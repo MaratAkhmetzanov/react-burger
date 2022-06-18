@@ -46,10 +46,10 @@ class BurgerConstructor extends React.Component {
           >
             <div className={classNames(styleConstructor.catalog, "pr-4")}>
               {ingretients.map((ingretient, index) => (
-                <div className={styleConstructor.drag_element}>
+                <div className={styleConstructor.drag_element} key={index}>
                   <DragIcon type="primary" />
                   <ConstructorElement
-                    key={index}
+
                     text={ingretient.name}
                     price={ingretient.price}
                     thumbnail={ingretient.image}
@@ -66,14 +66,14 @@ class BurgerConstructor extends React.Component {
               price={bun.price}
               thumbnail={bun.image}
             /></div>
-        </div>
+        </div >
         <Total />
-      </section>
+      </section >
     );
   }
 }
 
-const dataIngredients = PropTypes.arrayOf.shape({
+const dataIngredients = PropTypes.shape({
   _id: PropTypes.string,
   name: PropTypes.string,
   type: PropTypes.string,
@@ -89,7 +89,7 @@ const dataIngredients = PropTypes.arrayOf.shape({
 })
 
 BurgerConstructor.propTypes = {
-  data: dataIngredients
+  data: PropTypes.arrayOf(dataIngredients)
 }
 
 export default BurgerConstructor;

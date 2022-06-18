@@ -1,5 +1,5 @@
 import React from "react";
-import { Tab, CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
+import { Tab, CurrencyIcon, Counter } from "@ya.praktikum/react-developer-burger-ui-components";
 import styleIngredients from "./burger-ingredients.module.scss";
 import classNames from "classnames";
 import { Scrollbars } from 'react-custom-scrollbars';
@@ -22,7 +22,7 @@ const Tabs = () => {
   )
 }
 
-const IngredientCard = ({ image, price, name }) => {
+const IngredientCard = ({ image, price, name, counter = false }) => {
   return (
     <div className={classNames(styleIngredients.card)}>
       <img src={image} alt={name} className="ml-4 mr-4" />
@@ -32,6 +32,10 @@ const IngredientCard = ({ image, price, name }) => {
       <div>
         <p className={classNames(styleIngredients.card_name, "text text_type_main-default")}>{name}</p>
       </div>
+      {counter &&
+        <div className={styleIngredients.counter}>
+          <Counter count={1} size="default" />
+        </div>}
     </div>
   )
 }
@@ -42,7 +46,7 @@ const CatalogGroup = (props) => {
       <h2 className="text text_type_main-medium mb-6">{props.title}</h2>
       <div className={classNames(styleIngredients.catalog, "pl-4 pr-4 mb-10")}>
         {props.data.filter(({ type }) => type === props.type).map((ingretient, index) => (
-          <IngredientCard key={index} image={ingretient.image} price={ingretient.price} name={ingretient.name} />
+          <IngredientCard key={index} image={ingretient.image} price={ingretient.price} name={ingretient.name} counter={false} />
         ))}
       </div>
     </>
@@ -72,7 +76,7 @@ class BurgerIngredients extends React.Component {
   }
 }
 
-const dataIngredients = PropTypes.arrayOf.shape({
+const dataIngredients = PropTypes.shape({
   _id: PropTypes.string,
   name: PropTypes.string,
   type: PropTypes.string,
@@ -90,17 +94,18 @@ const dataIngredients = PropTypes.arrayOf.shape({
 IngredientCard.propTypes = {
   image: PropTypes.string,
   price: PropTypes.number,
-  name: PropTypes.string
+  name: PropTypes.string,
+  counter: PropTypes.bool
 }
 
 CatalogGroup.propTypes = {
   title: PropTypes.string,
   type: PropTypes.string,
-  data: dataIngredients
+  data: PropTypes.arrayOf(dataIngredients)
 }
 
 BurgerIngredients.propTypes = {
-  data: dataIngredients
+  data: PropTypes.arrayOf(dataIngredients)
 };
 
 export default BurgerIngredients;
