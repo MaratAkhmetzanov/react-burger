@@ -1,0 +1,50 @@
+@import "../../css/variables.scss";
+
+.content {
+  width: 600px;
+}
+
+.catalog {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.card {
+  width: 272px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.card_price {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card_name {
+  text-align: center;
+  height: 48px;
+  text-overflow: ellipsis;
+}
+
+.track_vertical {
+  position: absolute;
+  background-color: $input;
+  width: 8px;
+  top: 8px;
+  right: 0;
+  height: calc(100% - 34px);
+}
+
+.thumb_vertical {
+  width: 100%;
+  position: relative;
+  display: block;
+  cursor: pointer;
+  border-radius: inherit;
+  background-color: $secondary-text;
+  transform: translateY(0px);
+}

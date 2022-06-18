@@ -1,0 +1,44 @@
+@import "../../css/variables.scss";
+
+.header {
+  background-color: $modal-bg;
+  min-width: 1280px;
+}
+
+.header_wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 1280px;
+  margin: 0 auto;
+}
+
+.header_left {
+  flex-basis: 40%;
+  display: flex;
+}
+
+.header_right {
+  flex-basis: 40%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.nav {
+  display: flex;
+  align-content: center;
+}
+
+.nav_button {
+  text-decoration: none;
+  display: flex;
+  align-content: center;
+}
+
+.nav_button_active {
+  color: $standart-text;
+}
+
+.nav_button_inactive {
+  color: $secondary-text;
+}
