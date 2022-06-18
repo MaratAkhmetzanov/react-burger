@@ -2,12 +2,13 @@ import React from "react";
 import { Logo, BurgerIcon, ListIcon, ProfileIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import styleAppHeader from "./app-header.module.scss";
 import classNames from "classnames";
+import PropTypes from 'prop-types';
 
-const NavigationLink = (props) => {
+const NavigationLink = ({ className, label, children }) => {
   return (
-    <a href="/" className={classNames(styleAppHeader.nav_button, props.className, "pt-4 pb-4 pr-5 pl-5")}>
-      {props.children}
-      <span className="text text_type_main-default ml-2">{props.label}</span>
+    <a href="/" className={classNames(styleAppHeader.nav_button, className, "pt-4 pb-4 pr-5 pl-5")}>
+      {children}
+      <span className="text text_type_main-default ml-2">{label}</span>
     </a>
   )
 }
@@ -38,5 +39,11 @@ class AppHeader extends React.Component {
     );
   }
 }
+
+NavigationLink.propTypes = {
+  className: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+  children: PropTypes.element.isRequired
+};
 
 export default AppHeader;

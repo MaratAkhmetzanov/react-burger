@@ -2,12 +2,14 @@
 
 .content {
   width: 600px;
+  margin-right: 40px;
 }
 
 .catalog {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
+  row-gap: 16px;
 }
 
 .card {
@@ -34,9 +36,9 @@
   position: absolute;
   background-color: $input;
   width: 8px;
-  top: 8px;
+  top: 0;
   right: 0;
-  height: calc(100% - 34px);
+  height: calc(100% - 40px);
 }
 
 .thumb_vertical {

@@ -1,92 +1,95 @@
 import React from "react";
-import { DragIcon, LockIcon, CurrencyIcon, DeleteIcon, Button, ConstructorElement } from "@ya.praktikum/react-developer-burger-ui-components";
-import styleBurgerConstructor from "./burger-constructor.module.scss";
+import { CurrencyIcon, Button, ConstructorElement, DragIcon } from "@ya.praktikum/react-developer-burger-ui-components";
+import styleConstructor from "./burger-constructor.module.scss";
+import "./constructor.css";
 import classNames from "classnames";
-import { Scrollbars } from 'react-custom-scrollbars-2';
+import { Scrollbars } from 'react-custom-scrollbars';
+import PropTypes from 'prop-types';
 
-
-const ConstructorCard = ({ image, price, name, type, top = false, bottom = false }) => {
-  let cardStyle = classNames(styleBurgerConstructor.card_wrapper_side, "pl-6 pr-8 pt-4 pb-4");
-
-  if (top) { cardStyle = classNames(cardStyle, styleBurgerConstructor.bun_top) }
-  else if (bottom) { cardStyle = classNames(cardStyle, styleBurgerConstructor.bun_bottom) }
-
+const Total = () => {
   return (
-    <div className={classNames(styleBurgerConstructor.card)}>
-      <div className={styleBurgerConstructor.card_dragzone}>
-        {(type !== "bun") && <DragIcon type="primary" />}
+    <div className={classNames(styleConstructor.total, "pt-6")}>
+      <div className={classNames(styleConstructor.total_price, "mr-10")}>
+        <span className="text text_type_digits-medium mr-2">1256</span><CurrencyIcon type="primary" />
       </div>
-      <div className={cardStyle}>
-        <img src={image} alt={name} className={classNames(styleBurgerConstructor.card_image, "mr-5")} />
-        <p className={classNames(styleBurgerConstructor.card_name, "text text_type_main-default")}>{name}{top ? " (верх)" : ""}{bottom ? " (низ)" : ""}</p>
-        <div className={classNames(styleBurgerConstructor.card_price, "ml-5 mr-5")}>
-          <span className="text text_type_digits-default mr-2">{price}</span> <CurrencyIcon type="primary" />
-        </div>
-        <div className={styleBurgerConstructor.card_icon}>
-          {(type === "bun") ? <LockIcon type="secondary" /> : <DeleteIcon type="primary" />}
-        </div>
-      </div>
+      <Button type="primary" size="large">
+        Оформить заказ
+      </Button>
     </div>
   )
 }
 
 class BurgerConstructor extends React.Component {
   render () {
-    const ingretients = this.props.data.filter(({ type }) => type !== "bun");
-    const bun = this.props.data.find(({ type }) => type === "bun");
+    const data = this.props.data;
+    const ingretients = data.filter(({ type }) => type !== "bun");
+    const bun = data.find(({ type }) => type === "bun");
 
     return (
-      <section className={styleBurgerConstructor.content}>
-        {/* <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          <ConstructorElement
-            type="top"
-            isLocked={true}
-            text="Краторная булка N-200i (верх)"
-            price={200}
-            thumbnail={bun.image}
-          />
-          <ConstructorElement
-            text="Краторная булка N-200i (верх)"
-            price={50}
-            thumbnail={bun.image}
-          />
-          <ConstructorElement
-            type="bottom"
-            isLocked={true}
-            text="Краторная булка N-200i (низ)"
-            price={200}
-            thumbnail={bun.image}
-            style={{ background: '#fff' }}
-          />
-        </div> */}
-        <div className={classNames(styleBurgerConstructor.catalog, "mt-25")}>
-          <ConstructorCard image={bun.image_mobile} price={bun.price} name={bun.name} type={bun.type} top={true} />
+      <section className={classNames(styleConstructor.content, "pl-4")}>
+        <div className={classNames(styleConstructor.wrapper, "mt-25")}>
+          <div className="pl-8 pr-4">
+            <ConstructorElement
+              type="top"
+              isLocked={true}
+              text={bun.name.concat(" (верх)")}
+              price={bun.price}
+              thumbnail={bun.image}
+            />
+          </div>
           <Scrollbars
             autoHeight={true}
             thumbMinSize={120}
-            autoHeightMin={window.innerHeight - 180 - 156}
-            renderTrackVertical={props => <div className={styleBurgerConstructor.track_vertical} />}
-            renderThumbVertical={props => <div className={styleBurgerConstructor.thumb_vertical} />}
+            autoHeightMin={window.innerHeight - 536}
+            renderTrackVertical={props => <div className={styleConstructor.track_vertical} />}
+            renderThumbVertical={props => <div className={styleConstructor.thumb_vertical} />}
           >
-            <div className="pl-4 pr-4">
+            <div className={classNames(styleConstructor.catalog, "pr-4")}>
               {ingretients.map((ingretient, index) => (
-                <ConstructorCard key={index} image={ingretient.image_mobile} price={ingretient.price} name={ingretient.name} type={ingretient.type} />
+                <div className={styleConstructor.drag_element}>
+                  <DragIcon type="primary" />
+                  <ConstructorElement
+                    key={index}
+                    text={ingretient.name}
+                    price={ingretient.price}
+                    thumbnail={ingretient.image}
+                  />
+                </div>
               ))}
             </div>
           </Scrollbars>
-          <ConstructorCard image={bun.image_mobile} price={bun.price} name={bun.name} type={bun.type} bottom={true} />
+          <div className="pl-8 pr-4">
+            <ConstructorElement
+              type="bottom"
+              isLocked={true}
+              text={bun.name.concat(" (низ)")}
+              price={bun.price}
+              thumbnail={bun.image}
+            /></div>
         </div>
-        <div className={classNames(styleBurgerConstructor.total, "pt-6")}>
-          <div className={classNames(styleBurgerConstructor.card_price, "mr-10")}>
-            <span className="text text_type_digits-medium mr-2">12487124</span><CurrencyIcon type="primary" />
-          </div>
-          <Button type="primary" size="large">
-            Оформить заказ
-          </Button>
-        </div>
+        <Total />
       </section>
     );
   }
+}
+
+const dataIngredients = PropTypes.arrayOf.shape({
+  _id: PropTypes.string,
+  name: PropTypes.string,
+  type: PropTypes.string,
+  proteins: PropTypes.number,
+  fat: PropTypes.number,
+  carbohydrates: PropTypes.number,
+  calories: PropTypes.number,
+  price: PropTypes.number,
+  image: PropTypes.string,
+  image_mobile: PropTypes.string,
+  image_large: PropTypes.string,
+  __v: PropTypes.number
+})
+
+BurgerConstructor.propTypes = {
+  data: dataIngredients
 }
 
 export default BurgerConstructor;

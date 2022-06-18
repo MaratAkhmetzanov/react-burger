@@ -3,17 +3,6 @@
 .content {
   display: flex;
   width: 1240px;
-  justify-content: space-between;
   margin: 0 auto;
-}
-
-body::-webkit-scrollbar {
-  display: none;
-}
-
-body {
-  -ms-overflow-style: none;
-  /* IE and Edge */
-  scrollbar-width: none;
-  /* Firefox */
+  height: calc(100% - 88px);
 }

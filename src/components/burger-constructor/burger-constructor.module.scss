@@ -7,66 +7,34 @@
   align-items: flex-end;
 }
 
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
 .catalog {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
-.card {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
-
-.card_dragzone {
-  width: 32px;
-}
-
-.card_wrapper_side {
-  background-color: $modal-bg;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  width: 100%;
-  border-radius: 40px 40px 40px 40px;
-  flex-grow: 1;
-}
-
-.bun_top {
-  border-radius: 88px 88px 40px 40px;
-}
-
-.bun_bottom {
-  border-radius: 40px 40px 88px 88px;
-}
-
-.card_image {
-  width: 80px;
-  height: 40px;
-}
-
-.card_name {
-  text-align: left;
-  flex-grow: 1;
-  height: 48px;
-  text-overflow: ellipsis;
-}
-
-.card_price {
+.drag_element {
   display: flex;
   align-items: center;
-}
-
-.card_icon {
-  width: 24px;
-  cursor: pointer;
+  justify-content: space-between;
 }
 
 .total {
   display: flex;
   align-items: center;
   margin-bottom: 52px;
+}
+
+.total_price {
+  display: flex;
+  align-items: center;
 }
 
 .total svg {
