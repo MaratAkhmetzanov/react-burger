@@ -17,7 +17,7 @@ const IngredientDetails = ({ ingredient, closeModal }) => {
       <Modal closeModal={closeModal}>
         <div className={clsx(styleIngredientDetails.details_wrapper, 'pt-10 pr-10 pb-15 pl-10')}>
           <h2 className={clsx(styleIngredientDetails.title, 'text text_type_main-large')}>Детали ингредиента</h2>
-          <div><img src={ingredient.image_large} alt={ingredient.name} /></div>
+          <div className={styleIngredientDetails.checkmark}><img src={ingredient.image_large} alt={ingredient.name} /></div>
           <h3 className='text text_type_main-medium mt-4'>{ingredient.name}</h3>
           <div className={clsx(styleIngredientDetails.parameters, 'mt-8')}>
             <div>
