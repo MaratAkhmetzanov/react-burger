@@ -24,9 +24,9 @@ const App = () => {
 
     fetch(GET_DATA_URL)
       .then(res => {
-        if (res.status === 200) {
+        if (res.ok) {
           return res.json();
-        } else console.log(res);
+        } else Promise.reject(`Ошибка ${res.status}`);
       })
       .then(data => {
         setState({ ingredients: data.data, isLoading: false });
