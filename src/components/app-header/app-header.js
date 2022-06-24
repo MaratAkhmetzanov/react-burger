@@ -13,8 +13,7 @@ const NavigationLink = ({ className, label, children }) => {
   )
 }
 
-class AppHeader extends React.Component {
-  render () {
+const AppHeader = () => {
     return (
       <header className={classNames(styleAppHeader.header, "pt-4 pb-4")}>
         <div className={styleAppHeader.header_wrapper}>
@@ -38,7 +37,6 @@ class AppHeader extends React.Component {
       </header>
     );
   }
-}
 
 NavigationLink.propTypes = {
   className: PropTypes.string.isRequired,

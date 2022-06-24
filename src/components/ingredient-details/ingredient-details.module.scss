@@ -1,0 +1,20 @@
+.details_wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.title {
+  width: 560px;
+}
+
+.parameters {
+  display: flex;
+  column-gap: 20px;
+}
+
+.parameters p {
+  min-width: 112px;
+}
