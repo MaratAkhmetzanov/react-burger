@@ -5,6 +5,7 @@ import { Tab, CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger
 import { Scrollbars } from 'react-custom-scrollbars';
 
 import IngredientDetails from '../ingredient-details/ingredient-details';
+import Modal from '../modal/modal';
 
 import dataIngredientsType from '../../utils/types';
 import styleIngredients from './burger-ingredients.module.scss';
@@ -67,7 +68,7 @@ const CatalogGroup = (props) => {
           </div>
         ))}
       </div>
-      {modalVisibility && <IngredientDetails ingredient={selectedIngredient} closeModal={handleCloseModal} />}
+      {modalVisibility && <Modal closeModal={handleCloseModal}><IngredientDetails ingredient={selectedIngredient} /></Modal>}
     </>
   )
 }

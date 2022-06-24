@@ -7,6 +7,8 @@ import dataIngredientsType from '../../utils/types';
 import clsx from 'clsx';
 import OrderDetails from '../order-details/order-details';
 
+import Modal from '../modal/modal';
+
 const Total = React.memo(() => {
   const [modalVisibility, setModalVisibility] = useState(false);
 
@@ -27,13 +29,14 @@ const Total = React.memo(() => {
       <Button type='primary' size='large' onClick={handleOpenModal}>
         Оформить заказ
       </Button>
-      {modalVisibility && <OrderDetails closeModal={handleCloseModal} />}
+      {modalVisibility &&
+        <Modal closeModal={handleCloseModal}><OrderDetails /></Modal>}
     </div>
   )
 })
 
-const BurgerConstructor = ({data}) => {
-  
+const BurgerConstructor = ({ data }) => {
+
   const ingretients = data.filter(({ type }) => type !== 'bun');
   const bun = data.find(({ type }) => type === 'bun');
 

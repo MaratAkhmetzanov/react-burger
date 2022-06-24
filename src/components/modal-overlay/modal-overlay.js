@@ -1,24 +1,9 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import styleModal from './modal-overlay.module.scss';
 
 const ModalOverlay = ({ closeModal, children }) => {
-
-  useEffect(() => {
-    document.addEventListener('keydown', handleEscPress);
-
-    return () => {
-      document.removeEventListener('keydown', handleEscPress);
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  const handleEscPress = (e) => {
-    if (e.key === 'Escape') {
-      closeModal();
-    }
-  }
 
   const handleCloseModal = () => {
     closeModal();
