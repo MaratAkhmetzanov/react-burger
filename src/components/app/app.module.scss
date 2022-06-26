@@ -1,0 +1,18 @@
+@import "../../css/variables.scss";
+
+.wrapper {
+  height: 100%;
+}
+
+.content {
+  display: flex;
+  width: 1240px;
+  margin: 0 auto;
+  height: calc(100% - 88px);
+}
+
+.loading {
+  @extend .content;
+  align-items: center;
+  justify-content: center;
+}
