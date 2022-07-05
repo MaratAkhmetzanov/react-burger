@@ -1,7 +1,7 @@
 import { ADD_BUN, ADD_INGREDIENT, DELETE_INGREDIENT } from '../actions/constructor-actions';
 
 const initialState = {
-  constructorBun: {},
+  constructorBun: null,
   constructorItems: []
 };
 

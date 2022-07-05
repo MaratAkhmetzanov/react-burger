@@ -4,7 +4,6 @@ export const DELETE_INGREDIENT = 'DELETE_INGREDIENT';
 
 export function addIngredient (ingredient, position) {
   return function (dispatch) {
-    console.log(ingredient);
     (ingredient.type === 'bun')
       ? dispatch({
         type: ADD_BUN,
@@ -15,6 +14,5 @@ export function addIngredient (ingredient, position) {
         ingredient: ingredient,
         position: position
       })
-    console.log(ingredient);
   };
 }

@@ -31,29 +31,41 @@ const Tabs = () => {
   );
 };
 
-const IngredientCard = ({ image, price, name, count = 0, item }) => {
+const IngredientCard = ({ image, price, name, item }) => {
+
+  // TODO: реализовать счетчики
+
+  // const {constructorBun, constructorItems} = useSelector((store) => ({
+  //   constructorBun: store.burgerConstructor.constructorBun,
+  //   constructorItems: store.burgerConstructor.constructorItems
+  // }));
+
   const [, bunDragRef] = useDrag({
     type: 'bun',
-    item: item
+    item: { item }
   });
 
   const [, ingredientDragRef] = useDrag({
     type: 'ingredient',
-    item: item
+    item: { item }
   });
 
   return (
-    <div ref={item.type === 'bun' ? bunDragRef : ingredientDragRef} className={clsx(styleIngredients.card)}>
+    <div
+      ref={item.type === 'bun' ? bunDragRef : ingredientDragRef}
+      className={clsx(styleIngredients.card)}
+    >
       <img src={image} alt={name} className='ml-4 mr-4' />
       <div className={clsx(styleIngredients.card_price, 'mt-1 mb-1')}>
-        <span className='text text_type_digits-default mr-2'>{price}</span> <CurrencyIcon type='primary' />
+        <span className='text text_type_digits-default mr-2'>{price}</span>{' '}
+        <CurrencyIcon type='primary' />
       </div>
       <div>
         <p className={clsx(styleIngredients.card_name, 'text text_type_main-default')}>{name}</p>
       </div>
       {!!count && (
         <div className={styleIngredients.counter}>
-          <Counter count={1} size='default' />
+          <Counter count={0} size='default' />
         </div>
       )}
     </div>
@@ -81,7 +93,12 @@ const CatalogGroup = (props) => {
           .filter(({ type }) => type === props.type)
           .map((ingretient) => (
             <div key={ingretient._id} onClick={() => handleOpenModal(ingretient)}>
-              <IngredientCard image={ingretient.image} price={ingretient.price} name={ingretient.name} count={0} item={ingretient} />
+              <IngredientCard
+                image={ingretient.image}
+                price={ingretient.price}
+                name={ingretient.name}
+                item={ingretient}
+              />
             </div>
           ))}
       </div>
@@ -108,7 +125,9 @@ const BurgerIngredients = () => {
 
   return (
     <section className={styleIngredients.content}>
-      <h1 className={clsx(styleIngredients.title, 'text text_type_main-large mt-10')}>Соберите бургер</h1>
+      <h1 className={clsx(styleIngredients.title, 'text text_type_main-large mt-10')}>
+        Соберите бургер
+      </h1>
       <Tabs />
       <Scrollbars
         autoHeight={true}

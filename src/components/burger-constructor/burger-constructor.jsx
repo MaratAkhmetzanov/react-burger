@@ -12,19 +12,20 @@ import { Scrollbars } from 'react-custom-scrollbars';
 import clsx from 'clsx';
 import { v4 as uuidv4 } from 'uuid';
 
-import { addIngredient } from '../../services/actions/constructor-actions';
+import { addIngredient, DELETE_INGREDIENT } from '../../services/actions/constructor-actions';
 
 import OrderDetails from '../order-details/order-details';
 import Modal from '../modal/modal';
 
 const Total = React.memo(() => {
-  const totalPrice = useSelector((store) =>
-    (store.constructor.constructorBun
-      ? store.constructor.constructorBun.price * 2
-      : 0) +
-    (store.constructor.constructorItems
-      ? store.constructor.constructorItems.reduce((total, item) => total + item.price, 0)
-      : 0)
+  const totalPrice = useSelector(
+    (store) =>
+      (store.burgerConstructor.constructorBun
+        ? store.burgerConstructor.constructorBun.price * 2
+        : 0) +
+      (store.burgerConstructor.constructorItems
+        ? store.burgerConstructor.constructorItems.reduce((total, item) => total + item.price, 0)
+        : 0)
   );
 
   const [modalVisibility, setModalVisibility] = useState(false);
@@ -57,36 +58,49 @@ const Total = React.memo(() => {
 
 const BurgerConstructor = () => {
   const { constructorBun, constructorItems } = useSelector((store) => ({
-    constructorBun: store.constructor.constructorBun,
-    constructorItems: store.constructor.constructorItems
+    constructorBun: store.burgerConstructor.constructorBun,
+    constructorItems: store.burgerConstructor.constructorItems
   }));
+
+  const deleteIngredient = (position) => {
+    dispatch({
+      type: DELETE_INGREDIENT,
+      position
+    });
+  };
 
   const dispatch = useDispatch();
 
   const [{ bunDropHover }, bunDropTarget] = useDrop({
     accept: 'bun',
-    collect: monitor => ({
+    collect: (monitor) => ({
       bunDropHover: monitor.isOver()
     }),
-    drop (item) {
+    drop ({ item }) {
       dispatch(addIngredient(item));
     }
   });
 
-  const [{ ingredientbunDropHover }, ingredientDropTarget] = useDrop({
+  const [{ ingredientDropHover }, ingredientDropTarget] = useDrop({
     accept: 'ingredient',
-    collect: monitor => ({
-      ingredientbunDropHover: monitor.isOver()
+    collect: (monitor) => ({
+      ingredientDropHover: monitor.isOver()
     }),
-    drop (item) {
-      dispatch(addIngredient(item));
+    drop ({ item }) {
+      dispatch(addIngredient(item, uuidv4()));
     }
   });
 
   return (
     <section className={clsx(styleConstructor.content, 'pl-4')}>
       <div className={clsx(styleConstructor.wrapper, 'mt-25')}>
-        <div className={clsx('ml-8 mr-4', bunDropHover ? styleConstructor.dropzone_hover : styleConstructor.dropzone)} ref={bunDropTarget}>
+        <div
+          className={clsx(
+            'ml-8 mr-4',
+            bunDropHover ? styleConstructor.bun_dropzone_hover : styleConstructor.bun_dropzone
+          )}
+          ref={bunDropTarget}
+        >
           {constructorBun && (
             <ConstructorElement
               type='top'
@@ -103,27 +117,36 @@ const BurgerConstructor = () => {
           )}
         </div>
 
-        {!constructorItems && (
-          <div className='ml-8 mr-4' ref={ingredientDropTarget}>
+        {!constructorItems.length && (
+          <div
+            className={clsx(
+              'ml-8 mr-4',
+              ingredientDropHover
+                ? styleConstructor.ingredients_dropzone_hover
+                : styleConstructor.ingredients_dropzone
+            )}
+            ref={ingredientDropTarget}
+          >
             <div className={styleConstructor.empty_ingredients}>Добавьте ингредиент</div>
           </div>
         )}
-        {constructorItems && (
+        {!!constructorItems.length && (
           <Scrollbars
             autoHeight={true}
             thumbMinSize={120}
             autoHeightMin={window.innerHeight - 536}
-            renderTrackVertical={(props) => <div className={styleConstructor.track_vertical} />}
-            renderThumbVertical={(props) => <div className={styleConstructor.thumb_vertical} />}
+            renderTrackVertical={() => <div className={styleConstructor.track_vertical} />}
+            renderThumbVertical={() => <div className={styleConstructor.thumb_vertical} />}
           >
             <div className={clsx(styleConstructor.catalog, 'pr-4')} ref={ingredientDropTarget}>
               {constructorItems.map((ingretient) => (
-                <div className={styleConstructor.drag_element} key={uuidv4()}>
+                <div className={styleConstructor.drag_element} key={ingretient.position}>
                   <DragIcon type='primary' />
                   <ConstructorElement
                     text={ingretient.name}
                     price={ingretient.price}
                     thumbnail={ingretient.image}
+                    handleClose={() => deleteIngredient(ingretient.position)}
                   />
                 </div>
               ))}
@@ -131,7 +154,7 @@ const BurgerConstructor = () => {
           </Scrollbars>
         )}
         <div className='pl-8 pr-4'>
-          {constructorBun && (
+          {!!constructorBun && (
             <ConstructorElement
               type='bottom'
               isLocked={true}
