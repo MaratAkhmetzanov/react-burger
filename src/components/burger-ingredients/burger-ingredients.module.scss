@@ -1,15 +1,22 @@
-@import "../../css/variables.scss";
+@import '../../css/variables.scss';
 
 .content {
   width: 600px;
   margin-right: 40px;
 }
 
-.title{
+.loading {
+  width: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.title {
   height: 40px;
 }
 
-.tabs{
+.tabs {
   display: flex;
 }
 
@@ -26,7 +33,14 @@
   display: flex;
   justify-content: center;
   flex-direction: column;
-  cursor: pointer;
+  background-color: $bg;
+  border-radius: 20px;
+}
+
+
+.card:hover {
+  cursor: grab;
+  outline: 2px solid $input;
 }
 
 .card_price {
@@ -41,7 +55,7 @@
   text-overflow: ellipsis;
 }
 
-.counter{
+.counter {
   position: absolute;
   top: 0;
   right: 0;

@@ -1,4 +1,4 @@
-@import "../../css/variables.scss";
+@import '../../css/variables.scss';
 
 .content {
   width: 600px;
@@ -18,6 +18,49 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
+}
+
+.empty_bun {
+  height: 80px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: $modal-bg;
+  outline: 2px dashed $input;
+  cursor: default;
+}
+
+.dropzone_hover{
+  border-radius: 88px 88px 40px 40px;
+  outline: 2px dashed #fff;
+  transition: outline-color .5s;
+}
+
+.dropzone{
+  border-radius: 88px 88px 40px 40px;
+  outline: 2px dashed transparent;
+  transition: outline-color .5s;
+}
+
+.top {
+  border-radius: 88px 88px 40px 40px;
+}
+
+.bottom {
+  border-radius: 40px 40px 88px 88px;
+}
+
+.empty_ingredients{
+  height: calc(100vh - 536px);
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: $modal-bg;
+  border: 2px dashed $input;
+  border-radius: 40px;
+  cursor: default;
 }
 
 .drag_element {
