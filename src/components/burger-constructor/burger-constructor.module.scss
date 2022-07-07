@@ -67,12 +67,21 @@
 .ingredients_dropzone_hover{
   outline: 2px dashed #fff;
   border-radius: 40px;
+  transition: outline-color .5s;
 }
 
 .drag_element {
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.hide{
+  opacity: 0;
+}
+
+.drag_icon{
+  cursor: grab;
 }
 
 .total {

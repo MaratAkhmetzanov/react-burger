@@ -1,12 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useDrag } from 'react-dnd';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { Tab, CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Scrollbars } from 'react-custom-scrollbars';
-import { useDrag } from 'react-dnd';
 
-import { getIngredients } from '../../services/actions/ingredients-actions';
+import {
+  getIngredients,
+  SET_ACTIVE_TAB,
+  ADD_VIEWING_INGREDIENT,
+  DELETE_VIEWING_INGREDIENT
+} from '../../services/actions/ingredients-actions';
 
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import Modal from '../modal/modal';
@@ -15,16 +20,26 @@ import dataIngredientsType from '../../utils/types';
 import styleIngredients from './burger-ingredients.module.scss';
 
 const Tabs = () => {
-  const [current, setCurrent] = React.useState('bun');
+  const activeTab = useSelector((store) => store.ingredients.activeTab);
+
+  const dispatch = useDispatch();
+
+  const setActiveTab = (tab) => {
+    dispatch({
+      type: SET_ACTIVE_TAB,
+      tab
+    });
+  };
+
   return (
-    <div className={clsx(styleIngredients.tabs, 'mt-5 mb-10')}>
-      <Tab value='bun' active={current === 'bun'} onClick={setCurrent}>
+    <div className={clsx(styleIngredients.tabs, 'mt-5')}>
+      <Tab value='bun' active={activeTab === 'bun'} onClick={setActiveTab}>
         Булки
       </Tab>
-      <Tab value='sauce' active={current === 'sauce'} onClick={setCurrent}>
+      <Tab value='sauce' active={activeTab === 'sauce'} onClick={setActiveTab}>
         Соусы
       </Tab>
-      <Tab value='main' active={current === 'main'} onClick={setCurrent}>
+      <Tab value='main' active={activeTab === 'main'} onClick={setActiveTab}>
         Начинки
       </Tab>
     </div>
@@ -32,13 +47,15 @@ const Tabs = () => {
 };
 
 const IngredientCard = ({ image, price, name, item }) => {
-
-  // TODO: реализовать счетчики
-
-  // const {constructorBun, constructorItems} = useSelector((store) => ({
-  //   constructorBun: store.burgerConstructor.constructorBun,
-  //   constructorItems: store.burgerConstructor.constructorItems
-  // }));
+  const count = useSelector((store) =>
+    store.burgerConstructor.constructorBun &&
+      store.burgerConstructor.constructorBun._id === item._id
+      ? 2
+      : store.burgerConstructor.constructorItems
+        ? store.burgerConstructor.constructorItems.filter((ingredient) => item._id === ingredient._id)
+          .length
+        : 0
+  );
 
   const [, bunDragRef] = useDrag({
     type: 'bun',
@@ -65,7 +82,7 @@ const IngredientCard = ({ image, price, name, item }) => {
       </div>
       {!!count && (
         <div className={styleIngredients.counter}>
-          <Counter count={0} size='default' />
+          <Counter count={count} size='default' />
         </div>
       )}
     </div>
@@ -74,37 +91,46 @@ const IngredientCard = ({ image, price, name, item }) => {
 
 const CatalogGroup = (props) => {
   const [modalVisibility, setModalVisibility] = useState(false);
-  const [selectedIngredient, setSelectedIngredient] = useState({});
 
-  const handleOpenModal = (ingretient) => {
-    setSelectedIngredient(ingretient);
+  const dispatch = useDispatch();
+
+  const handleOpenModal = (ingredient) => {
+    dispatch({
+      type: ADD_VIEWING_INGREDIENT,
+      ingredient
+    });
     setModalVisibility(true);
   };
 
   const handleCloseModal = () => {
     setModalVisibility(false);
+    dispatch({
+      type: DELETE_VIEWING_INGREDIENT
+    });
   };
 
   return (
     <>
-      <h2 className='text text_type_main-medium mb-6'>{props.title}</h2>
-      <div className={clsx(styleIngredients.catalog, 'pl-4 pr-4 mb-10')}>
+      <h2 className='text text_type_main-medium mb-6 mt-10' ref={props.titleRef}>
+        {props.title}
+      </h2>
+      <div className={clsx(styleIngredients.catalog, 'pl-4 pr-4')}>
         {props.data
           .filter(({ type }) => type === props.type)
-          .map((ingretient) => (
-            <div key={ingretient._id} onClick={() => handleOpenModal(ingretient)}>
+          .map((ingredient) => (
+            <div key={ingredient._id} onClick={() => handleOpenModal(ingredient)}>
               <IngredientCard
-                image={ingretient.image}
-                price={ingretient.price}
-                name={ingretient.name}
-                item={ingretient}
+                image={ingredient.image}
+                price={ingredient.price}
+                name={ingredient.name}
+                item={ingredient}
               />
             </div>
           ))}
       </div>
       {modalVisibility && (
         <Modal closeModal={handleCloseModal}>
-          <IngredientDetails ingredient={selectedIngredient} />
+          <IngredientDetails />
         </Modal>
       )}
     </>
@@ -117,11 +143,38 @@ const BurgerIngredients = () => {
     ingredientsRequest: store.ingredients.ingredientsRequest
   }));
 
+  const scrollRef = useRef();
+  const bunTitleRef = useRef();
+  const sauceTitleRef = useRef();
+  const mainTitleRef = useRef();
+
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getIngredients());
   }, [dispatch]);
+
+  const setActiveTab = useCallback(
+    (tab) => {
+      dispatch({
+        type: SET_ACTIVE_TAB,
+        tab
+      });
+    },
+    [dispatch]
+  );
+
+  const handleScroll = () => {
+    const top = scrollRef.current.getScrollTop() + 50;
+    const sauceOffset = sauceTitleRef.current.offsetTop;
+    const mainOffset = mainTitleRef.current.offsetTop;
+
+    top > sauceOffset && top < mainOffset
+      ? setActiveTab('sauce')
+      : top > mainOffset
+        ? setActiveTab('main')
+        : setActiveTab('bun');
+  };
 
   return (
     <section className={styleIngredients.content}>
@@ -132,16 +185,18 @@ const BurgerIngredients = () => {
       <Scrollbars
         autoHeight={true}
         thumbMinSize={120}
-        autoHeightMin={window.innerHeight - 285}
+        autoHeightMin={window.innerHeight - 245}
         renderTrackVertical={() => <div className={styleIngredients.track_vertical} />}
         renderThumbVertical={() => <div className={styleIngredients.thumb_vertical} />}
+        onScroll={handleScroll}
+        ref={scrollRef}
       >
         {ingredientsRequest && <div className={styleIngredients.loading}>Загрузка...</div>}
         {!ingredientsRequest && (
           <>
-            <CatalogGroup title='Булки' data={ingredients} type='bun' />
-            <CatalogGroup title='Соусы' data={ingredients} type='sauce' />
-            <CatalogGroup title='Начинка' data={ingredients} type='main' />
+            <CatalogGroup title='Булки' data={ingredients} type='bun' titleRef={bunTitleRef} />
+            <CatalogGroup title='Соусы' data={ingredients} type='sauce' titleRef={sauceTitleRef} />
+            <CatalogGroup title='Начинка' data={ingredients} type='main' titleRef={mainTitleRef} />
           </>
         )}
       </Scrollbars>
@@ -153,13 +208,14 @@ IngredientCard.propTypes = {
   image: PropTypes.string.isRequired,
   price: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
-  counter: PropTypes.bool
+  item: PropTypes.arrayOf(dataIngredientsType).isRequired
 };
 
 CatalogGroup.propTypes = {
   title: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
-  data: PropTypes.arrayOf(dataIngredientsType).isRequired
+  data: PropTypes.arrayOf(dataIngredientsType).isRequired,
+  titleRef: PropTypes.string.isRequired
 };
 
 export default BurgerIngredients;

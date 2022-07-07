@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useDrop } from 'react-dnd';
+import { useDrop, useDrag } from 'react-dnd';
 import {
   CurrencyIcon,
   Button,
@@ -10,14 +10,21 @@ import {
 import styleConstructor from './burger-constructor.module.scss';
 import { Scrollbars } from 'react-custom-scrollbars';
 import clsx from 'clsx';
+import PropTypes from 'prop-types';
 import { v4 as uuidv4 } from 'uuid';
 
-import { addIngredient, DELETE_INGREDIENT } from '../../services/actions/constructor-actions';
+import {
+  addIngredient,
+  DELETE_INGREDIENT,
+  MOVE_INGREDIENT
+} from '../../services/actions/constructor-actions';
 
 import OrderDetails from '../order-details/order-details';
 import Modal from '../modal/modal';
+import { getOrder } from '../../services/actions/order-actions';
+import dataIngredientsType from '../../utils/types';
 
-const Total = React.memo(() => {
+const Total = () => {
   const totalPrice = useSelector(
     (store) =>
       (store.burgerConstructor.constructorBun
@@ -28,10 +35,21 @@ const Total = React.memo(() => {
         : 0)
   );
 
+  const { constructorBun, constructorItems } = useSelector((store) => ({
+    constructorBun: store.burgerConstructor.constructorBun,
+    constructorItems: store.burgerConstructor.constructorItems
+  }));
+
   const [modalVisibility, setModalVisibility] = useState(false);
 
-  const handleOpenModal = () => {
-    setModalVisibility(true);
+  const dispatch = useDispatch();
+
+  const makeOrder = () => {
+    if (constructorBun) {
+      setModalVisibility(true);
+      const ingredients = [constructorBun._id, ...constructorItems.map((item) => item._id)];
+      dispatch(getOrder(ingredients));
+    }
   };
 
   const handleCloseModal = () => {
@@ -44,7 +62,7 @@ const Total = React.memo(() => {
         <span className='text text_type_digits-medium mr-2'>{totalPrice}</span>
         <CurrencyIcon type='primary' />
       </div>
-      <Button type='primary' size='large' onClick={handleOpenModal}>
+      <Button type='primary' size='large' onClick={makeOrder}>
         Оформить заказ
       </Button>
       {modalVisibility && (
@@ -54,13 +72,56 @@ const Total = React.memo(() => {
       )}
     </div>
   );
-});
+};
 
-const BurgerConstructor = () => {
-  const { constructorBun, constructorItems } = useSelector((store) => ({
-    constructorBun: store.burgerConstructor.constructorBun,
-    constructorItems: store.burgerConstructor.constructorItems
-  }));
+const ConstructorItem = ({ ingredient, index, moveItem }) => {
+  const { position } = ingredient;
+
+  const ref = useRef(null);
+  const [{ handlerId }, drop] = useDrop({
+    accept: 'constructorItem',
+    collect (monitor) {
+      return {
+        handlerId: monitor.getHandlerId()
+      };
+    },
+    hover (item, monitor) {
+      if (!ref.current) {
+        return;
+      }
+      const dragIndex = item.index;
+      const hoverIndex = index;
+
+      if (dragIndex === hoverIndex) {
+        return;
+      }
+      const hoverBoundingRect = ref.current?.getBoundingClientRect();
+      const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+      const clientOffset = monitor.getClientOffset();
+      const hoverClientY = clientOffset.y - hoverBoundingRect.top;
+
+      if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
+        return;
+      }
+      if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
+        return;
+      }
+      moveItem(dragIndex, hoverIndex);
+      item.index = hoverIndex;
+    }
+  });
+
+  const [{ isDragging }, drag] = useDrag({
+    type: 'constructorItem',
+    item: () => {
+      return { position, index };
+    },
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging()
+    })
+  });
+
+  drag(drop(ref));
 
   const deleteIngredient = (position) => {
     dispatch({
@@ -68,6 +129,33 @@ const BurgerConstructor = () => {
       position
     });
   };
+
+  const dispatch = useDispatch();
+
+  return (
+    <div
+      className={clsx(styleConstructor.drag_element, isDragging ? styleConstructor.hide : '')}
+      ref={ref}
+      data-handler-id={handlerId}
+    >
+      <div className={styleConstructor.drag_icon}>
+        <DragIcon type='primary' />
+      </div>
+      <ConstructorElement
+        text={ingredient.name}
+        price={ingredient.price}
+        thumbnail={ingredient.image}
+        handleClose={() => deleteIngredient(ingredient.position)}
+      />
+    </div>
+  );
+};
+
+const BurgerConstructor = () => {
+  const { constructorBun, constructorItems } = useSelector((store) => ({
+    constructorBun: store.burgerConstructor.constructorBun,
+    constructorItems: store.burgerConstructor.constructorItems
+  }));
 
   const dispatch = useDispatch();
 
@@ -90,6 +178,15 @@ const BurgerConstructor = () => {
       dispatch(addIngredient(item, uuidv4()));
     }
   });
+
+  const moveItem = useCallback(
+    (dragIndex, hoverIndex) => {
+      const ingredients = [...constructorItems];
+      ingredients.splice(hoverIndex, 0, ingredients.splice(dragIndex, 1)[0]);
+      dispatch({ type: MOVE_INGREDIENT, ingredients });
+    },
+    [dispatch, constructorItems]
+  );
 
   return (
     <section className={clsx(styleConstructor.content, 'pl-4')}>
@@ -116,14 +213,11 @@ const BurgerConstructor = () => {
             </div>
           )}
         </div>
-
         {!constructorItems.length && (
           <div
             className={clsx(
               'ml-8 mr-4',
-              ingredientDropHover
-                ? styleConstructor.ingredients_dropzone_hover
-                : styleConstructor.ingredients_dropzone
+              ingredientDropHover ? styleConstructor.ingredients_dropzone_hover : ''
             )}
             ref={ingredientDropTarget}
           >
@@ -139,16 +233,13 @@ const BurgerConstructor = () => {
             renderThumbVertical={() => <div className={styleConstructor.thumb_vertical} />}
           >
             <div className={clsx(styleConstructor.catalog, 'pr-4')} ref={ingredientDropTarget}>
-              {constructorItems.map((ingretient) => (
-                <div className={styleConstructor.drag_element} key={ingretient.position}>
-                  <DragIcon type='primary' />
-                  <ConstructorElement
-                    text={ingretient.name}
-                    price={ingretient.price}
-                    thumbnail={ingretient.image}
-                    handleClose={() => deleteIngredient(ingretient.position)}
-                  />
-                </div>
+              {constructorItems.map((ingredient, index) => (
+                <ConstructorItem
+                  key={ingredient.position}
+                  ingredient={ingredient}
+                  index={index}
+                  moveItem={moveItem}
+                />
               ))}
             </div>
           </Scrollbars>
@@ -173,6 +264,12 @@ const BurgerConstructor = () => {
       <Total />
     </section>
   );
+};
+
+ConstructorItem.propTypes = {
+  ingredient: dataIngredientsType.isRequired,
+  index: PropTypes.number.isRequired,
+  moveItem: PropTypes.func.isRequired
 };
 
 export default BurgerConstructor;

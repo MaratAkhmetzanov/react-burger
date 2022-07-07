@@ -1,4 +1,4 @@
-import { ADD_BUN, ADD_INGREDIENT, DELETE_INGREDIENT } from '../actions/constructor-actions';
+import { ADD_BUN, ADD_INGREDIENT, DELETE_INGREDIENT, MOVE_INGREDIENT, ERASE_CONSTRUCTOR } from '../actions/constructor-actions';
 
 const initialState = {
   constructorBun: null,
@@ -23,6 +23,19 @@ export const constructorReducer = (state = initialState, action) => {
       return {
         ...state,
         constructorItems: state.constructorItems.filter((item) => item.position !== action.position)
+      };
+    }
+    case MOVE_INGREDIENT: {
+      return {
+        ...state,
+        constructorItems: [...action.ingredients]
+      };
+    }
+    case ERASE_CONSTRUCTOR: {
+      return {
+        ...state,
+        constructorBun: null,
+        constructorItems: []
       };
     }
     default: {

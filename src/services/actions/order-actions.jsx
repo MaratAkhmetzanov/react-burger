@@ -1,25 +1,37 @@
+import { GET_DATA_URL } from "../../utils/constants";
+import { ERASE_CONSTRUCTOR } from "./constructor-actions";
+
 export const CREATE_ORDER_REQUEST = 'CREATE_ORDER_REQUEST';
 export const CREATE_ORDER_SUCCESS = 'CREATE_ORDER_SUCCESS';
 export const CREATE_ORDER_FAILED = 'CREATE_ORDER_FAILED';
 
-const GET_DATA_URL = 'https://norma.nomoreparties.space/api/orders';
-
-export function getIngredients () {
+export function getOrder (ingredients) {
   return function (dispatch) {
     dispatch({
       type: CREATE_ORDER_REQUEST
     });
-    fetch(GET_DATA_URL)
-      .then(res => {
+    fetch(`${GET_DATA_URL}/orders`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ ingredients: ingredients })
+    })
+      .then((res) => {
         if (res.ok) {
           return res.json();
         } else Promise.reject(`Ошибка ${res.status}`);
       })
-      .then(res => {
+      .then((res) => {
         if (res && res.success) {
           dispatch({
+            type: ERASE_CONSTRUCTOR
+          });
+          dispatch({
             type: CREATE_ORDER_SUCCESS,
-            ingredients: res.data
+            name: res.name,
+            orderNumber: res.order.number
           });
         } else {
           dispatch({
@@ -27,7 +39,7 @@ export function getIngredients () {
           });
         }
       })
-      .catch(e => {
+      .catch((e) => {
         dispatch({
           type: CREATE_ORDER_FAILED
         });
