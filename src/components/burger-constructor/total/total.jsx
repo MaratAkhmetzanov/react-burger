@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   CurrencyIcon,
@@ -12,20 +12,14 @@ import Modal from '../../modal/modal';
 import { getOrder } from '../../../services/actions/order-actions';
 
 const Total = () => {
-  const totalPrice = useSelector(
-    (store) =>
-      (store.burgerConstructor.constructorBun
-        ? store.burgerConstructor.constructorBun.price * 2
-        : 0) +
-      (store.burgerConstructor.constructorItems
-        ? store.burgerConstructor.constructorItems.reduce((total, item) => total + item.price, 0)
-        : 0)
-  );
-
   const { constructorBun, constructorItems } = useSelector((store) => ({
     constructorBun: store.burgerConstructor.constructorBun,
     constructorItems: store.burgerConstructor.constructorItems
   }));
+
+  const totalPrice = useMemo(() => {
+    return (constructorBun ? constructorBun.price * 2 : 0) + (constructorItems ? constructorItems.reduce((total, item) => total + item.price, 0) : 0)
+  }, [constructorBun, constructorItems]);
 
   const [modalVisibility, setModalVisibility] = useState(false);
 
