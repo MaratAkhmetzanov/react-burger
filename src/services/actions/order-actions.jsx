@@ -4,6 +4,7 @@ import { ERASE_CONSTRUCTOR } from "./constructor-actions";
 export const CREATE_ORDER_REQUEST = 'CREATE_ORDER_REQUEST';
 export const CREATE_ORDER_SUCCESS = 'CREATE_ORDER_SUCCESS';
 export const CREATE_ORDER_FAILED = 'CREATE_ORDER_FAILED';
+export const ERASE_ORDER = 'ERASE_ORDER';
 
 export function getOrder (ingredients) {
   return function (dispatch) {
@@ -16,7 +17,7 @@ export function getOrder (ingredients) {
         Accept: 'application/json',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ ingredients: ingredients })
+      body: JSON.stringify({ ingredients })
     })
       .then((res) => {
         if (res.ok) {
@@ -37,11 +38,17 @@ export function getOrder (ingredients) {
           dispatch({
             type: CREATE_ORDER_FAILED
           });
+          dispatch({
+            type: ERASE_ORDER
+          });
         }
       })
       .catch((e) => {
         dispatch({
           type: CREATE_ORDER_FAILED
+        });
+        dispatch({
+          type: ERASE_ORDER
         });
       });
   };

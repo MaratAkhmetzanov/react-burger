@@ -1,0 +1,17 @@
+@import '../../../css/variables.scss';
+
+.total {
+  display: flex;
+  align-items: center;
+  margin-bottom: 52px;
+}
+
+.total_price {
+  display: flex;
+  align-items: center;
+}
+
+.total svg {
+  width: 36px !important;
+  height: 36px !important;
+}

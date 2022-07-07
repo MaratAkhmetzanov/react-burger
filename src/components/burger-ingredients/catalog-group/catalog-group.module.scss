@@ -1,0 +1,8 @@
+@import '../../../css/variables.scss';
+
+.catalog {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  row-gap: 16px;
+}

@@ -1,7 +1,8 @@
 import {
   CREATE_ORDER_REQUEST,
   CREATE_ORDER_SUCCESS,
-  CREATE_ORDER_FAILED
+  CREATE_ORDER_FAILED,
+  ERASE_ORDER
 } from '../actions/order-actions';
 
 const initialState = {
@@ -33,6 +34,13 @@ export const orderReducer = (state = initialState, action) => {
         ...state,
         orderRequest: false,
         orderFailed: true
+      };
+    }
+    case ERASE_ORDER: {
+      return {
+        ...state,
+        name: '',
+        orderNumber: 0
       };
     }
     default: {

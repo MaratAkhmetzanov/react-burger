@@ -32,16 +32,16 @@
   cursor: default;
 }
 
-.bun_dropzone_hover{
+.bun_dropzone_hover {
   border-radius: 88px 88px 40px 40px;
   outline: 2px dashed #fff;
-  transition: outline-color .5s;
+  transition: outline-color 0.5s;
 }
 
-.bun_dropzone{
+.bun_dropzone {
   border-radius: 88px 88px 40px 40px;
   outline: 2px dashed transparent;
-  transition: outline-color .5s;
+  transition: outline-color 0.5s;
 }
 
 .top {
@@ -52,7 +52,7 @@
   border-radius: 40px 40px 88px 88px;
 }
 
-.empty_ingredients{
+.empty_ingredients {
   height: calc(100vh - 536px);
   width: 100%;
   display: flex;
@@ -64,40 +64,10 @@
   cursor: default;
 }
 
-.ingredients_dropzone_hover{
+.ingredients_dropzone_hover {
   outline: 2px dashed #fff;
   border-radius: 40px;
-  transition: outline-color .5s;
-}
-
-.drag_element {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.hide{
-  opacity: 0;
-}
-
-.drag_icon{
-  cursor: grab;
-}
-
-.total {
-  display: flex;
-  align-items: center;
-  margin-bottom: 52px;
-}
-
-.total_price {
-  display: flex;
-  align-items: center;
-}
-
-.total svg {
-  width: 36px !important;
-  height: 36px !important;
+  transition: outline-color 0.5s;
 }
 
 .track_vertical {
