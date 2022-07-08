@@ -1,59 +1,29 @@
-@import "../../css/variables.scss";
+@import '../../css/variables.scss';
 
 .content {
   width: 600px;
   margin-right: 40px;
 }
 
-.title{
-  height: 40px;
-}
-
-.tabs{
-  display: flex;
-}
-
-.catalog {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  row-gap: 16px;
-}
-
-.card {
-  position: relative;
-  width: 272px;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  cursor: pointer;
-}
-
-.card_price {
+.loading {
+  width: 600px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.card_name {
-  text-align: center;
-  height: 48px;
-  text-overflow: ellipsis;
+.title {
+  height: 40px;
 }
 
-.counter{
-  position: absolute;
-  top: 0;
-  right: 0;
-}
 
 .track_vertical {
   position: absolute;
   background-color: $input;
   width: 8px;
-  top: 0;
+  top: 40px;
   right: 0;
-  height: calc(100% - 40px);
+  height: calc(100% - 80px);
 }
 
 .thumb_vertical {

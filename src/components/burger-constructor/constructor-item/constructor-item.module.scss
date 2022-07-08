@@ -1,0 +1,15 @@
+@import '../../../css/variables.scss';
+
+.drag_element {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.hide{
+  opacity: 0;
+}
+
+.drag_icon{
+  cursor: grab;
+}

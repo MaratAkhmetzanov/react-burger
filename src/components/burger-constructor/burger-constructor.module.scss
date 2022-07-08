@@ -1,4 +1,4 @@
-@import "../../css/variables.scss";
+@import '../../css/variables.scss';
 
 .content {
   width: 600px;
@@ -18,28 +18,56 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
+  height: calc(100vh - 536px);
 }
 
-.drag_element {
+.empty_bun {
+  height: 80px;
+  width: 100%;
   display: flex;
+  justify-content: center;
   align-items: center;
-  justify-content: space-between;
+  background-color: $modal-bg;
+  outline: 2px dashed $input;
+  cursor: default;
 }
 
-.total {
+.bun_dropzone_hover {
+  border-radius: 88px 88px 40px 40px;
+  outline: 2px dashed #fff;
+  transition: outline-color 0.5s;
+}
+
+.bun_dropzone {
+  border-radius: 88px 88px 40px 40px;
+  outline: 2px dashed transparent;
+  transition: outline-color 0.5s;
+}
+
+.top {
+  border-radius: 88px 88px 40px 40px;
+}
+
+.bottom {
+  border-radius: 40px 40px 88px 88px;
+}
+
+.empty_ingredients {
+  height: calc(100vh - 536px);
+  width: 100%;
   display: flex;
+  justify-content: center;
   align-items: center;
-  margin-bottom: 52px;
+  background-color: $modal-bg;
+  outline: 2px dashed $input;
+  border-radius: 40px;
+  cursor: default;
 }
 
-.total_price {
-  display: flex;
-  align-items: center;
-}
-
-.total svg {
-  width: 36px !important;
-  height: 36px !important;
+.ingredients_dropzone_hover {
+  outline: 2px dashed #fff;
+  border-radius: 40px;
+  transition: outline-color 0.5s;
 }
 
 .track_vertical {
