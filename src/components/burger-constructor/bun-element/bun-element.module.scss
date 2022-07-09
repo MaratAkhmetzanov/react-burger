@@ -1,0 +1,30 @@
+@import '../../../css/variables.scss';
+
+.empty_bun {
+  height: 80px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: $modal-bg;
+  outline: 2px dashed $input;
+  cursor: default;
+}
+
+.bun_dropzone_hover {
+  outline: 2px dashed #fff;
+  transition: outline-color 0.5s;
+}
+
+.bun_dropzone {
+  outline: 2px dashed transparent;
+  transition: outline-color 0.5s;
+}
+
+.top {
+  border-radius: 88px 88px 40px 40px;
+}
+
+.bottom {
+  border-radius: 40px 40px 88px 88px;
+}

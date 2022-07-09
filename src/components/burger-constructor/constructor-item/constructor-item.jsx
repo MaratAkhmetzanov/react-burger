@@ -10,7 +10,6 @@ import { DELETE_INGREDIENT } from '../../../services/actions/constructor-actions
 import dataIngredientsType from '../../../utils/types';
 
 const ConstructorItem = ({ ingredient, index, moveItem }) => {
-  const { position } = ingredient;
 
   const ref = useRef(null);
   const [{ handlerId }, drop] = useDrop({
@@ -49,7 +48,7 @@ const ConstructorItem = ({ ingredient, index, moveItem }) => {
   const [{ isDragging }, drag] = useDrag({
     type: 'constructorItem',
     item: () => {
-      return { position, index };
+      return { index };
     },
     collect: (monitor) => ({
       isDragging: monitor.isDragging()
