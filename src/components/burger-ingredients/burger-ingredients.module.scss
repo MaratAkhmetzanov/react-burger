@@ -35,3 +35,16 @@
   background-color: $secondary-text;
   transform: translateY(0px);
 }
+
+.loader{
+  width: 100%;
+  height: calc(100vh - 235px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+
+  & > div:after{
+    background-color: $bg;
+  }
+}
