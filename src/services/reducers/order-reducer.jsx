@@ -1,50 +1,75 @@
-import {
-  CREATE_ORDER_REQUEST,
-  CREATE_ORDER_SUCCESS,
-  CREATE_ORDER_FAILED,
-  ERASE_ORDER
-} from '../actions/order-actions';
+import { createSlice } from '@reduxjs/toolkit';
+import { GET_DATA_URL } from '../../utils/constants';
+import { eraseCunstructor } from './constructor-reducer';
 
 const initialState = {
   name: '',
   orderNumber: 0,
-  orderRequest: false,
-  orderFailed: false
+  createOrderRequest: false,
+  createOrderFailed: false,
 };
 
-export const orderReducer = (state = initialState, action) => {
-  switch (action.type) {
-    case CREATE_ORDER_REQUEST: {
-      return {
-        ...state,
-        orderRequest: true
-      };
-    }
-    case CREATE_ORDER_SUCCESS: {
-      return {
-        ...state,
-        name: action.name,
-        orderNumber: action.orderNumber,
-        orderRequest: false,
-        orderFailed: false
-      };
-    }
-    case CREATE_ORDER_FAILED: {
-      return {
-        ...state,
-        orderRequest: false,
-        orderFailed: true
-      };
-    }
-    case ERASE_ORDER: {
-      return {
-        ...state,
-        name: '',
-        orderNumber: 0
-      };
-    }
-    default: {
-      return state;
-    }
-  }
-};
+const orderReducer = createSlice({
+  name: 'order',
+  initialState,
+  reducers: {
+    createOrderRequest(state) {
+      state.createOrderRequest = true;
+    },
+    createOrderSuccess(state, { payload }) {
+      state.name = payload.name;
+      state.orderNumber = payload.orderNumber;
+      state.createOrderRequest = false;
+      state.createOrderFailed = false;
+    },
+    createOrderFailed(state) {
+      state.createOrderRequest = false;
+      state.createOrderFailed = true;
+    },
+    eraseOrder(state) {
+      state.name = '';
+      state.orderNumber = 0;
+    },
+  },
+});
+
+export function getOrder(ingredients) {
+  return function (dispatch) {
+    dispatch(createOrderRequest());
+    fetch(`${GET_DATA_URL}/orders`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ ingredients }),
+    })
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        } else Promise.reject(`Ошибка ${res.status}`);
+      })
+      .then((res) => {
+        if (res && res.success) {
+          dispatch(eraseCunstructor());
+          dispatch(
+            createOrderSuccess({
+              name: res.name,
+              orderNumber: res.order.number,
+            })
+          );
+        } else {
+          dispatch(createOrderFailed());
+          dispatch(eraseOrder());
+        }
+      })
+      .catch((e) => {
+        dispatch(createOrderFailed());
+        dispatch(eraseOrder());
+      });
+  };
+}
+
+export const { createOrderRequest, createOrderSuccess, createOrderFailed, eraseOrder } = orderReducer.actions;
+
+export default orderReducer.reducer;

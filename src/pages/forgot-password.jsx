@@ -6,7 +6,7 @@ import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-component
 import styleAuth from './auth.module.scss';
 import AuthWrapper from '../components/auth-wrapper/auth-wrapper';
 import { useDispatch, useSelector } from 'react-redux';
-import { forgotPassword } from '../services/actions/auth-actions';
+import { forgotPassword } from '../services/reducers/auth-reducer';
 
 const ForgotPassword = () => {
   const changePasswordRequest = useSelector((store) => store.authorization.changePasswordRequest);

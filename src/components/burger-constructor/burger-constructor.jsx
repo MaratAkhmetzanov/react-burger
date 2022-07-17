@@ -4,9 +4,9 @@ import { useDrop } from 'react-dnd';
 import styleConstructor from './burger-constructor.module.scss';
 import { Scrollbars } from 'react-custom-scrollbars';
 import clsx from 'clsx';
-import { v4 as uuidv4 } from 'uuid';
 
-import { addIngredient, MOVE_INGREDIENT } from '../../services/actions/constructor-actions';
+import { addIngredient, moveIngredient } from '../../services/reducers/constructor-reducer';
+
 
 import Total from './total/total';
 import ConstructorItem from './constructor-item/constructor-item';
@@ -23,7 +23,7 @@ const BurgerConstructor = () => {
       ingredientDropHover: monitor.isOver()
     }),
     drop ({ item }) {
-      dispatch(addIngredient(item, uuidv4()));
+      dispatch(addIngredient(item));
     }
   });
 
@@ -31,7 +31,7 @@ const BurgerConstructor = () => {
     (dragIndex, hoverIndex) => {
       const ingredients = [...constructorItems];
       ingredients.splice(hoverIndex, 0, ingredients.splice(dragIndex, 1)[0]);
-      dispatch({ type: MOVE_INGREDIENT, ingredients });
+      dispatch(moveIngredient(ingredients));
     },
     [dispatch, constructorItems]
   );

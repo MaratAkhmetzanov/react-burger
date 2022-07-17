@@ -3,34 +3,30 @@ import { useSelector, useDispatch } from 'react-redux';
 import clsx from 'clsx';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 
-import { SET_ACTIVE_TAB } from '../../../services/actions/ingredients-actions';
-
 import styleTabs from './tabs.module.scss';
+import { setActiveTab } from '../../../services/reducers/ingredients-reducer';
 
 const Tabs = () => {
   const activeTab = useSelector((store) => store.ingredients.activeTab);
 
   const dispatch = useDispatch();
 
-  const setActiveTab = useCallback(
+  const setActiveTabHandler = useCallback(
     (tab) => {
-      dispatch({
-        type: SET_ACTIVE_TAB,
-        tab
-      });
+      dispatch(setActiveTab(tab));
     },
     [dispatch]
   );
 
   return (
     <div className={clsx(styleTabs.tabs, 'mt-5')}>
-      <Tab value='bun' active={activeTab === 'bun'} onClick={setActiveTab}>
+      <Tab value='bun' active={activeTab === 'bun'} onClick={setActiveTabHandler}>
         Булки
       </Tab>
-      <Tab value='sauce' active={activeTab === 'sauce'} onClick={setActiveTab}>
+      <Tab value='sauce' active={activeTab === 'sauce'} onClick={setActiveTabHandler}>
         Соусы
       </Tab>
-      <Tab value='main' active={activeTab === 'main'} onClick={setActiveTab}>
+      <Tab value='main' active={activeTab === 'main'} onClick={setActiveTabHandler}>
         Начинки
       </Tab>
     </div>

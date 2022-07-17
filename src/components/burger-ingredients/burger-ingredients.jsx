@@ -3,17 +3,16 @@ import { useSelector, useDispatch } from 'react-redux';
 import clsx from 'clsx';
 import { Scrollbars } from 'react-custom-scrollbars';
 
-import { getIngredients, SET_ACTIVE_TAB } from '../../services/actions/ingredients-actions';
-
 import styleIngredients from './burger-ingredients.module.scss';
 import Tabs from './tabs/tabs';
 import CatalogGroup from './catalog-group/catalog-group';
 import Loader from '../loader/loader';
+import { getIngredients, setActiveTab } from '../../services/reducers/ingredients-reducer';
 
 const BurgerIngredients = () => {
-  const { ingredients, ingredientsRequest } = useSelector((store) => ({
+  const { ingredients, getIngredientsRequest } = useSelector((store) => ({
     ingredients: store.ingredients.ingredients,
-    ingredientsRequest: store.ingredients.ingredientsRequest,
+    getIngredientsRequest: store.ingredients.getIngredientsRequest,
   }));
 
   const scrollRef = useRef();
@@ -27,12 +26,9 @@ const BurgerIngredients = () => {
     dispatch(getIngredients());
   }, [dispatch]);
 
-  const setActiveTab = useCallback(
+  const setActiveTabHandler = useCallback(
     (tab) => {
-      dispatch({
-        type: SET_ACTIVE_TAB,
-        tab,
-      });
+      dispatch(setActiveTab(tab));
     },
     [dispatch]
   );
@@ -44,10 +40,10 @@ const BurgerIngredients = () => {
       const mainOffset = mainTitleRef.current.offsetTop;
 
       top > sauceOffset && top < mainOffset
-        ? setActiveTab('sauce')
+        ? setActiveTabHandler('sauce')
         : top > mainOffset
-        ? setActiveTab('main')
-        : setActiveTab('bun');
+        ? setActiveTabHandler('main')
+        : setActiveTabHandler('bun');
     }
   };
 
@@ -55,7 +51,7 @@ const BurgerIngredients = () => {
     <section className={styleIngredients.content}>
       <h1 className={clsx(styleIngredients.title, 'text text_type_main-large mt-10')}>Соберите бургер</h1>
       <Tabs />
-      {ingredientsRequest
+      {getIngredientsRequest
       ?(
         <div className={styleIngredients.loader}>
           <Loader />

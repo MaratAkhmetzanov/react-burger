@@ -24,6 +24,7 @@ const PasswordReset = () => {
 
   const passwordResetHandler = (e) => {
     e.preventDefault();
+    //TODO
   };
 
   return (

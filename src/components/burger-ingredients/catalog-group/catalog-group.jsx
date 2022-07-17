@@ -3,17 +3,13 @@ import { useDispatch } from 'react-redux';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 
-import {
-  ADD_VIEWING_INGREDIENT,
-  DELETE_VIEWING_INGREDIENT
-} from '../../../services/actions/ingredients-actions';
-
 import IngredientDetails from '../../ingredient-details/ingredient-details';
 import Modal from '../../modal/modal';
 
 import dataIngredientsType from '../../../utils/types';
 import styleCatalogGroup from './catalog-group.module.scss';
 import IngredientCard from '../ingredient-card/ingredient-card';
+import { addViewingIngredient, deleteViewingIngredient } from '../../../services/reducers/ingredients-reducer';
 
 
 const CatalogGroup = ({ data, type, title, titleRef }) => {
@@ -22,18 +18,13 @@ const CatalogGroup = ({ data, type, title, titleRef }) => {
   const dispatch = useDispatch();
 
   const handleOpenModal = (ingredient) => {
-    dispatch({
-      type: ADD_VIEWING_INGREDIENT,
-      ingredient
-    });
+    dispatch(addViewingIngredient(ingredient));
     setModalVisibility(true);
   };
 
   const handleCloseModal = () => {
     setModalVisibility(false);
-    dispatch({
-      type: DELETE_VIEWING_INGREDIENT
-    });
+    dispatch(deleteViewingIngredient());
   };
 
   return (

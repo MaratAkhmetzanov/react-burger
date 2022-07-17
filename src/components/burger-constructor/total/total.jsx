@@ -9,7 +9,7 @@ import clsx from 'clsx';
 
 import OrderDetails from '../../order-details/order-details';
 import Modal from '../../modal/modal';
-import { getOrder } from '../../../services/actions/order-actions';
+import { getOrder } from '../../../services/reducers/order-reducer';
 
 const Total = () => {
   const { constructorBun, constructorItems } = useSelector((store) => ({

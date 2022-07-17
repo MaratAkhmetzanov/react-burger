@@ -1,63 +1,64 @@
-import {
-  GET_INGREDIENTS_REQUEST,
-  GET_INGREDIENTS_SUCCESS,
-  GET_INGREDIENTS_FAILED,
-  SET_ACTIVE_TAB,
-  ADD_VIEWING_INGREDIENT,
-  DELETE_VIEWING_INGREDIENT
-} from '../actions/ingredients-actions';
+import { createSlice } from '@reduxjs/toolkit';
+import { GET_DATA_URL } from '../../utils/constants';
 
 const initialState = {
   ingredients: [],
-  ingredientsRequest: false,
-  ingredientsFailed: false,
+  getIngredientsRequest: false,
+  getIngredientsFailed: false,
   activeTab: 'bun',
-  viewingIngredient: {}
+  viewingIngredient: null
 };
 
-export const ingredientsReducer = (state = initialState, action) => {
-  switch (action.type) {
-    case GET_INGREDIENTS_REQUEST: {
-      return {
-        ...state,
-        ingredientsRequest: true
-      };
-    }
-    case GET_INGREDIENTS_SUCCESS: {
-      return {
-        ...state,
-        ingredients: action.ingredients,
-        ingredientsRequest: false,
-        ingredientsFailed: false
-      };
-    }
-    case GET_INGREDIENTS_FAILED: {
-      return {
-        ...state,
-        ingredientsRequest: false,
-        ingredientsFailed: true
-      };
-    }
-    case SET_ACTIVE_TAB: {
-      return {
-        ...state,
-        activeTab: action.tab
-      };
-    }
-    case ADD_VIEWING_INGREDIENT: {
-      return {
-        ...state,
-        viewingIngredient: action.ingredient
-      };
-    }
-    case DELETE_VIEWING_INGREDIENT: {
-      return {
-        ...state,
-        viewingIngredient: {}
-      };
-    }
-    default: {
-      return state;
-    }
-  }
-};
+const ingredientsReducer = createSlice({
+  name: 'order',
+  initialState,
+  reducers: {
+    getIngredientsRequest (state) {
+      state.getIngredientsRequest = true;
+    },
+    getIngredientsSuccess (state, { payload }) {
+      state.ingredients = payload;
+      state.getIngredientsRequest = false;
+      state.getIngredientsFailed = false;
+    },
+    getIngredientsFailed (state) {
+      state.getIngredientsRequest = false;
+      state.getIngredientsFailed = true;
+    },
+    setActiveTab (state, { payload }) {
+      state.activeTab = payload;
+    },
+    addViewingIngredient (state, { payload }) {
+      state.viewingIngredient = payload;
+    },
+    deleteViewingIngredient (state, { payload }) {
+      state.viewingIngredient = null;
+    },
+  },
+});
+
+export function getIngredients () {
+  return function (dispatch) {
+    dispatch(getIngredientsRequest());
+    fetch(`${GET_DATA_URL}/ingredients`)
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        } else Promise.reject(`Ошибка ${res.status}`);
+      })
+      .then((res) => {
+        if (res && res.success) {
+          dispatch(getIngredientsSuccess(res.data));
+        } else {
+          dispatch(getIngredientsFailed());
+        }
+      })
+      .catch((e) => {
+        dispatch(getIngredientsFailed());
+      });
+  };
+}
+
+export const { getIngredientsRequest, getIngredientsSuccess, getIngredientsFailed, setActiveTab, addViewingIngredient,deleteViewingIngredient } = ingredientsReducer.actions;
+
+export default ingredientsReducer.reducer;

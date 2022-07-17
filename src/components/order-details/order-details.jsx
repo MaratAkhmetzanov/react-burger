@@ -6,19 +6,19 @@ import styleOrderDetails from './order-details.module.scss';
 import { checkmark } from '../../images/svg.jsx';
 
 const OrderDetails = () => {
-  const { orderNumber, orderRequest } = useSelector((store) => ({
+  const { orderNumber, createOrderRequest } = useSelector((store) => ({
     orderNumber: store.order.orderNumber,
-    orderRequest: store.order.orderRequest
+    createOrderRequest: store.order.createOrderRequest
   }));
 
   return (
     <div className={styleOrderDetails.order_wrapper}>
-      {orderRequest && (
+      {createOrderRequest && (
         <div className={clsx(styleOrderDetails.loader, 'text text_type_main-medium')}>
           Формируем заказ…
         </div>
       )}
-      {!orderRequest && (
+      {!createOrderRequest && (
         <>
           <p className={clsx(styleOrderDetails.order_id, 'text text_type_digits-large mt-20')}>
             {orderNumber}

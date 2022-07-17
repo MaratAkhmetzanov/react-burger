@@ -47,8 +47,11 @@ const AppHeader = () => {
 };
 
 NavigationLink.propTypes = {
-  className: PropTypes.string,
   label: PropTypes.string.isRequired,
+  route: PropTypes.string.isRequired,
+  className: PropTypes.string,
+  icon: PropTypes.string,
+  isExact: PropTypes.bool,
 };
 
 export default AppHeader;

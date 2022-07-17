@@ -5,7 +5,7 @@ import { ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-comp
 import styleBunElement from './bun-element.module.scss';
 import clsx from 'clsx';
 
-import { addIngredient } from '../../../services/actions/constructor-actions';
+import { addIngredient } from '../../../services/reducers/constructor-reducer';
 
 const BunElement = ({ isTop = true }) => {
   const constructorBun = useSelector((store) => store.burgerConstructor.constructorBun);

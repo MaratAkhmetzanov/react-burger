@@ -6,12 +6,12 @@ import styleConstructorItem from './constructor-item.module.scss';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 
-import { DELETE_INGREDIENT } from '../../../services/actions/constructor-actions';
 import dataIngredientsType from '../../../utils/types';
+import { deleteIngredient } from '../../../services/reducers/constructor-reducer';
 
 const ConstructorItem = ({ ingredient, index, moveItem }) => {
-
   const ref = useRef(null);
+
   const [{ handlerId }, drop] = useDrop({
     accept: 'constructorItem',
     collect (monitor) {
@@ -57,11 +57,8 @@ const ConstructorItem = ({ ingredient, index, moveItem }) => {
 
   drag(drop(ref));
 
-  const deleteIngredient = (position) => {
-    dispatch({
-      type: DELETE_INGREDIENT,
-      position
-    });
+  const deleteIngredientHandler = (position) => {
+    dispatch(deleteIngredient(position));
   };
 
   const dispatch = useDispatch();
@@ -82,7 +79,7 @@ const ConstructorItem = ({ ingredient, index, moveItem }) => {
         text={ingredient.name}
         price={ingredient.price}
         thumbnail={ingredient.image}
-        handleClose={() => deleteIngredient(ingredient.position)}
+        handleClose={() => deleteIngredientHandler(ingredient.position)}
       />
     </div>
   );

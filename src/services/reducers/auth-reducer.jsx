@@ -1,36 +1,104 @@
-import { CHANGE_PASSWORD_FAILED, CHANGE_PASSWORD_REQUEST, CHANGE_PASSWORD_SUCCESS } from "../actions/auth-actions";
+import { createSlice } from "@reduxjs/toolkit";
+import { GET_DATA_URL } from '../../utils/constants';
 
 const initialState = {
-  changePasswordRequest: false,
-  changePasswordFailed: false,
+  forgotPasswordRequest: false,
+  forgotPasswordFailed: false,
   resetPasswordRequest: false,
   resetPasswordFailed: false
 };
 
-export const authReducer = (state = initialState, action) => {
-  switch (action.type) {
-    case CHANGE_PASSWORD_REQUEST: {
-      return {
-        ...state,
-        changePasswordRequest: true
-      };
-    }
-    case CHANGE_PASSWORD_SUCCESS: {
-      return {
-        ...state,
-        changePasswordRequest: false,
-        changePasswordFailed: false
-      };
-    }
-    case CHANGE_PASSWORD_FAILED: {
-      return {
-        ...state,
-        changePasswordRequest: false,
-        changePasswordFailed: true
-      };
-    }
-    default: {
-      return state;
-    }
-  }
+const authReducer = createSlice({
+  name: 'authorization',
+  initialState,
+  reducers: {
+    forgotPasswordRequest (state) {
+      state.forgotPasswordRequest = true;
+    },
+    forgotPasswordSuccess (state) {
+      state.forgotPasswordRequest = false;
+      state.forgotPasswordFailed = false;
+    },
+    forgotPasswordFailed (state) {
+      state.forgotPasswordRequest = false;
+      state.forgotPasswordFailed = true;
+    },
+    resetPasswordRequest (state) {
+      state.resetPasswordRequest = true;
+    },
+    resetPasswordSuccess (state) {
+      state.resetPasswordRequest = false;
+      state.resetPasswordFailed = false;
+    },
+    resetPasswordFailed (state) {
+      state.resetPasswordRequest = false;
+      state.resetPasswordFailed = true;
+    },
+  },
+});
+
+export function forgotPassword (email, history) {
+  return function (dispatch) {
+    dispatch(forgotPasswordRequest());
+    fetch(`${GET_DATA_URL}/password-reset`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email }),
+    })
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        } else Promise.reject(`Ошибка ${res.status}`);
+      })
+      .then((res) => {
+        if (res && res.success) {
+          dispatch(forgotPasswordSuccess());
+          history.push({ pathname: '/reset-password' });
+        } else {
+          dispatch(forgotPasswordFailed());
+        }
+      })
+      .catch((e) => {
+        dispatch(forgotPasswordFailed());
+      });
+  };
 }
+
+export function resetPassword (password, token) {
+  return function (dispatch) {
+    dispatch(resetPasswordRequest());
+    fetch(`${GET_DATA_URL}/password-reset/reset`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        password,
+        token,
+      }),
+    })
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        } else Promise.reject(`Ошибка ${res.status}`);
+      })
+      .then((res) => {
+        if (res && res.success) {
+          dispatch(forgotPasswordSuccess());
+        } else {
+          dispatch(forgotPasswordFailed());
+        }
+      })
+      .catch((e) => {
+        dispatch(forgotPasswordFailed());
+      });
+  };
+}
+
+export const { forgotPasswordRequest, forgotPasswordSuccess, forgotPasswordFailed, resetPasswordRequest, resetPasswordSuccess, resetPasswordFailed } = authReducer.actions;
+
+export default authReducer.reducer;
