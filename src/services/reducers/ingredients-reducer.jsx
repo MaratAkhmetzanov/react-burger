@@ -3,62 +3,67 @@ import { GET_DATA_URL } from '../../utils/constants';
 
 const initialState = {
   ingredients: [],
-  getIngredientsRequest: false,
-  getIngredientsFailed: false,
+  isGetIngredientsRequest: false,
+  isGetIngredientsFailed: false,
   activeTab: 'bun',
-  viewingIngredient: null
+  viewingIngredient: null,
 };
 
 const ingredientsReducer = createSlice({
   name: 'order',
   initialState,
   reducers: {
-    getIngredientsRequest (state) {
-      state.getIngredientsRequest = true;
+    getIngredientsRequest(state) {
+      state.isGetIngredientsRequest = true;
     },
-    getIngredientsSuccess (state, { payload }) {
+    getIngredientsSuccess(state, { payload }) {
       state.ingredients = payload;
-      state.getIngredientsRequest = false;
-      state.getIngredientsFailed = false;
+      state.isGetIngredientsRequest = false;
+      state.isGetIngredientsFailed = false;
     },
-    getIngredientsFailed (state) {
-      state.getIngredientsRequest = false;
-      state.getIngredientsFailed = true;
+    getIngredientsFailed(state) {
+      state.isGetIngredientsRequest = false;
+      state.isGetIngredientsFailed = true;
     },
-    setActiveTab (state, { payload }) {
+    setActiveTab(state, { payload }) {
       state.activeTab = payload;
     },
-    addViewingIngredient (state, { payload }) {
+    addViewingIngredient(state, { payload }) {
       state.viewingIngredient = payload;
     },
-    deleteViewingIngredient (state, { payload }) {
+    deleteViewingIngredient(state, { payload }) {
       state.viewingIngredient = null;
     },
   },
 });
 
-export function getIngredients () {
-  return function (dispatch) {
-    dispatch(getIngredientsRequest());
-    fetch(`${GET_DATA_URL}/ingredients`)
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        } else Promise.reject(`Ошибка ${res.status}`);
-      })
-      .then((res) => {
-        if (res && res.success) {
-          dispatch(getIngredientsSuccess(res.data));
-        } else {
-          dispatch(getIngredientsFailed());
-        }
-      })
-      .catch((e) => {
+export const getIngredients = () => (dispatch) => {
+  dispatch(getIngredientsRequest());
+  fetch(`${GET_DATA_URL}/ingredients`)
+    .then((res) => {
+      if (res.ok) {
+        return res.json();
+      } else Promise.reject(`Ошибка ${res.status}`);
+    })
+    .then((res) => {
+      if (res && res.success) {
+        dispatch(getIngredientsSuccess(res.data));
+      } else {
         dispatch(getIngredientsFailed());
-      });
-  };
-}
+      }
+    })
+    .catch((e) => {
+      dispatch(getIngredientsFailed());
+    });
+};
 
-export const { getIngredientsRequest, getIngredientsSuccess, getIngredientsFailed, setActiveTab, addViewingIngredient,deleteViewingIngredient } = ingredientsReducer.actions;
+export const {
+  getIngredientsRequest,
+  getIngredientsSuccess,
+  getIngredientsFailed,
+  setActiveTab,
+  addViewingIngredient,
+  deleteViewingIngredient,
+} = ingredientsReducer.actions;
 
 export default ingredientsReducer.reducer;

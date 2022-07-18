@@ -1,10 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import clsx from 'clsx';
 import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import styleAuth from './auth.module.scss';
 import AuthWrapper from '../components/auth-wrapper/auth-wrapper';
+import { loginUser } from '../services/reducers/auth-reducer';
+import { useDispatch } from 'react-redux';
 
 const FORM_TITLE = 'Вход';
 const BUTTON_TITLE = 'Войти';
@@ -17,12 +19,14 @@ const Login = () => {
   const passwordRef = useRef(null);
 
   const location = useLocation();
+  const dispatch = useDispatch();
+  const history = useHistory();
 
   useEffect(() => {
-    if (!email && location.state) {
+    if (location.state && location.state.savedEmail) {
       setEmail(location.state.savedEmail);
     }
-    if (emailRef.current && !email) {
+    if (emailRef.current) {
       emailRef.current.focus();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -30,6 +34,7 @@ const Login = () => {
 
   const loginHandler = (e) => {
     e.preventDefault();
+    dispatch(loginUser(email, password, history));
   };
 
   return (
@@ -73,15 +78,11 @@ const Login = () => {
       <div className={styleAuth.bottom_text}>
         <p className='text text_type_main-default text_color_inactive mb-4'>
           Вы — новый пользователь?{' '}
-          <Link to={{ pathname: '/register', state: { savedEmail: email } }}>
-            Зарегистрироваться
-          </Link>
+          <Link to={{ pathname: '/register', state: { savedEmail: email } }}>Зарегистрироваться</Link>
         </p>
         <p className='text text_type_main-default text_color_inactive'>
           Забыли пароль?{' '}
-          <Link to={{ pathname: '/forgot-password', state: { savedEmail: email } }}>
-            Восстановить пароль
-          </Link>
+          <Link to={{ pathname: '/forgot-password', state: { savedEmail: email } }}>Восстановить пароль</Link>
         </p>
       </div>
     </AuthWrapper>

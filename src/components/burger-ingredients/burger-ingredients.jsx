@@ -10,9 +10,9 @@ import Loader from '../loader/loader';
 import { getIngredients, setActiveTab } from '../../services/reducers/ingredients-reducer';
 
 const BurgerIngredients = () => {
-  const { ingredients, getIngredientsRequest } = useSelector((store) => ({
+  const { ingredients, isGetIngredientsRequest } = useSelector((store) => ({
     ingredients: store.ingredients.ingredients,
-    getIngredientsRequest: store.ingredients.getIngredientsRequest,
+    isGetIngredientsRequest: store.ingredients.isGetIngredientsRequest,
   }));
 
   const scrollRef = useRef();
@@ -51,7 +51,7 @@ const BurgerIngredients = () => {
     <section className={styleIngredients.content}>
       <h1 className={clsx(styleIngredients.title, 'text text_type_main-large mt-10')}>Соберите бургер</h1>
       <Tabs />
-      {getIngredientsRequest
+      {isGetIngredientsRequest
       ?(
         <div className={styleIngredients.loader}>
           <Loader />

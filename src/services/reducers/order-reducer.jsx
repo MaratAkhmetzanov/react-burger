@@ -5,8 +5,8 @@ import { eraseCunstructor } from './constructor-reducer';
 const initialState = {
   name: '',
   orderNumber: 0,
-  createOrderRequest: false,
-  createOrderFailed: false,
+  isCreateOrderRequest: false,
+  isCreateOrderFailed: false,
 };
 
 const orderReducer = createSlice({
@@ -14,17 +14,17 @@ const orderReducer = createSlice({
   initialState,
   reducers: {
     createOrderRequest(state) {
-      state.createOrderRequest = true;
+      state.isCreateOrderRequest = true;
     },
     createOrderSuccess(state, { payload }) {
       state.name = payload.name;
       state.orderNumber = payload.orderNumber;
-      state.createOrderRequest = false;
-      state.createOrderFailed = false;
+      state.isCreateOrderRequest = false;
+      state.isCreateOrderFailed = false;
     },
     createOrderFailed(state) {
-      state.createOrderRequest = false;
-      state.createOrderFailed = true;
+      state.isCreateOrderRequest = false;
+      state.isCreateOrderFailed = true;
     },
     eraseOrder(state) {
       state.name = '';
@@ -33,42 +33,40 @@ const orderReducer = createSlice({
   },
 });
 
-export function getOrder(ingredients) {
-  return function (dispatch) {
-    dispatch(createOrderRequest());
-    fetch(`${GET_DATA_URL}/orders`, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ ingredients }),
+export const getOrder = (ingredients) => (dispatch) => {
+  dispatch(createOrderRequest());
+  fetch(`${GET_DATA_URL}/orders`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ ingredients }),
+  })
+    .then((res) => {
+      if (res.ok) {
+        return res.json();
+      } else Promise.reject(`Ошибка ${res.status}`);
     })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        } else Promise.reject(`Ошибка ${res.status}`);
-      })
-      .then((res) => {
-        if (res && res.success) {
-          dispatch(eraseCunstructor());
-          dispatch(
-            createOrderSuccess({
-              name: res.name,
-              orderNumber: res.order.number,
-            })
-          );
-        } else {
-          dispatch(createOrderFailed());
-          dispatch(eraseOrder());
-        }
-      })
-      .catch((e) => {
+    .then((res) => {
+      if (res && res.success) {
+        dispatch(eraseCunstructor());
+        dispatch(
+          createOrderSuccess({
+            name: res.name,
+            orderNumber: res.order.number,
+          })
+        );
+      } else {
         dispatch(createOrderFailed());
         dispatch(eraseOrder());
-      });
-  };
-}
+      }
+    })
+    .catch((e) => {
+      dispatch(createOrderFailed());
+      dispatch(eraseOrder());
+    });
+};
 
 export const { createOrderRequest, createOrderSuccess, createOrderFailed, eraseOrder } = orderReducer.actions;
 

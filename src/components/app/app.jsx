@@ -12,6 +12,7 @@ import PasswordReset from '../../pages/reset-password';
 import ForgotPassword from '../../pages/forgot-password';
 import NotFound404 from '../../pages/404';
 import ProfileOrdersPage from '../../pages/profile-pages/profile-orders-page';
+import ProtectedRoute from '../protected-route/protected-route';
 
 const App = () => {
   return (
@@ -38,12 +39,15 @@ const App = () => {
         <Route exact path='/orders'>
           <OrdersPage />
         </Route>
-        <Route exact path='/profile'>
+        <ProtectedRoute exact path='/profile'>
           <ProfilePage />
-        </Route>
-        <Route exact path='/profile/orders'>
+        </ProtectedRoute>
+        <ProtectedRoute exact path='/profile/orders'>
           <ProfileOrdersPage />
-        </Route>
+        </ProtectedRoute>
+        <ProtectedRoute exact path='/profile/orders/:id'>
+          ingredient
+        </ProtectedRoute>
         <Route>
           <NotFound404 />
         </Route>
