@@ -4,7 +4,7 @@ import { Redirect, Route } from 'react-router-dom';
 import { getUser } from '../../services/reducers/profile-reducer';
 import Loader from '../loader/loader';
 
-const ProtectedRoute = ({ children, ...rest }) => {
+const RedirectRoute = ({ children, ...rest }) => {
   const { user, isGetUserLoaded } = useSelector((store) => ({
     user: store.profile.user,
     isGetUserLoaded: store.profile.isGetUserLoaded,
@@ -25,12 +25,12 @@ const ProtectedRoute = ({ children, ...rest }) => {
     <Route
       {...rest}
       render={({ location }) =>
-        user ? (
+        !user ? (
           children
         ) : (
           <Redirect
             to={{
-              pathname: '/login',
+              pathname: '/',
               state: { from: location },
             }}
           />
@@ -40,4 +40,4 @@ const ProtectedRoute = ({ children, ...rest }) => {
   );
 };
 
-export default ProtectedRoute;
+export default RedirectRoute;

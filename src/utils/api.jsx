@@ -37,7 +37,7 @@ export const fetchLogin = async (email, password) =>
   });
 
 export const fetchRefreshToken = async () =>
-  await fetch(`${GET_DATA_URL}/auth/login`, {
+  await fetch(`${GET_DATA_URL}/auth/token`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -102,11 +102,12 @@ export const fetchResetPassword = async (password, token) =>
 export const fetchGetUser = async () =>
   await fetch(`${GET_DATA_URL}/auth/user`, {
     method: 'GET',
-    authorization: getCookie('accessToken'),
+    authorization: `Basic ${getCookie('accessToken')}`,
+    headers: {
+      authorization: `Basic ${getCookie('accessToken')}`,
+    },
   }).then((res) => {
-    if (res.ok) {
-      return res.json();
-    } else Promise.reject(`Ошибка ${res.status}`);
+    return res.json();
   });
 
 export const fetchUpdateUser = async (email, password, name) =>

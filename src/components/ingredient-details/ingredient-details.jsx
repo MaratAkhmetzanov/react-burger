@@ -1,46 +1,77 @@
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react';
 import clsx from 'clsx';
 
 import styleIngredientDetails from './ingredient-details.module.scss';
 import Loader from '../loader/loader';
+import { useDispatch, useSelector } from 'react-redux';
+import { getIngredients } from '../../services/reducers/ingredients-reducer';
+import { useHistory, useLocation, useRouteMatch } from 'react-router-dom';
 
-const IngredientDetails = () => {
-  const viewingIngredient = useSelector((store) => store.ingredients.viewingIngredient);
+const IngredientDetails = ({ ingredientId = '' }) => {
+  const {
+    params: { id },
+    url,
+  } = useRouteMatch();
+  const { ingredients, viewingIngredientId } = useSelector((store) => ({
+    ingredients: store.ingredients.ingredients,
+    viewingIngredientId: store.ingredients.viewingIngredientId,
+  }));
   const [isImageLoaded, setIsImageLoaded] = useState(false);
 
+  const [viewingIngredient, setviewIngIngredient] = useState(null);
+
+  const dispatch = useDispatch();
+  const history = useHistory();
+  let location = useLocation();
+
+  useEffect(() => {
+    console.log(url);
+    if (id) {
+      dispatch(getIngredients());
+    }
+    setviewIngIngredient(ingredients.find((item) => item._id === id || item._id === viewingIngredientId));
+    // history.location({ pathname: `${url}/ingredient/1233` })
+    window.history.pushState({ state: { ingredientId: '123', from: '/' } }, 'Title', '/new-url');
+    console.log(location);
+    console.log(history);
+  }, []);
+
   return (
-    <div className={clsx(styleIngredientDetails.details_wrapper, 'pt-15 pr-10 pb-15 pl-10')}>
-      <h2 className={clsx(styleIngredientDetails.title, 'text text_type_main-large')}>Детали ингредиента</h2>
-      <div className={styleIngredientDetails.ingredient_img}>
-        {!isImageLoaded && <Loader />}
-        <img
-          src={viewingIngredient.image_large}
-          alt={viewingIngredient.name}
-          className={!isImageLoaded ? styleIngredientDetails.hidden : styleIngredientDetails.visible}
-          onLoad={() => setIsImageLoaded(true)}
-        />
-      </div>
-      <h3 className='text text_type_main-medium mt-4'>{viewingIngredient.name}</h3>
-      <div className={clsx(styleIngredientDetails.parameters, 'mt-8')}>
-        <div>
-          <p className='text text_type_main-default text_color_inactive'>Калории,ккал</p>
-          <p className='text text_type_main-default text_color_inactive mt-2'>{viewingIngredient.calories}</p>
+    <>
+      {viewingIngredient && (
+        <div className={clsx(styleIngredientDetails.details_wrapper, 'pt-15 pr-10 pb-15 pl-10')}>
+          <h2 className={clsx(styleIngredientDetails.title, 'text text_type_main-large')}>Детали ингредиента</h2>
+          <div className={styleIngredientDetails.ingredient_img}>
+            {!isImageLoaded && <Loader />}
+            <img
+              src={viewingIngredient.image_large}
+              alt={viewingIngredient.name}
+              className={!isImageLoaded ? styleIngredientDetails.hidden : styleIngredientDetails.visible}
+              onLoad={() => setIsImageLoaded(true)}
+            />
+          </div>
+          <h3 className='text text_type_main-medium mt-4'>{viewingIngredient.name}</h3>
+          <div className={clsx(styleIngredientDetails.parameters, 'mt-8')}>
+            <div>
+              <p className='text text_type_main-default text_color_inactive'>Калории,ккал</p>
+              <p className='text text_type_main-default text_color_inactive mt-2'>{viewingIngredient.calories}</p>
+            </div>
+            <div>
+              <p className='text text_type_main-default text_color_inactive'>Белки,г</p>
+              <p className='text text_type_main-default text_color_inactive mt-2'>{viewingIngredient.proteins}</p>
+            </div>
+            <div>
+              <p className='text text_type_main-default text_color_inactive'>Жиры,г</p>
+              <p className='text text_type_main-default text_color_inactive mt-2'>{viewingIngredient.fat}</p>
+            </div>
+            <div>
+              <p className='text text_type_main-default text_color_inactive'>Углеводы,г</p>
+              <p className='text text_type_main-default text_color_inactive mt-2'>{viewingIngredient.carbohydrates}</p>
+            </div>
+          </div>
         </div>
-        <div>
-          <p className='text text_type_main-default text_color_inactive'>Белки,г</p>
-          <p className='text text_type_main-default text_color_inactive mt-2'>{viewingIngredient.proteins}</p>
-        </div>
-        <div>
-          <p className='text text_type_main-default text_color_inactive'>Жиры,г</p>
-          <p className='text text_type_main-default text_color_inactive mt-2'>{viewingIngredient.fat}</p>
-        </div>
-        <div>
-          <p className='text text_type_main-default text_color_inactive'>Углеводы,г</p>
-          <p className='text text_type_main-default text_color_inactive mt-2'>{viewingIngredient.carbohydrates}</p>
-        </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 };
 

@@ -1,12 +1,14 @@
 import { Input } from '@ya.praktikum/react-developer-burger-ui-components';
 import clsx from 'clsx';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 import styleProfile from './profile.module.scss';
 
 const Profile = () => {
-  const [userName, setUserName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const user = useSelector(store => store.profile.user)
+  const [userName, setUserName] = useState(user.name);
+  const [email, setEmail] = useState(user.email);
+  const [password, setPassword] = useState('******');
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const userNameRef = useRef(null);
   const emailRef = useRef(null);

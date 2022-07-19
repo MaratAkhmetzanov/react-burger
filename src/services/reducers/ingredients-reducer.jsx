@@ -6,7 +6,7 @@ const initialState = {
   isGetIngredientsRequest: false,
   isGetIngredientsFailed: false,
   activeTab: 'bun',
-  viewingIngredient: null,
+  viewingIngredientId: null,
 };
 
 const ingredientsReducer = createSlice({
@@ -29,10 +29,10 @@ const ingredientsReducer = createSlice({
       state.activeTab = payload;
     },
     addViewingIngredient(state, { payload }) {
-      state.viewingIngredient = payload;
+      state.viewingIngredientId = payload;
     },
     deleteViewingIngredient(state, { payload }) {
-      state.viewingIngredient = null;
+      state.viewingIngredientId = null;
     },
   },
 });

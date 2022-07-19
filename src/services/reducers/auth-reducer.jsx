@@ -104,7 +104,6 @@ export const registerUser = (email, password, name) => (dispatch) => {
     .then((data) => {
       if (data && data.success) {
         saveTokensUtil(data.accessToken, data.refreshToken);
-
         dispatch(registerSuccess(data.user));
       } else {
         dispatch(registerFailed(data.message));
@@ -115,7 +114,7 @@ export const registerUser = (email, password, name) => (dispatch) => {
     });
 };
 
-export const loginUser = (email, password, history) => (dispatch) => {
+export const loginUser = (email, password) => (dispatch) => {
   dispatch(loginRequest());
 
   fetchLogin(email, password)
@@ -123,7 +122,6 @@ export const loginUser = (email, password, history) => (dispatch) => {
       if (data && data.success) {
         saveTokensUtil(data.accessToken, data.refreshToken);
         dispatch(loginSuccess(data.user));
-        history.replace({ pathname: '/' });
       } else {
         dispatch(loginFailed());
       }

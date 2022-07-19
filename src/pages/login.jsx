@@ -6,7 +6,7 @@ import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-component
 import styleAuth from './auth.module.scss';
 import AuthWrapper from '../components/auth-wrapper/auth-wrapper';
 import { loginUser } from '../services/reducers/auth-reducer';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 const FORM_TITLE = 'Вход';
 const BUTTON_TITLE = 'Войти';
@@ -20,7 +20,6 @@ const Login = () => {
 
   const location = useLocation();
   const dispatch = useDispatch();
-  const history = useHistory();
 
   useEffect(() => {
     if (location.state && location.state.savedEmail) {
@@ -32,9 +31,18 @@ const Login = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const user = useSelector((store) => store.profile.user);
+  const history = useHistory();
+  useEffect(() => {
+    if (user) {
+      history.replace({ pathname: '/' });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
+
   const loginHandler = (e) => {
     e.preventDefault();
-    dispatch(loginUser(email, password, history));
+    dispatch(loginUser(email, password));
   };
 
   return (

@@ -1,10 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { fetchGetUser, fetchUpdateUser } from '../../utils/api';
-import { loginSuccess, registerSuccess } from './auth-reducer';
+import { loginSuccess, refreshToken, registerSuccess } from './auth-reducer';
 
 const initialState = {
   user: null,
   isGetUserRequest: false,
+  isGetUserLoaded: false,
   getUserFailedMessage: '',
 };
 
@@ -17,12 +18,13 @@ const profileReducer = createSlice({
     },
     getUserSuccess (state, { payload }) {
       state.user = { ...payload };
-
       state.isGetUserRequest = false;
+      state.isGetUserLoaded = true;
       state.getUserFailedMessage = '';
     },
     getUserFailed (state, { payload }) {
       state.isGetUserRequest = false;
+      state.isGetUserLoaded = true;
       state.getUserFailedMessage = payload;
     },
   },
@@ -36,14 +38,19 @@ const profileReducer = createSlice({
   },
 });
 
-export const getUser = () => (dispatch) => {
+export const getUser = (reqCount = 0) => (dispatch) => {
   dispatch(getUserRequest());
   fetchGetUser()
     .then((data) => {
       if (data && data.success) {
         dispatch(getUserSuccess(data.user));
       } else {
-        dispatch(getUserFailed(data.message));
+        console.log(data.message);
+        if (data.message === 'jwt expired' && reqCount < 4) {
+          const counter = reqCount + 1;
+          dispatch(refreshToken());
+          dispatch(getUser(counter));
+        } else dispatch(getUserFailed(data.message));
       }
     })
     .catch((e) => {
@@ -57,8 +64,10 @@ export const updateUser = (email, password, name) => (dispatch) => {
     .then((data) => {
       if (data && data.success) {
         dispatch(getUserSuccess(data.user));
-      } else {
+      }
+      if (data.message) {
         dispatch(getUserFailed(data.message));
+        console.log(data.message);
       }
     })
     .catch((e) => {

@@ -10,34 +10,36 @@ import OrdersPage from '../../pages/orders-page';
 import ProfilePage from '../../pages/profile-pages/profile-page';
 import PasswordReset from '../../pages/reset-password';
 import ForgotPassword from '../../pages/forgot-password';
-import NotFound404 from '../../pages/404';
+import NotFound404 from '../../pages/404/404';
 import ProfileOrdersPage from '../../pages/profile-pages/profile-orders-page';
 import ProtectedRoute from '../protected-route/protected-route';
+import RedirectRoute from '../protected-route/redirect-route';
+import IngredientPage from '../../pages/ingredient-page';
 
 const App = () => {
   return (
     <Provider store={store}>
       <Switch>
-        <Route exact path='/login'>
+        <RedirectRoute exact path='/login'>
           <Login />
-        </Route>
-        <Route exact path='/register'>
+        </RedirectRoute>
+        <RedirectRoute exact path='/register'>
           <Registration />
-        </Route>
-        <Route exact path='/forgot-password'>
+        </RedirectRoute>
+        <RedirectRoute exact path='/forgot-password'>
           <ForgotPassword />
-        </Route>
-        <Route exact path='/reset-password'>
+        </RedirectRoute>
+        <RedirectRoute exact path='/reset-password'>
           <PasswordReset />
-        </Route>
-        <Route exact path='/ingredients/:id'>
-          ingredient
-        </Route>
+        </RedirectRoute>
         <Route exact path='/'>
           <ConstructorPage />
         </Route>
         <Route exact path='/orders'>
           <OrdersPage />
+        </Route>
+        <Route exact path='/ingredients/:id'>
+          <IngredientPage />
         </Route>
         <ProtectedRoute exact path='/profile'>
           <ProfilePage />
