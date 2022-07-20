@@ -12,6 +12,7 @@ const ForgotPassword = () => {
   const changePasswordRequest = useSelector((store) => store.authorization.changePasswordRequest);
   const [email, setEmail] = useState('');
   const emailRef = useRef(null);
+  const [isEmailEmpty, setIsEmailEmpty] = useState(false);
 
   const dispatch = useDispatch();
   const history = useHistory();
@@ -27,21 +28,31 @@ const ForgotPassword = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const emailChangeHandler = (e) => {
+    setIsEmailEmpty(false);
+    setEmail(e.target.value);
+  };
+
   const forgotPasswordHandler = (e) => {
     e.preventDefault();
-    dispatch(forgotPassword(email, history));
-    history.push({ pathname: '/reset-password', state: { from: location } });
+    if (email !== '') {
+      dispatch(forgotPassword(email, history));
+      history.push({ pathname: '/reset-password', state: { from: location } });
+    } else setIsEmailEmpty(true);
   };
 
   return (
     <AuthWrapper>
       <form className={styleAuth.login_form}>
         <h1 className='text text_type_main-medium mb-6'>Восстановление пароля</h1>
+          {isEmailEmpty && (
+            <p className={clsx(styleAuth.error_message, 'text text_type_main-default mb-4')}>Введите почту</p>
+          )}
         <div className={clsx(styleAuth.input, 'mb-6')}>
           <Input
             type={'email'}
             placeholder={'Укажите e-mail'}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={emailChangeHandler}
             value={email}
             name={'email'}
             error={false}

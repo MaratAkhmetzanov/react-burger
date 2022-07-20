@@ -29,16 +29,21 @@
     text-decoration: none;
     color: $primary-text;
     transition: color 0.5s;
-    
-    &:hover{
+
+    &:hover {
       color: #fff;
       transition: color 0.5s;
     }
   }
 }
 
-.loading{
+.loading {
   height: 56px;
   display: flex;
   align-items: center;
+}
+
+.error_message {
+  color: #b62910;
+  text-align: center;
 }

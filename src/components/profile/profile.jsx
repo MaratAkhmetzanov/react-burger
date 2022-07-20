@@ -31,7 +31,8 @@ const Profile = () => {
     setPassword('');
   };
 
-  const updateUserHandler = () => {
+  const saveUserHandler = (e) => {
+    e.preventDefault();
     let payload = {};
     if (userName !== name) {
       payload.name = userName;
@@ -100,7 +101,7 @@ const Profile = () => {
         <Button type='secondary' size='medium' onClick={discardUserHandler}>
           Отмена
         </Button>
-        <Button type='primary' size='medium' onClick={updateUserHandler}>
+        <Button type='primary' size='medium' onClick={saveUserHandler}>
           Сохранить
         </Button>
       </div>
