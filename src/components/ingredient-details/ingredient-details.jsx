@@ -5,36 +5,23 @@ import styleIngredientDetails from './ingredient-details.module.scss';
 import Loader from '../loader/loader';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIngredients } from '../../services/reducers/ingredients-reducer';
-import { useHistory, useLocation, useRouteMatch } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
-const IngredientDetails = ({ ingredientId = '' }) => {
-  const {
-    params: { id },
-    url,
-  } = useRouteMatch();
-  const { ingredients, viewingIngredientId } = useSelector((store) => ({
-    ingredients: store.ingredients.ingredients,
-    viewingIngredientId: store.ingredients.viewingIngredientId,
-  }));
+const IngredientDetails = () => {
+  const ingredients = useSelector((store) => store.ingredients.ingredients);
   const [isImageLoaded, setIsImageLoaded] = useState(false);
-
-  const [viewingIngredient, setviewIngIngredient] = useState(null);
+  const [viewingIngredient, setViewingIngredient] = useState(null);
+  const { id } = useParams();
 
   const dispatch = useDispatch();
-  const history = useHistory();
-  let location = useLocation();
 
   useEffect(() => {
-    console.log(url);
-    if (id) {
+    if (!ingredients.length) {
       dispatch(getIngredients());
     }
-    setviewIngIngredient(ingredients.find((item) => item._id === id || item._id === viewingIngredientId));
-    // history.location({ pathname: `${url}/ingredient/1233` })
-    window.history.pushState({ state: { ingredientId: '123', from: '/' } }, 'Title', '/new-url');
-    console.log(location);
-    console.log(history);
-  }, []);
+    setViewingIngredient(ingredients.find((item) => item._id === id));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ingredients]);
 
   return (
     <>

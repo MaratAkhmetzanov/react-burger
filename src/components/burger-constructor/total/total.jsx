@@ -1,5 +1,5 @@
-import React, { useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useMemo } from 'react';
+import { useSelector } from 'react-redux';
 import {
   CurrencyIcon,
   Button
@@ -7,9 +7,7 @@ import {
 import styleTotal from './total.module.scss';
 import clsx from 'clsx';
 
-import OrderDetails from '../../order-details/order-details';
-import Modal from '../../modal/modal';
-import { getOrder } from '../../../services/reducers/order-reducer';
+import { useHistory, useLocation } from 'react-router-dom';
 
 const Total = () => {
   const { constructorBun, constructorItems } = useSelector((store) => ({
@@ -21,20 +19,17 @@ const Total = () => {
     return (constructorBun ? constructorBun.price * 2 : 0) + (constructorItems ? constructorItems.reduce((total, item) => total + item.price, 0) : 0)
   }, [constructorBun, constructorItems]);
 
-  const [modalVisibility, setModalVisibility] = useState(false);
-
-  const dispatch = useDispatch();
+  const history = useHistory();
+  const location = useLocation();
 
   const makeOrder = () => {
-    if (constructorBun) {
-      setModalVisibility(true);
-      const ingredients = [constructorBun._id, ...constructorItems.map((item) => item._id)];
-      dispatch(getOrder(ingredients));
-    }
-  };
 
-  const handleCloseModal = () => {
-    setModalVisibility(false);
+    if (constructorBun) {
+      history.push({
+        pathname: '/order',
+        state: { background: location },
+      })
+    }
   };
 
   return (
@@ -46,11 +41,6 @@ const Total = () => {
       <Button type='primary' size='large' onClick={makeOrder}>
         Оформить заказ
       </Button>
-      {modalVisibility && (
-        <Modal closeModal={handleCloseModal}>
-          <OrderDetails />
-        </Modal>
-      )}
     </div>
   );
 };

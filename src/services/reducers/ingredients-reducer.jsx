@@ -1,50 +1,38 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { GET_DATA_URL } from '../../utils/constants';
+import { fetchGetIngredients } from '../../utils/api';
 
 const initialState = {
   ingredients: [],
   isGetIngredientsRequest: false,
   isGetIngredientsFailed: false,
   activeTab: 'bun',
-  viewingIngredientId: null,
 };
 
 const ingredientsReducer = createSlice({
   name: 'order',
   initialState,
   reducers: {
-    getIngredientsRequest(state) {
+    getIngredientsRequest (state) {
       state.isGetIngredientsRequest = true;
     },
-    getIngredientsSuccess(state, { payload }) {
+    getIngredientsSuccess (state, { payload }) {
       state.ingredients = payload;
       state.isGetIngredientsRequest = false;
       state.isGetIngredientsFailed = false;
     },
-    getIngredientsFailed(state) {
+    getIngredientsFailed (state) {
       state.isGetIngredientsRequest = false;
       state.isGetIngredientsFailed = true;
     },
-    setActiveTab(state, { payload }) {
+    setActiveTab (state, { payload }) {
       state.activeTab = payload;
-    },
-    addViewingIngredient(state, { payload }) {
-      state.viewingIngredientId = payload;
-    },
-    deleteViewingIngredient(state, { payload }) {
-      state.viewingIngredientId = null;
     },
   },
 });
 
 export const getIngredients = () => (dispatch) => {
   dispatch(getIngredientsRequest());
-  fetch(`${GET_DATA_URL}/ingredients`)
-    .then((res) => {
-      if (res.ok) {
-        return res.json();
-      } else Promise.reject(`Ошибка ${res.status}`);
-    })
+  fetchGetIngredients()
     .then((res) => {
       if (res && res.success) {
         dispatch(getIngredientsSuccess(res.data));

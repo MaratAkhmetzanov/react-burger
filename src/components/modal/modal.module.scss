@@ -1,6 +1,7 @@
 @import '../../css/variables.scss';
 
 .modal_wrapper {
+  min-height: 100px;
   position: relative;
   width: 640px;
   background-color: $modal-bg;

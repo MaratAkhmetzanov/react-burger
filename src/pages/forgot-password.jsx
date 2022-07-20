@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Link, Redirect, useHistory, useLocation } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import clsx from 'clsx';
 import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
 
@@ -15,17 +15,13 @@ const ForgotPassword = () => {
 
   const dispatch = useDispatch();
   const history = useHistory();
-
-  const {
-    state: { savedEmail },
-  } = useLocation();
+  const location = useLocation();
 
   useEffect(() => {
-    <Redirect to='/reset-password' />;
-    if (!email && savedEmail) {
-      setEmail(savedEmail);
+    if (location.state && location.state.savedEmail) {
+      setEmail(location.state.savedEmail);
     }
-    if (emailRef.current && !email) {
+    if (emailRef.current) {
       emailRef.current.focus();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -34,6 +30,7 @@ const ForgotPassword = () => {
   const forgotPasswordHandler = (e) => {
     e.preventDefault();
     dispatch(forgotPassword(email, history));
+    history.push({ pathname: '/reset-password', state: { from: location } });
   };
 
   return (

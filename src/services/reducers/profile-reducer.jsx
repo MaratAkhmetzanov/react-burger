@@ -1,18 +1,25 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchGetUser, fetchUpdateUser } from '../../utils/api';
-import { loginSuccess, refreshToken, registerSuccess } from './auth-reducer';
+import { fetchExit, fetchGetUser, fetchUpdateUser } from '../../utils/api';
+import { deleteCookie } from '../../utils/cookie';
+import { refreshToken } from './auth-reducer';
 
 const initialState = {
   user: null,
   isGetUserRequest: false,
   isGetUserLoaded: false,
   getUserFailedMessage: '',
+  isExitRequest: false,
+  isExitFailed: false,
 };
 
 const profileReducer = createSlice({
   name: 'profile',
   initialState,
   reducers: {
+    setUser (state, { payload }) {
+      state.user = { ...payload };
+      state.isExitFailed = false;
+    },
     getUserRequest (state) {
       state.isGetUserRequest = true;
     },
@@ -27,29 +34,30 @@ const profileReducer = createSlice({
       state.isGetUserLoaded = true;
       state.getUserFailedMessage = payload;
     },
-  },
-  extraReducers: {
-    [loginSuccess]: (state, { payload }) => {
-      state.user = { ...payload };
+    exitRequest (state) {
+      state.isExitRequest = true;
     },
-    [registerSuccess]: (state, { payload }) => {
-      state.user = { ...payload };
+    exitSuccess (state) {
+      state.user = null;
+      state.isExitRequest = false;
+      state.isExitFailed = true;
+    },
+    exitFailed (state) {
+      state.isExitRequest = false;
+      state.isExitFailed = true;
     },
   },
 });
 
-export const getUser = (reqCount = 0) => (dispatch) => {
+export const getUser = () => (dispatch) => {
   dispatch(getUserRequest());
   fetchGetUser()
     .then((data) => {
       if (data && data.success) {
         dispatch(getUserSuccess(data.user));
       } else {
-        console.log(data.message);
-        if (data.message === 'jwt expired' && reqCount < 4) {
-          const counter = reqCount + 1;
-          dispatch(refreshToken());
-          dispatch(getUser(counter));
+        if (data.message === 'jwt expired') {
+          dispatch(refreshToken(getUser));
         } else dispatch(getUserFailed(data.message));
       }
     })
@@ -58,16 +66,15 @@ export const getUser = (reqCount = 0) => (dispatch) => {
     });
 };
 
-export const updateUser = (email, password, name) => (dispatch) => {
+export const updateUser = (payload) => (dispatch) => {
   dispatch(getUserRequest());
-  fetchUpdateUser(email, password, name)
+  fetchUpdateUser(payload)
     .then((data) => {
       if (data && data.success) {
         dispatch(getUserSuccess(data.user));
       }
       if (data.message) {
         dispatch(getUserFailed(data.message));
-        console.log(data.message);
       }
     })
     .catch((e) => {
@@ -75,6 +82,24 @@ export const updateUser = (email, password, name) => (dispatch) => {
     });
 };
 
-export const { getUserRequest, getUserSuccess, getUserFailed } = profileReducer.actions;
+export const exitUser = () => (dispatch) => {
+  dispatch(exitRequest());
+  fetchExit()
+    .then((data) => {
+      if (data && data.success) {
+        deleteCookie('accessToken');
+        deleteCookie('refreshToken');
+        dispatch(exitSuccess());
+      } else {
+        dispatch(exitFailed());
+      }
+    })
+    .catch((e) => {
+      dispatch(exitFailed());
+    });
+};
+
+export const { setUser, getUserRequest, getUserSuccess, getUserFailed, exitRequest, exitSuccess, exitFailed } =
+  profileReducer.actions;
 
 export default profileReducer.reducer;

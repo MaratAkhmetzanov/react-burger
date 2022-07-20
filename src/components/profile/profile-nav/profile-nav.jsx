@@ -1,15 +1,24 @@
 import clsx from 'clsx';
-import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { NavLink, useHistory } from 'react-router-dom';
-import { exitUser } from '../../../services/reducers/auth-reducer';
+import { exitUser } from '../../../services/reducers/profile-reducer';
 import styleProfileNav from './profile-nav.module.scss';
 
 const ProfileNav = ({ children, className = '' }) => {
+  const isUserExit = useSelector((store) => store.profile.isUserExit);
   const dispatch = useDispatch();
   const history = useHistory();
+
+  useEffect(() => {
+    if (isUserExit) {
+      history.push({ pathname: '/login' });
+    }
+  }, [isUserExit, history]);
+
   const exitHandler = () => {
-    dispatch(exitUser(history));
-  }
+    dispatch(exitUser());
+  };
 
   return (
     <section className={clsx(styleProfileNav.nav_section, className)}>
@@ -30,7 +39,9 @@ const ProfileNav = ({ children, className = '' }) => {
         >
           История заказов
         </NavLink>
-        <div className={clsx(styleProfileNav.nav_link, 'text text_type_main-medium')} onClick={exitHandler}>Выход</div>
+        <div className={clsx(styleProfileNav.nav_link, 'text text_type_main-medium')} onClick={exitHandler}>
+          Выход
+        </div>
       </nav>
       <p className={clsx(styleProfileNav.nav_text, 'text text_type_main-default text_color_inactive')}>{children}</p>
     </section>

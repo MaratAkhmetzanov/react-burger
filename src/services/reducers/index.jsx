@@ -9,6 +9,6 @@ export const rootReducer = combineReducers({
   ingredients: ingredientsReducer,
   burgerConstructor: constructorReducer,
   order: orderReducer,
+  profile: profileReducer,
   authorization: authReducer,
-  profile: profileReducer
 });

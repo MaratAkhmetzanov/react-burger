@@ -1,5 +1,10 @@
 @import '../../../css/variables.scss';
 
+.router_link{
+  text-decoration: none;
+  color: #fff;
+}
+
 .card {
   position: relative;
   width: 272px;

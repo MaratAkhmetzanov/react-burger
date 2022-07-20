@@ -17,15 +17,13 @@ const Register = () => {
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
 
-  const {
-    state: { savedEmail },
-  } = useLocation();
+  const location = useLocation();
 
   useEffect(() => {
-    if (!email && savedEmail) {
-      setEmail(savedEmail);
+    if (location.state && location.state.savedEmail) {
+      setEmail(location.state.savedEmail);
     }
-    if (userNameRef.current && !userName) {
+    if (userNameRef.current) {
       userNameRef.current.focus();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

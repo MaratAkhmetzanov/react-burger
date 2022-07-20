@@ -47,9 +47,7 @@ export const fetchRefreshToken = async () =>
       token: getCookie('refreshToken'),
     }),
   }).then((res) => {
-    if (res.ok) {
-      return res.json();
-    } else Promise.reject(`Ошибка ${res.status}`);
+    return res.json();
   });
 
 export const fetchExit = async () =>
@@ -94,15 +92,12 @@ export const fetchResetPassword = async (password, token) =>
       token,
     }),
   }).then((res) => {
-    if (res.ok) {
-      return res.json();
-    } else Promise.reject(`Ошибка ${res.status}`);
+    return res.json();
   });
 
 export const fetchGetUser = async () =>
   await fetch(`${GET_DATA_URL}/auth/user`, {
     method: 'GET',
-    authorization: `Basic ${getCookie('accessToken')}`,
     headers: {
       authorization: `Basic ${getCookie('accessToken')}`,
     },
@@ -110,13 +105,13 @@ export const fetchGetUser = async () =>
     return res.json();
   });
 
-export const fetchUpdateUser = async (email, password, name) =>
+export const fetchUpdateUser = async ({ email, password, name }) =>
   await fetch(`${GET_DATA_URL}/auth/user`, {
     method: 'PATCH',
-    authorization: getCookie('accessToken'),
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      authorization: `Basic ${getCookie('accessToken')}`,
     },
     body: JSON.stringify({
       email,
@@ -124,7 +119,25 @@ export const fetchUpdateUser = async (email, password, name) =>
       name,
     }),
   }).then((res) => {
-    if (res.ok) {
-      return res.json();
-    } else Promise.reject(`Ошибка ${res.status}`);
+    return res.json();
   });
+
+export const fetchGetOrder = async (ingredients) =>
+  await fetch(`${GET_DATA_URL}/orders`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      authorization: `Basic ${getCookie('accessToken')}`,
+    },
+    body: JSON.stringify({ ingredients }),
+  }).then((res) => {
+    return res.json();
+  });
+  
+export const fetchGetIngredients = async () =>
+  await fetch(`${GET_DATA_URL}/ingredients`)
+    .then((res) => {
+      return res.json();
+    })
+

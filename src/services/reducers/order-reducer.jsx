@@ -1,32 +1,33 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { GET_DATA_URL } from '../../utils/constants';
+import { fetchGetOrder } from '../../utils/api';
+import { refreshToken } from './auth-reducer';
 import { eraseCunstructor } from './constructor-reducer';
 
 const initialState = {
   name: '',
   orderNumber: 0,
   isCreateOrderRequest: false,
-  isCreateOrderFailed: false,
+  isCreateOrderFailed: '',
 };
 
 const orderReducer = createSlice({
   name: 'order',
   initialState,
   reducers: {
-    createOrderRequest(state) {
+    createOrderRequest (state) {
       state.isCreateOrderRequest = true;
     },
-    createOrderSuccess(state, { payload }) {
+    createOrderSuccess (state, { payload }) {
       state.name = payload.name;
       state.orderNumber = payload.orderNumber;
       state.isCreateOrderRequest = false;
-      state.isCreateOrderFailed = false;
+      state.isCreateOrderFailed = '';
     },
-    createOrderFailed(state) {
+    createOrderFailed (state, { payload }) {
       state.isCreateOrderRequest = false;
-      state.isCreateOrderFailed = true;
+      state.isCreateOrderFailed = payload;
     },
-    eraseOrder(state) {
+    eraseOrder (state) {
       state.name = '';
       state.orderNumber = 0;
     },
@@ -35,31 +36,20 @@ const orderReducer = createSlice({
 
 export const getOrder = (ingredients) => (dispatch) => {
   dispatch(createOrderRequest());
-  fetch(`${GET_DATA_URL}/orders`, {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ ingredients }),
-  })
-    .then((res) => {
-      if (res.ok) {
-        return res.json();
-      } else Promise.reject(`Ошибка ${res.status}`);
-    })
-    .then((res) => {
-      if (res && res.success) {
+  fetchGetOrder(ingredients)
+    .then((data) => {
+      if (data && data.success) {
         dispatch(eraseCunstructor());
         dispatch(
           createOrderSuccess({
-            name: res.name,
-            orderNumber: res.order.number,
+            name: data.name,
+            orderNumber: data.order.number,
           })
         );
       } else {
-        dispatch(createOrderFailed());
-        dispatch(eraseOrder());
+        if (data.message === 'jwt expired') {
+          dispatch(refreshToken(() => getOrder(ingredients)));
+        } else dispatch(createOrderFailed(data.message));
       }
     })
     .catch((e) => {

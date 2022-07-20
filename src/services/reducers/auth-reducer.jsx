@@ -1,14 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
-import {
-  fetchExit,
-  fetchForgotPassword,
-  fetchLogin,
-  fetchRefreshToken,
-  fetchRegister,
-  fetchResetPassword,
-} from '../../utils/api';
-import { deleteCookie } from '../../utils/cookie';
+import { fetchForgotPassword, fetchLogin, fetchRefreshToken, fetchRegister, fetchResetPassword } from '../../utils/api';
 import { saveTokensUtil } from '../../utils/utils';
+import { exitUser, setUser } from './profile-reducer';
 
 const initialState = {
   isRegisterRequest: false,
@@ -27,70 +20,58 @@ const authReducer = createSlice({
   name: 'authorization',
   initialState,
   reducers: {
-    registerRequest(state) {
+    registerRequest (state) {
       state.isRegisterRequest = true;
     },
-    registerSuccess(state, { payload }) {
+    registerSuccess (state, { payload }) {
       state.isRegisterRequest = false;
       state.registerFailedMessage = '';
     },
-    registerFailed(state, { payload }) {
+    registerFailed (state, { payload }) {
       state.isRegisterRequest = false;
       state.registerFailedMessage = payload;
     },
-    loginRequest(state) {
+    loginRequest (state) {
       state.isLoginRequest = true;
     },
-    loginSuccess(state) {
+    loginSuccess (state) {
       state.isLoginRequest = false;
       state.isLoginFailed = false;
     },
-    loginFailed(state) {
+    loginFailed (state) {
       state.isloginRequest = false;
       state.isLoginFailed = true;
     },
-    refreshTokenRequest(state) {
+    refreshTokenRequest (state) {
       state.isRefreshTokenRequest = true;
     },
-    refreshTokenSuccess(state) {
+    refreshTokenSuccess (state) {
       state.isRefreshTokenRequest = false;
       state.refreshTokenFailedMessage = '';
     },
-    refreshTokenFailed(state, { payload }) {
+    refreshTokenFailed (state, { payload }) {
       state.isRefreshTokenRequest = false;
       state.refreshTokenFailedMessage = payload;
     },
-    exitRequest(state) {
-      state.isExitRequest = true;
-    },
-    exitSuccess(state, { payload }) {
-      state.user = null;
-      state.isExitRequest = false;
-      state.isExitFailed = false;
-    },
-    exitFailed(state) {
-      state.isExitRequest = false;
-      state.isExitFailed = true;
-    },
-    forgotPasswordRequest(state) {
+    forgotPasswordRequest (state) {
       state.isForgotPasswordRequest = true;
     },
-    forgotPasswordSuccess(state) {
+    forgotPasswordSuccess (state) {
       state.isForgotPasswordRequest = false;
       state.isForgotPasswordFailed = false;
     },
-    forgotPasswordFailed(state) {
+    forgotPasswordFailed (state) {
       state.isForgotPasswordRequest = false;
       state.isForgotPasswordFailed = true;
     },
-    resetPasswordRequest(state) {
+    resetPasswordRequest (state) {
       state.isResetPasswordRequest = true;
     },
-    resetPasswordSuccess(state) {
+    resetPasswordSuccess (state) {
       state.isResetPasswordRequest = false;
       state.isResetPasswordFailed = false;
     },
-    resetPasswordFailed(state) {
+    resetPasswordFailed (state) {
       state.isResetPasswordRequest = false;
       state.isResetPasswordFailed = true;
     },
@@ -104,6 +85,7 @@ export const registerUser = (email, password, name) => (dispatch) => {
     .then((data) => {
       if (data && data.success) {
         saveTokensUtil(data.accessToken, data.refreshToken);
+        dispatch(setUser(data.user));
         dispatch(registerSuccess(data.user));
       } else {
         dispatch(registerFailed(data.message));
@@ -121,6 +103,7 @@ export const loginUser = (email, password) => (dispatch) => {
     .then((data) => {
       if (data && data.success) {
         saveTokensUtil(data.accessToken, data.refreshToken);
+        dispatch(setUser(data.user));
         dispatch(loginSuccess(data.user));
       } else {
         dispatch(loginFailed());
@@ -131,40 +114,23 @@ export const loginUser = (email, password) => (dispatch) => {
     });
 };
 
-export const refreshToken = () => (dispatch) => {
+export const refreshToken = (prevAction) => (dispatch) => {
   dispatch(refreshTokenRequest());
   fetchRefreshToken()
     .then((data) => {
       if (data && data.success) {
         saveTokensUtil(data.accessToken, data.refreshToken);
+        dispatch(prevAction());
         dispatch(refreshTokenSuccess());
       } else {
+        if (data.message === 'Token is invalid') {
+          dispatch(exitUser());
+        }
         dispatch(refreshTokenFailed(data.message));
       }
     })
     .catch((e) => {
       dispatch(refreshTokenFailed(e));
-    });
-};
-
-export const exitUser = (history) => (dispatch) => {
-  dispatch(exitRequest());
-  fetchExit()
-    .then((data) => {
-      if (data && data.success) {
-        deleteCookie('accessToken');
-        deleteCookie('refreshToken');
-        dispatch(exitSuccess(data.user));
-        history.push({ pathname: '/login' });
-      } else {
-        dispatch(exitFailed());
-      }
-      if (data.message) {
-        console.log(data.message);
-      }
-    })
-    .catch((e) => {
-      dispatch(exitFailed());
     });
 };
 

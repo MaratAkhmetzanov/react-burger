@@ -4,7 +4,7 @@ import IngredientDetails from '../components/ingredient-details/ingredient-detai
 const IngredientPage = () => {
   return (
     <AppWrapper>
-      <IngredientDetails/>
+      <IngredientDetails />
     </AppWrapper>
   );
 };

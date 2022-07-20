@@ -12,3 +12,14 @@
     width: 480px;
   }
 }
+
+.buttons{
+  display: flex;
+  justify-content: flex-end;
+  opacity: 0;
+}
+
+.visible{
+  opacity: 1;
+  transition: opacity .5s;
+}
