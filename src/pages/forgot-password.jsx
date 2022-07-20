@@ -51,13 +51,13 @@ const ForgotPassword = () => {
           />
         </div>
         <div className={clsx(styleAuth.login_button, 'mb-20')}>
-          {changePasswordRequest
-            ? <p className={clsx(styleAuth.loading, 'text text_type_main-default text_color_inactive')}>Загрузка…</p>
-            :
+          {changePasswordRequest ? (
+            <p className={clsx(styleAuth.loading, 'text text_type_main-default text_color_inactive')}>Загрузка…</p>
+          ) : (
             <Button type='primary' size='medium' onClick={forgotPasswordHandler}>
               Восстановить
             </Button>
-          }
+          )}
         </div>
       </form>
       <div className={styleAuth.bottom_text}>

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { useDrop } from 'react-dnd';
 import { ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components';
@@ -15,11 +16,11 @@ const BunElement = ({ isTop = true }) => {
   const [{ bunDropHover }, bunDropTarget] = useDrop({
     accept: 'bun',
     collect: (monitor) => ({
-      bunDropHover: monitor.isOver()
+      bunDropHover: monitor.isOver(),
     }),
     drop ({ item }) {
       dispatch(addIngredient(item));
-    }
+    },
   });
 
   return (
@@ -41,17 +42,16 @@ const BunElement = ({ isTop = true }) => {
         />
       )}
       {!constructorBun && (
-        <div
-          className={clsx(
-            styleBunElement.empty_bun,
-            isTop ? styleBunElement.top : styleBunElement.bottom
-          )}
-        >
+        <div className={clsx(styleBunElement.empty_bun, isTop ? styleBunElement.top : styleBunElement.bottom)}>
           Добавьте булку
         </div>
       )}
     </div>
   );
+};
+
+BunElement.propTypes = {
+  children: PropTypes.bool,
 };
 
 export default BunElement;

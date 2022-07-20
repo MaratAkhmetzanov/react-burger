@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types';
+
 import { Logo } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Link } from 'react-router-dom';
 
@@ -14,6 +16,10 @@ const AuthWrapper = ({ children }) => {
       {children}
     </div>
   );
+};
+
+AuthWrapper.propTypes = {
+  children: PropTypes.node.isRequired,
 };
 
 export default AuthWrapper;

@@ -16,7 +16,7 @@ const ConstructorItem = ({ ingredient, index, moveItem }) => {
     accept: 'constructorItem',
     collect (monitor) {
       return {
-        handlerId: monitor.getHandlerId()
+        handlerId: monitor.getHandlerId(),
       };
     },
     hover (item, monitor) {
@@ -42,7 +42,7 @@ const ConstructorItem = ({ ingredient, index, moveItem }) => {
       }
       moveItem(dragIndex, hoverIndex);
       item.index = hoverIndex;
-    }
+    },
   });
 
   const [{ isDragging }, drag] = useDrag({
@@ -51,8 +51,8 @@ const ConstructorItem = ({ ingredient, index, moveItem }) => {
       return { index };
     },
     collect: (monitor) => ({
-      isDragging: monitor.isDragging()
-    })
+      isDragging: monitor.isDragging(),
+    }),
   });
 
   drag(drop(ref));
@@ -65,10 +65,7 @@ const ConstructorItem = ({ ingredient, index, moveItem }) => {
 
   return (
     <div
-      className={clsx(
-        styleConstructorItem.drag_element,
-        isDragging ? styleConstructorItem.hide : ''
-      )}
+      className={clsx(styleConstructorItem.drag_element, isDragging ? styleConstructorItem.hide : '')}
       ref={ref}
       data-handler-id={handlerId}
     >
@@ -88,7 +85,7 @@ const ConstructorItem = ({ ingredient, index, moveItem }) => {
 ConstructorItem.propTypes = {
   ingredient: dataIngredientsType.isRequired,
   index: PropTypes.number.isRequired,
-  moveItem: PropTypes.func.isRequired
+  moveItem: PropTypes.func.isRequired,
 };
 
 export default ConstructorItem;

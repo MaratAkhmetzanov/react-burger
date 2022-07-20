@@ -10,18 +10,18 @@ const constructorReducer = createSlice({
   name: 'burgerConstructor',
   initialState,
   reducers: {
-    addIngredient(state, { payload }) {
+    addIngredient (state, { payload }) {
       payload.type === 'bun'
         ? (state.constructorBun = { ...payload })
         : (state.constructorItems = [...state.constructorItems, { ...payload, position: uuidv4() }]);
     },
-    deleteIngredient(state, { payload }) {
+    deleteIngredient (state, { payload }) {
       state.constructorItems = state.constructorItems.filter((item) => item.position !== payload);
     },
-    moveIngredient(state, { payload }) {
+    moveIngredient (state, { payload }) {
       state.constructorItems = [...payload];
     },
-    eraseCunstructor(state, { payload }) {
+    eraseCunstructor (state, { payload }) {
       state.constructorBun = null;
       state.constructorItems = [];
     },

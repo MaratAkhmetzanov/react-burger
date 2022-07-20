@@ -1,10 +1,11 @@
+import PropTypes from 'prop-types';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect, Route, useLocation } from 'react-router-dom';
 import { getUser } from '../../services/reducers/profile-reducer';
 import Loader from '../loader/loader';
 
-const RedirectRoute = ({ children, ...rest }) => {
+const RedirectRoute = ({ children }) => {
   const dispatch = useDispatch();
   const location = useLocation();
   const { user, isGetUserLoaded } = useSelector((store) => ({
@@ -12,8 +13,7 @@ const RedirectRoute = ({ children, ...rest }) => {
     isGetUserLoaded: store.profile.isGetUserLoaded,
   }));
 
-  const pathName = (location.state && location.state.from) ? location.state.from.pathname : '/';
-
+  const pathName = location.state && location.state.from ? location.state.from.pathname : '/';
 
   useEffect(() => {
     dispatch(getUser());
@@ -26,7 +26,6 @@ const RedirectRoute = ({ children, ...rest }) => {
 
   return (
     <Route
-      {...rest}
       render={({ location }) =>
         !user ? (
           children
@@ -41,6 +40,10 @@ const RedirectRoute = ({ children, ...rest }) => {
       }
     />
   );
+};
+
+RedirectRoute.propTypes = {
+  children: PropTypes.node.isRequired,
 };
 
 export default RedirectRoute;

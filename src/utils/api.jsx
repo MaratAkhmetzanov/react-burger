@@ -134,10 +134,8 @@ export const fetchGetOrder = async (ingredients) =>
   }).then((res) => {
     return res.json();
   });
-  
-export const fetchGetIngredients = async () =>
-  await fetch(`${GET_DATA_URL}/ingredients`)
-    .then((res) => {
-      return res.json();
-    })
 
+export const fetchGetIngredients = async () =>
+  await fetch(`${GET_DATA_URL}/ingredients`).then((res) => {
+    return res.json();
+  });

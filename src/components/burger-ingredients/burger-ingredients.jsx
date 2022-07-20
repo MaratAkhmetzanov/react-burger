@@ -24,7 +24,7 @@ const BurgerIngredients = () => {
 
   useEffect(() => {
     dispatch(getIngredients());
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const setActiveTabHandler = useCallback(
@@ -52,29 +52,27 @@ const BurgerIngredients = () => {
     <section className={styleIngredients.content}>
       <h1 className={clsx(styleIngredients.title, 'text text_type_main-large mt-10')}>Соберите бургер</h1>
       <Tabs />
-      {isGetIngredientsRequest
-        ? (
-          <div className={styleIngredients.loader}>
-            <Loader />
-          </div>
-        )
-        : (
-          <Scrollbars
-            autoHeight={true}
-            thumbMinSize={120}
-            autoHeightMin={window.innerHeight - 245}
-            renderTrackVertical={() => <div className={styleIngredients.track_vertical} />}
-            renderThumbVertical={() => <div className={styleIngredients.thumb_vertical} />}
-            onScroll={handleScroll}
-            ref={scrollRef}
-          >
-            <>
-              <CatalogGroup title='Булки' data={ingredients} type='bun' titleRef={bunTitleRef} />
-              <CatalogGroup title='Соусы' data={ingredients} type='sauce' titleRef={sauceTitleRef} />
-              <CatalogGroup title='Начинка' data={ingredients} type='main' titleRef={mainTitleRef} />
-            </>
-          </Scrollbars>
-        )}
+      {isGetIngredientsRequest ? (
+        <div className={styleIngredients.loader}>
+          <Loader />
+        </div>
+      ) : (
+        <Scrollbars
+          autoHeight={true}
+          thumbMinSize={120}
+          autoHeightMin={window.innerHeight - 245}
+          renderTrackVertical={() => <div className={styleIngredients.track_vertical} />}
+          renderThumbVertical={() => <div className={styleIngredients.thumb_vertical} />}
+          onScroll={handleScroll}
+          ref={scrollRef}
+        >
+          <>
+            <CatalogGroup title='Булки' data={ingredients} type='bun' titleRef={bunTitleRef} />
+            <CatalogGroup title='Соусы' data={ingredients} type='sauce' titleRef={sauceTitleRef} />
+            <CatalogGroup title='Начинка' data={ingredients} type='main' titleRef={mainTitleRef} />
+          </>
+        </Scrollbars>
+      )}
     </section>
   );
 };

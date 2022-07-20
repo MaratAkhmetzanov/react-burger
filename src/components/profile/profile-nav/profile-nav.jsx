@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import PropTypes from 'prop-types';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink, useHistory } from 'react-router-dom';
@@ -46,6 +47,11 @@ const ProfileNav = ({ children, className = '' }) => {
       <p className={clsx(styleProfileNav.nav_text, 'text text_type_main-default text_color_inactive')}>{children}</p>
     </section>
   );
+};
+
+ProfileNav.propTypes = {
+  children: PropTypes.node.isRequired,
+  className: PropTypes.string,
 };
 
 export default ProfileNav;

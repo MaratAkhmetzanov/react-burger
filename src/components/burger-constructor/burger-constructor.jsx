@@ -7,7 +7,6 @@ import clsx from 'clsx';
 
 import { addIngredient, moveIngredient } from '../../services/reducers/constructor-reducer';
 
-
 import Total from './total/total';
 import ConstructorItem from './constructor-item/constructor-item';
 
@@ -20,11 +19,11 @@ const BurgerConstructor = () => {
   const [{ ingredientDropHover }, ingredientDropTarget] = useDrop({
     accept: 'ingredient',
     collect: (monitor) => ({
-      ingredientDropHover: monitor.isOver()
+      ingredientDropHover: monitor.isOver(),
     }),
     drop ({ item }) {
       dispatch(addIngredient(item));
-    }
+    },
   });
 
   const moveItem = useCallback(
@@ -42,10 +41,7 @@ const BurgerConstructor = () => {
         <BunElement />
         {!constructorItems.length && (
           <div
-            className={clsx(
-              'ml-8 mr-4',
-              ingredientDropHover ? styleConstructor.ingredients_dropzone_hover : ''
-            )}
+            className={clsx('ml-8 mr-4', ingredientDropHover ? styleConstructor.ingredients_dropzone_hover : '')}
             ref={ingredientDropTarget}
           >
             <div className={styleConstructor.empty_ingredients}>Добавьте ингредиент</div>
@@ -61,12 +57,7 @@ const BurgerConstructor = () => {
           >
             <div className={clsx(styleConstructor.catalog, 'pr-4')} ref={ingredientDropTarget}>
               {constructorItems.map((ingredient, index) => (
-                <ConstructorItem
-                  key={ingredient.position}
-                  ingredient={ingredient}
-                  index={index}
-                  moveItem={moveItem}
-                />
+                <ConstructorItem key={ingredient.position} ingredient={ingredient} index={index} moveItem={moveItem} />
               ))}
             </div>
           </Scrollbars>

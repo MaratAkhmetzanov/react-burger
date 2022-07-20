@@ -1,6 +1,6 @@
-import React, {useEffect} from 'react';
-import {createPortal} from 'react-dom';
-import {CloseIcon} from '@ya.praktikum/react-developer-burger-ui-components';
+import React, { useEffect } from 'react';
+import { createPortal } from 'react-dom';
+import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 
@@ -9,7 +9,7 @@ import styleModal from './modal.module.scss';
 
 const modalRoot = document.getElementById('modal_root');
 
-const Modal = ({closeModal, children}) => {
+const Modal = ({ closeModal, children }) => {
   useEffect(() => {
     document.addEventListener('keydown', handleEscPress);
 
@@ -48,7 +48,7 @@ const Modal = ({closeModal, children}) => {
 
 Modal.propTypes = {
   closeModal: PropTypes.func.isRequired,
-  children: PropTypes.node.isRequired
+  children: PropTypes.node.isRequired,
 };
 
 export default Modal;

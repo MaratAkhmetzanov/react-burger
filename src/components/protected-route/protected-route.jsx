@@ -1,10 +1,11 @@
 import { useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect, Route } from 'react-router-dom';
 import { getUser } from '../../services/reducers/profile-reducer';
 import Loader from '../loader/loader';
 
-const ProtectedRoute = ({ children, ...rest }) => {
+const ProtectedRoute = ({ children }) => {
   const { user, isGetUserLoaded } = useSelector((store) => ({
     user: store.profile.user,
     isGetUserLoaded: store.profile.isGetUserLoaded,
@@ -23,7 +24,6 @@ const ProtectedRoute = ({ children, ...rest }) => {
 
   return (
     <Route
-      {...rest}
       render={({ location }) =>
         user ? (
           children
@@ -38,6 +38,10 @@ const ProtectedRoute = ({ children, ...rest }) => {
       }
     />
   );
+};
+
+ProtectedRoute.propTypes = {
+  children: PropTypes.node.isRequired,
 };
 
 export default ProtectedRoute;
