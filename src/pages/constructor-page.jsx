@@ -6,12 +6,10 @@ import BurgerIngredients from '../components/burger-ingredients/burger-ingredien
 
 const ConstructorPage = () => {
   return (
-    <AppWrapper>
-      <DndProvider backend={HTML5Backend}>
-        <BurgerIngredients />
-        <BurgerConstructor />
-      </DndProvider>
-    </AppWrapper>
+    <DndProvider backend={HTML5Backend}>
+      <BurgerIngredients />
+      <BurgerConstructor />
+    </DndProvider>
   );
 };
 

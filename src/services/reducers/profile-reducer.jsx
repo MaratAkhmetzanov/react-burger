@@ -7,6 +7,7 @@ const initialState = {
   getUserFailedMessage: '',
   exitRequest: false,
   exitFailed: '',
+  userUnauthorized: false,
 };
 
 const profileReducer = createSlice({
@@ -15,6 +16,7 @@ const profileReducer = createSlice({
   reducers: {
     setUser(state, { payload }) {
       state.user = { ...payload };
+      state.userUnauthorized = false;
       state.exitFailed = '';
     },
     getUserRequest(state) {
@@ -22,6 +24,7 @@ const profileReducer = createSlice({
     },
     getUserSuccess(state, { payload }) {
       state.user = { ...payload };
+      state.userUnauthorized = false;
       state.getUserRequest = false;
       state.getUserLoaded = true;
       state.getUserFailedMessage = '';
@@ -37,16 +40,27 @@ const profileReducer = createSlice({
     exitSuccess(state) {
       state.user = null;
       state.exitRequest = false;
-      state.exitFailed = true;
+      state.userUnauthorized = true;
     },
     exitFailed(state, { payload }) {
       state.exitRequest = false;
       state.exitFailed = payload;
     },
+    userUnauthorized(state) {
+      state.userUnauthorized = true;
+    },
   },
 });
 
-export const { setUser, getUserRequest, getUserSuccess, getUserFailed, exitRequest, exitSuccess, exitFailed } =
-  profileReducer.actions;
+export const {
+  setUser,
+  getUserRequest,
+  getUserSuccess,
+  getUserFailed,
+  exitRequest,
+  exitSuccess,
+  exitFailed,
+  userUnauthorized,
+} = profileReducer.actions;
 
 export default profileReducer.reducer;

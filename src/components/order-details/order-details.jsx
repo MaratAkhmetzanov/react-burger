@@ -11,11 +11,11 @@ const OrderDetails = () => {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const { orderNumber, createOrderRequest, createOrderFailed, constructorBun, constructorItems } = useSelector(
+  const { orderNumber, createOrderRequest, userUnauthorized, constructorBun, constructorItems } = useSelector(
     (store) => ({
       orderNumber: store.order.orderNumber,
       createOrderRequest: store.order.createOrderRequest,
-      createOrderFailed: store.order.createOrderFailed,
+      userUnauthorized: store.profile.userUnauthorized,
       constructorBun: store.burgerConstructor.constructorBun,
       constructorItems: store.burgerConstructor.constructorItems,
     })
@@ -31,7 +31,7 @@ const OrderDetails = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (createOrderFailed === 'jwt malformed') {
+  if (userUnauthorized) {
     return <Redirect push={false} to={'/login'} />;
   }
 

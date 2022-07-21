@@ -4,7 +4,6 @@ import clsx from 'clsx';
 import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import styleAuth from './auth.module.scss';
-import AuthWrapper from '../components/auth-wrapper/auth-wrapper';
 import { useDispatch, useSelector } from 'react-redux';
 import { forgotPassword } from '../services/middleware/auth-middleware';
 import { useForm } from '../utils/hooks';
@@ -38,7 +37,7 @@ const ForgotPassword = () => {
   };
 
   return (
-    <AuthWrapper>
+    <div className={styleAuth.wrapper}>
       <form className={styleAuth.login_form} onSubmit={onFormSubmit}>
         <h1 className='text text_type_main-medium mb-6'>Восстановление пароля</h1>
         {isEmailEmpty && (
@@ -75,7 +74,7 @@ const ForgotPassword = () => {
           Вспомнили пароль? <Link to={{ pathname: '/login', state: { savedEmail: values.email } }}>Войти</Link>
         </p>
       </div>
-    </AuthWrapper>
+    </div>
   );
 };
 
