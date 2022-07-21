@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import styleIngredientDetails from './ingredient-details.module.scss';
 import Loader from '../loader/loader';
 import { useDispatch, useSelector } from 'react-redux';
-import { getIngredients } from '../../services/reducers/ingredients-reducer';
+import { getIngredients } from '../../services/middleware/ingredients-middleware';
 import { useParams } from 'react-router-dom';
 
 const IngredientDetails = () => {

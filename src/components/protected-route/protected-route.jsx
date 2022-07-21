@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect, Route } from 'react-router-dom';
-import { getUser } from '../../services/reducers/profile-reducer';
+import { getUser } from '../../services/middleware/profile-middleware';
 import Loader from '../loader/loader';
 
 const ProtectedRoute = ({ children }) => {

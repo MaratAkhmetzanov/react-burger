@@ -5,50 +5,46 @@ import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-component
 
 import styleAuth from './auth.module.scss';
 import AuthWrapper from '../components/auth-wrapper/auth-wrapper';
-import { registerUser } from '../services/reducers/auth-reducer';
+import { registerUser } from '../services/middleware/auth-middleware';
 import { useDispatch } from 'react-redux';
+import { useForm } from '../utils/hooks';
 
 const Register = () => {
-  const [userName, setUserName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const userNameRef = useRef(null);
-  const emailRef = useRef(null);
-  const passwordRef = useRef(null);
-
   const location = useLocation();
+  const { values, handleChange, setValues } = useForm({ name: '', email: '', password: '' });
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const nameRef = useRef(null);
 
   useEffect(() => {
     if (location.state && location.state.savedEmail) {
-      setEmail(location.state.savedEmail);
+      setValues({ ...values, email: location.state.savedEmail });
     }
-    if (userNameRef.current) {
-      userNameRef.current.focus();
+    if (nameRef.current) {
+      nameRef.current.focus();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const dispatch = useDispatch();
 
-  const registerHandler = (e) => {
+  const onFormSubmit = (e) => {
     e.preventDefault();
-    dispatch(registerUser(email, password, userName));
+    dispatch(registerUser(values.email, values.password, values.name));
   };
 
   return (
     <AuthWrapper>
-      <form className={styleAuth.login_form}>
+      <form className={styleAuth.login_form} onSubmit={onFormSubmit}>
         <h1 className='text text_type_main-medium mb-6'>Регистрация</h1>
         <div className={clsx(styleAuth.input, 'mb-6')}>
           <Input
             type={'text'}
             placeholder={'Имя'}
-            onChange={(e) => setUserName(e.target.value)}
-            value={userName}
-            name={'userName'}
+            onChange={handleChange}
+            value={values.name}
+            name={'name'}
             error={false}
-            ref={userNameRef}
+            ref={nameRef}
             errorText={'Ошибка'}
             size={'default'}
           />
@@ -57,11 +53,10 @@ const Register = () => {
           <Input
             type={'email'}
             placeholder={'E-mail'}
-            onChange={(e) => setEmail(e.target.value)}
-            value={email}
+            onChange={handleChange}
+            value={values.email}
             name={'email'}
             error={false}
-            ref={emailRef}
             errorText={'Ошибка'}
             size={'default'}
           />
@@ -70,11 +65,10 @@ const Register = () => {
           <Input
             type={isPasswordVisible ? 'text' : 'password'}
             placeholder={'Пароль'}
-            onChange={(e) => setPassword(e.target.value)}
-            value={password}
+            onChange={handleChange}
+            value={values.password}
             name={'password'}
             error={false}
-            ref={passwordRef}
             errorText={'Ошибка'}
             size={'default'}
             icon={isPasswordVisible ? 'HideIcon' : 'ShowIcon'}
@@ -82,13 +76,13 @@ const Register = () => {
           />
         </div>
         <div className={clsx(styleAuth.login_button, 'mb-20')}>
-          <Button type='primary' size='medium' onClick={registerHandler}>
+          <Button type='primary' size='medium' onClick={onFormSubmit}>
             Зарегистрироваться
           </Button>
         </div>
         <div className={styleAuth.bottom_text}>
           <p className='text text_type_main-default text_color_inactive'>
-            Уже зарегистрированы? <Link to={{ pathname: '/login', state: { savedEmail: email } }}>Войти</Link>
+            Уже зарегистрированы? <Link to={{ pathname: '/login', state: { savedEmail: values.email } }}>Войти</Link>
           </p>
         </div>
       </form>

@@ -2,16 +2,15 @@ import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-component
 import clsx from 'clsx';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateUser } from '../../services/reducers/profile-reducer';
+import { updateUser } from '../../services/middleware/profile-middleware';
+import { useForm } from '../../utils/hooks';
 import styleProfile from './profile.module.scss';
 
 const Profile = () => {
   const { name, email } = useSelector((store) => store.profile.user);
-  const [userName, setUserName] = useState(name);
-  const [userEmail, setUserEmail] = useState(email);
-  const [password, setPassword] = useState('');
-  const userNameRef = useRef(null);
-  const userEmailRef = useRef(null);
+  const { values, handleChange, setValues } = useForm({ name: name, email: email, password: '' });
+  const nameRef = useRef(null);
+  const emailRef = useRef(null);
   const passwordRef = useRef(null);
 
   const [isButtonsVisible, setIsButtonsVisible] = useState(false);
@@ -20,48 +19,46 @@ const Profile = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (name !== userName || email !== userEmail || password !== '') {
+    if (name !== values.name || email !== values.email || values.password !== '') {
       setIsButtonsVisible(true);
     } else setIsButtonsVisible(false);
-  }, [name, userName, email, userEmail, password]);
+  }, [name, email, values]);
 
   const discardUserHandler = (e) => {
     e.preventDefault();
-    setUserName(name);
-    setUserEmail(email);
-    setPassword('');
+    setValues({ name: name, email: email, password: '' });
   };
 
-  const saveUserHandler = (e) => {
+  const onFormSubmit = (e) => {
     e.preventDefault();
     let payload = {};
-    if (userName !== name) {
-      payload.name = userName;
+    if (values.name !== name) {
+      payload.name = values.name;
     }
-    if (userEmail !== email) {
-      payload.email = userEmail;
+    if (values.email !== email) {
+      payload.email = values.email;
     }
-    if (password !== '') {
-      payload.password = password;
+    if (values.password !== '') {
+      payload.password = values.password;
     }
     dispatch(updateUser(payload));
-    setPassword('');
+    setValues({ ...values, password: '' });
   };
 
   return (
     <section>
-      <form>
+      <form onSubmit={onFormSubmit}>
         <div className={clsx(styleProfile.input, 'mb-6')}>
           <Input
             type={'text'}
             placeholder={'Имя'}
-            onChange={(e) => setUserName(e.target.value)}
+            onChange={handleChange}
             onFocus={(e) => setInputInFocus('name')}
             onBlur={(e) => setInputInFocus('')}
-            value={userName}
+            value={values.name}
             name={'Имя'}
             error={false}
-            ref={userNameRef}
+            ref={nameRef}
             errorText={'Ошибка'}
             size={'default'}
             icon={inputInFocus === 'name' ? 'CloseIcon' : 'EditIcon'}
@@ -71,13 +68,13 @@ const Profile = () => {
           <Input
             type={'text'}
             placeholder={'E-mail'}
-            onChange={(e) => setUserEmail(e.target.value)}
+            onChange={handleChange}
             onFocus={(e) => setInputInFocus('email')}
             onBlur={(e) => setInputInFocus('')}
-            value={userEmail}
+            value={values.email}
             name={'email'}
             error={false}
-            ref={userEmailRef}
+            ref={emailRef}
             errorText={'Ошибка'}
             size={'default'}
             icon={inputInFocus === 'email' ? 'CloseIcon' : 'EditIcon'}
@@ -87,10 +84,10 @@ const Profile = () => {
           <Input
             type={'text'}
             placeholder={'Пароль'}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={handleChange}
             onFocus={(e) => setInputInFocus('password')}
             onBlur={(e) => setInputInFocus('')}
-            value={password}
+            value={values.password}
             name={'password'}
             error={false}
             ref={passwordRef}
@@ -103,7 +100,7 @@ const Profile = () => {
           <Button type='secondary' size='medium' onClick={discardUserHandler}>
             Отмена
           </Button>
-          <Button type='primary' size='medium' onClick={saveUserHandler}>
+          <Button type='primary' size='medium' onClick={onFormSubmit}>
             Сохранить
           </Button>
         </div>

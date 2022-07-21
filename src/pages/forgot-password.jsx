@@ -6,11 +6,12 @@ import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-component
 import styleAuth from './auth.module.scss';
 import AuthWrapper from '../components/auth-wrapper/auth-wrapper';
 import { useDispatch, useSelector } from 'react-redux';
-import { forgotPassword } from '../services/reducers/auth-reducer';
+import { forgotPassword } from '../services/middleware/auth-middleware';
+import { useForm } from '../utils/hooks';
 
 const ForgotPassword = () => {
   const changePasswordRequest = useSelector((store) => store.authorization.changePasswordRequest);
-  const [email, setEmail] = useState('');
+  const { values, handleChange, setValues } = useForm({ email: '' });
   const emailRef = useRef(null);
   const [isEmailEmpty, setIsEmailEmpty] = useState(false);
 
@@ -20,7 +21,7 @@ const ForgotPassword = () => {
 
   useEffect(() => {
     if (location.state && location.state.savedEmail) {
-      setEmail(location.state.savedEmail);
+      setValues({ ...values, email: location.state.savedEmail });
     }
     if (emailRef.current) {
       emailRef.current.focus();
@@ -28,32 +29,30 @@ const ForgotPassword = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const emailChangeHandler = (e) => {
-    setIsEmailEmpty(false);
-    setEmail(e.target.value);
-  };
-
-  const forgotPasswordHandler = (e) => {
+  const onFormSubmit = (e) => {
     e.preventDefault();
-    if (email !== '') {
-      dispatch(forgotPassword(email, history));
+    if (values.email !== '') {
+      dispatch(forgotPassword(values.email, history));
       history.push({ pathname: '/reset-password', state: { from: location } });
     } else setIsEmailEmpty(true);
   };
 
   return (
     <AuthWrapper>
-      <form className={styleAuth.login_form}>
+      <form className={styleAuth.login_form} onSubmit={onFormSubmit}>
         <h1 className='text text_type_main-medium mb-6'>Восстановление пароля</h1>
-          {isEmailEmpty && (
-            <p className={clsx(styleAuth.error_message, 'text text_type_main-default mb-4')}>Введите почту</p>
-          )}
+        {isEmailEmpty && (
+          <p className={clsx(styleAuth.error_message, 'text text_type_main-default mb-4')}>Введите почту</p>
+        )}
         <div className={clsx(styleAuth.input, 'mb-6')}>
           <Input
             type={'email'}
             placeholder={'Укажите e-mail'}
-            onChange={emailChangeHandler}
-            value={email}
+            onChange={(e) => {
+              handleChange(e);
+              setIsEmailEmpty(false);
+            }}
+            value={values.email}
             name={'email'}
             error={false}
             ref={emailRef}
@@ -65,7 +64,7 @@ const ForgotPassword = () => {
           {changePasswordRequest ? (
             <p className={clsx(styleAuth.loading, 'text text_type_main-default text_color_inactive')}>Загрузка…</p>
           ) : (
-            <Button type='primary' size='medium' onClick={forgotPasswordHandler}>
+            <Button type='primary' size='medium' onClick={onFormSubmit}>
               Восстановить
             </Button>
           )}
@@ -73,7 +72,7 @@ const ForgotPassword = () => {
       </form>
       <div className={styleAuth.bottom_text}>
         <p className='text text_type_main-default text_color_inactive'>
-          Вспомнили пароль? <Link to={{ pathname: '/login', state: { savedEmail: email } }}>Войти</Link>
+          Вспомнили пароль? <Link to={{ pathname: '/login', state: { savedEmail: values.email } }}>Войти</Link>
         </p>
       </div>
     </AuthWrapper>

@@ -5,8 +5,9 @@ import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-component
 
 import styleAuth from './auth.module.scss';
 import AuthWrapper from '../components/auth-wrapper/auth-wrapper';
-import { resetPassword } from '../services/reducers/auth-reducer';
+import { resetPassword } from '../services/middleware/auth-middleware';
 import { useDispatch } from 'react-redux';
+import { useForm } from '../utils/hooks';
 
 const FORM_TITLE = 'Восстановление пароля';
 const BUTTON_TITLE = 'Сохранить';
@@ -15,10 +16,9 @@ const PasswordReset = () => {
   const history = useHistory();
   const dispatch = useDispatch();
   const location = useLocation();
-  const [password, setPassword] = useState('');
-  const [code, setCode] = useState('');
+
+  const { values, handleChange } = useForm({ password: '', token: '' });
   const passwordRef = useRef(null);
-  const codeRef = useRef(null);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [fromLocation] = useState(location.state);
 
@@ -28,9 +28,9 @@ const PasswordReset = () => {
     }
   }, []);
 
-  const passwordResetHandler = (e) => {
+  const onFormSubmit = (e) => {
     e.preventDefault();
-    dispatch(resetPassword(password, code));
+    dispatch(resetPassword(values.password, values.token));
     history.push({ pathname: '/login' });
   };
 
@@ -40,17 +40,16 @@ const PasswordReset = () => {
 
   return (
     <AuthWrapper>
-      <form className={styleAuth.login_form}>
+      <form className={styleAuth.login_form} onSubmit={onFormSubmit}>
         <h1 className='text text_type_main-medium mb-6'>{FORM_TITLE}</h1>
         <div className={clsx(styleAuth.input, 'mb-6')}>
           <Input
             type={isPasswordVisible ? 'text' : 'password'}
             placeholder={'Введите новый пароль'}
-            onChange={(e) => setPassword(e.target.value)}
-            value={password}
+            onChange={handleChange}
+            value={values.password}
             name={'password'}
             error={false}
-            ref={passwordRef}
             errorText={'Ошибка'}
             size={'default'}
             icon={isPasswordVisible ? 'HideIcon' : 'ShowIcon'}
@@ -61,17 +60,16 @@ const PasswordReset = () => {
           <Input
             type={'text'}
             placeholder={'Введите код из письма'}
-            onChange={(e) => setCode(e.target.value)}
-            value={code}
-            name={'code'}
+            onChange={handleChange}
+            value={values.token}
+            name={'token'}
             error={false}
-            ref={codeRef}
             errorText={'Ошибка'}
             size={'default'}
           />
         </div>
         <div className={clsx(styleAuth.login_button, 'mb-20')}>
-          <Button type='primary' size='medium' onClick={passwordResetHandler}>
+          <Button type='primary' size='medium' onClick={onFormSubmit}>
             {BUTTON_TITLE}
           </Button>
         </div>

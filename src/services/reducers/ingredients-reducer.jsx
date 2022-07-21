@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchGetIngredients } from '../../utils/api';
 
 const initialState = {
   ingredients: [],
@@ -30,26 +29,11 @@ const ingredientsReducer = createSlice({
   },
 });
 
-export const getIngredients = () => (dispatch) => {
-  dispatch(getIngredientsRequest());
-  fetchGetIngredients()
-    .then((data) => {
-      if (data && data.success) {
-        dispatch(getIngredientsSuccess(data.data));
-      } else dispatch(getIngredientsFailed(data.message));
-    })
-    .catch((e) => {
-      dispatch(getIngredientsFailed(e));
-    });
-};
-
 export const {
   getIngredientsRequest,
   getIngredientsSuccess,
   getIngredientsFailed,
   setActiveTab,
-  addViewingIngredient,
-  deleteViewingIngredient,
 } = ingredientsReducer.actions;
 
 export default ingredientsReducer.reducer;

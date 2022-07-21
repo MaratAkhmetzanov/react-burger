@@ -1,6 +1,13 @@
 import { GET_DATA_URL } from './constants';
 import { getCookie } from './cookie';
 
+const fetchResponseCheck = (res) => {
+  if (res.ok) {
+    return res.json();
+  } else Promise.reject(`Ошибка ${res.status}`);
+  return res.json();
+};
+
 export const fetchRegister = async (email, password, name) =>
   await fetch(`${GET_DATA_URL}/auth/register`, {
     method: 'POST',
@@ -13,9 +20,7 @@ export const fetchRegister = async (email, password, name) =>
       password,
       name,
     }),
-  }).then((res) => {
-    return res.json();
-  });
+  }).then(fetchResponseCheck);
 
 export const fetchLogin = async (email, password) =>
   await fetch(`${GET_DATA_URL}/auth/login`, {
@@ -28,9 +33,7 @@ export const fetchLogin = async (email, password) =>
       email,
       password,
     }),
-  }).then((res) => {
-    return res.json();
-  });
+  }).then(fetchResponseCheck);
 
 export const fetchRefreshToken = async () =>
   await fetch(`${GET_DATA_URL}/auth/token`, {
@@ -42,9 +45,7 @@ export const fetchRefreshToken = async () =>
     body: JSON.stringify({
       token: getCookie('refreshToken'),
     }),
-  }).then((res) => {
-    return res.json();
-  });
+  }).then(fetchResponseCheck);
 
 export const fetchExit = async () =>
   await fetch(`${GET_DATA_URL}/auth/logout`, {
@@ -56,9 +57,7 @@ export const fetchExit = async () =>
     body: JSON.stringify({
       token: getCookie('refreshToken'),
     }),
-  }).then((res) => {
-    return res.json();
-  });
+  }).then(fetchResponseCheck);
 
 export const fetchForgotPassword = async (email) =>
   await fetch(`${GET_DATA_URL}/password-reset`, {
@@ -68,9 +67,7 @@ export const fetchForgotPassword = async (email) =>
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ email }),
-  }).then((res) => {
-    return res.json();
-  });
+  }).then(fetchResponseCheck);
 
 export const fetchResetPassword = async (password, token) =>
   await fetch(`${GET_DATA_URL}/password-reset/reset`, {
@@ -83,9 +80,7 @@ export const fetchResetPassword = async (password, token) =>
       password,
       token,
     }),
-  }).then((res) => {
-    return res.json();
-  });
+  }).then(fetchResponseCheck);
 
 export const fetchGetUser = async () =>
   await fetch(`${GET_DATA_URL}/auth/user`, {
@@ -93,9 +88,7 @@ export const fetchGetUser = async () =>
     headers: {
       authorization: `Basic ${getCookie('accessToken')}`,
     },
-  }).then((res) => {
-    return res.json();
-  });
+  }).then(fetchResponseCheck);
 
 export const fetchUpdateUser = async ({ email, password, name }) =>
   await fetch(`${GET_DATA_URL}/auth/user`, {
@@ -110,9 +103,7 @@ export const fetchUpdateUser = async ({ email, password, name }) =>
       password,
       name,
     }),
-  }).then((res) => {
-    return res.json();
-  });
+  }).then(fetchResponseCheck);
 
 export const fetchGetOrder = async (ingredients) =>
   await fetch(`${GET_DATA_URL}/orders`, {
@@ -123,11 +114,6 @@ export const fetchGetOrder = async (ingredients) =>
       authorization: `Basic ${getCookie('accessToken')}`,
     },
     body: JSON.stringify({ ingredients }),
-  }).then((res) => {
-    return res.json();
-  });
+  }).then(fetchResponseCheck);
 
-export const fetchGetIngredients = async () =>
-  await fetch(`${GET_DATA_URL}/ingredients`).then((res) => {
-    return res.json();
-  });
+export const fetchGetIngredients = async () => await fetch(`${GET_DATA_URL}/ingredients`).then(fetchResponseCheck);

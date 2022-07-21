@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect, Route, useLocation } from 'react-router-dom';
-import { getUser } from '../../services/reducers/profile-reducer';
+import { getUser } from '../../services/middleware/profile-middleware';
 import Loader from '../loader/loader';
 
 const RedirectRoute = ({ children }) => {

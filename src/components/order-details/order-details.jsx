@@ -5,7 +5,7 @@ import clsx from 'clsx';
 import styleOrderDetails from './order-details.module.scss';
 import { checkmark } from '../../images/svg.jsx';
 import { Redirect, useHistory } from 'react-router-dom';
-import { getOrder } from '../../services/reducers/order-reducer';
+import { getOrder } from '../../services/middleware/order-middleware';
 
 const OrderDetails = () => {
   const dispatch = useDispatch();
@@ -22,7 +22,7 @@ const OrderDetails = () => {
   );
 
   useEffect(() => {
-    if (constructorBun) {
+    if (constructorBun && !createOrderRequest) {
       const ingredients = [constructorBun._id, ...constructorItems.map((item) => item._id)];
       dispatch(getOrder(ingredients));
     } else {
@@ -32,7 +32,7 @@ const OrderDetails = () => {
   }, []);
 
   if (createOrderFailed === 'jwt malformed') {
-    return <Redirect push={false} to={'/'} />;
+    return <Redirect push={false} to={'/login'} />;
   }
 
   return (
