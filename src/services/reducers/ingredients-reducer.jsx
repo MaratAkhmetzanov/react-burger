@@ -3,8 +3,8 @@ import { fetchGetIngredients } from '../../utils/api';
 
 const initialState = {
   ingredients: [],
-  isGetIngredientsRequest: false,
-  isGetIngredientsFailed: false,
+  getIngredientsRequest: false,
+  getIngredientsFailed: false,
   activeTab: 'bun',
 };
 
@@ -12,19 +12,19 @@ const ingredientsReducer = createSlice({
   name: 'order',
   initialState,
   reducers: {
-    getIngredientsRequest (state) {
-      state.isGetIngredientsRequest = true;
+    getIngredientsRequest(state) {
+      state.getIngredientsRequest = true;
     },
-    getIngredientsSuccess (state, { payload }) {
+    getIngredientsSuccess(state, { payload }) {
       state.ingredients = payload;
-      state.isGetIngredientsRequest = false;
-      state.isGetIngredientsFailed = false;
+      state.getIngredientsRequest = false;
+      state.getIngredientsFailed = false;
     },
-    getIngredientsFailed (state) {
-      state.isGetIngredientsRequest = false;
-      state.isGetIngredientsFailed = true;
+    getIngredientsFailed(state, { payload }) {
+      state.getIngredientsRequest = false;
+      state.getIngredientsFailed = payload;
     },
-    setActiveTab (state, { payload }) {
+    setActiveTab(state, { payload }) {
       state.activeTab = payload;
     },
   },
@@ -33,15 +33,13 @@ const ingredientsReducer = createSlice({
 export const getIngredients = () => (dispatch) => {
   dispatch(getIngredientsRequest());
   fetchGetIngredients()
-    .then((res) => {
-      if (res && res.success) {
-        dispatch(getIngredientsSuccess(res.data));
-      } else {
-        dispatch(getIngredientsFailed());
-      }
+    .then((data) => {
+      if (data && data.success) {
+        dispatch(getIngredientsSuccess(data.data));
+      } else dispatch(getIngredientsFailed(data.message));
     })
     .catch((e) => {
-      dispatch(getIngredientsFailed());
+      dispatch(getIngredientsFailed(e));
     });
 };
 

@@ -4,38 +4,46 @@ import clsx from 'clsx';
 
 import styleOrderDetails from './order-details.module.scss';
 import { checkmark } from '../../images/svg.jsx';
-import { Redirect } from 'react-router-dom';
+import { Redirect, useHistory } from 'react-router-dom';
 import { getOrder } from '../../services/reducers/order-reducer';
 
 const OrderDetails = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
 
-  const { orderNumber, isCreateOrderRequest, isCreateOrderFailed, constructorBun, constructorItems } = useSelector(
+  const { orderNumber, createOrderRequest, createOrderFailed, constructorBun, constructorItems } = useSelector(
     (store) => ({
       orderNumber: store.order.orderNumber,
-      isCreateOrderRequest: store.order.isCreateOrderRequest,
-      isCreateOrderFailed: store.order.isCreateOrderFailed,
+      createOrderRequest: store.order.createOrderRequest,
+      createOrderFailed: store.order.createOrderFailed,
       constructorBun: store.burgerConstructor.constructorBun,
       constructorItems: store.burgerConstructor.constructorItems,
     })
   );
 
   useEffect(() => {
-    const ingredients = [constructorBun._id, ...constructorItems.map((item) => item._id)];
-    dispatch(getOrder(ingredients));
+    if (constructorBun) {
+      const ingredients = [constructorBun._id, ...constructorItems.map((item) => item._id)];
+      dispatch(getOrder(ingredients));
+    } else {
+      history.replace({ pathname: '/' });
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (isCreateOrderFailed === 'jwt malformed') {
+  if (createOrderFailed === 'jwt malformed') {
     return <Redirect push={false} to={'/'} />;
   }
 
   return (
     <div className={styleOrderDetails.order_wrapper}>
-      {isCreateOrderRequest && (
-        <div className={clsx(styleOrderDetails.loader, 'text text_type_main-medium')}>Формируем заказ…</div>
+      {createOrderRequest && (
+        <div className={styleOrderDetails.loader}>
+          <div className='text text_type_main-medium'>Формируем заказ…</div>
+          <div className='text text_type_main-default text_color_inactive mt-2'>Это займет некоторое время</div>
+        </div>
       )}
-      {!isCreateOrderRequest && (
+      {!createOrderRequest && (
         <>
           <p className={clsx(styleOrderDetails.order_id, 'text text_type_digits-large mt-20')}>{orderNumber}</p>
           <p className='text text_type_main-medium mt-8 mb-15'>идентификатор заказа</p>

@@ -6,28 +6,28 @@ import { eraseCunstructor } from './constructor-reducer';
 const initialState = {
   name: '',
   orderNumber: 0,
-  isCreateOrderRequest: false,
-  isCreateOrderFailed: '',
+  createOrderRequest: false,
+  createOrderFailed: '',
 };
 
 const orderReducer = createSlice({
   name: 'order',
   initialState,
   reducers: {
-    createOrderRequest (state) {
-      state.isCreateOrderRequest = true;
+    createOrderRequest(state) {
+      state.createOrderRequest = true;
     },
-    createOrderSuccess (state, { payload }) {
+    createOrderSuccess(state, { payload }) {
       state.name = payload.name;
       state.orderNumber = payload.orderNumber;
-      state.isCreateOrderRequest = false;
-      state.isCreateOrderFailed = '';
+      state.createOrderRequest = false;
+      state.createOrderFailed = '';
     },
-    createOrderFailed (state, { payload }) {
-      state.isCreateOrderRequest = false;
-      state.isCreateOrderFailed = payload;
+    createOrderFailed(state, { payload }) {
+      state.createOrderRequest = false;
+      state.createOrderFailed = payload;
     },
-    eraseOrder (state) {
+    eraseOrder(state) {
       state.name = '';
       state.orderNumber = 0;
     },
@@ -49,7 +49,8 @@ export const getOrder = (ingredients) => (dispatch) => {
       } else {
         if (data.message === 'jwt expired') {
           dispatch(refreshToken(() => getOrder(ingredients)));
-        } else dispatch(createOrderFailed(data.message));
+        }
+        dispatch(createOrderFailed(data.message));
       }
     })
     .catch((e) => {

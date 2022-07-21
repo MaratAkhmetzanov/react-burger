@@ -8,9 +8,9 @@ import Loader from '../loader/loader';
 const RedirectRoute = ({ children }) => {
   const dispatch = useDispatch();
   const location = useLocation();
-  const { user, isGetUserLoaded } = useSelector((store) => ({
+  const { user, getUserLoaded } = useSelector((store) => ({
     user: store.profile.user,
-    isGetUserLoaded: store.profile.isGetUserLoaded,
+    getUserLoaded: store.profile.getUserLoaded,
   }));
 
   const pathName = location.state && location.state.from ? location.state.from.pathname : '/';
@@ -20,7 +20,7 @@ const RedirectRoute = ({ children }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (!isGetUserLoaded) {
+  if (!getUserLoaded) {
     return <Loader />;
   }
 

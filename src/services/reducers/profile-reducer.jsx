@@ -5,46 +5,46 @@ import { refreshToken } from './auth-reducer';
 
 const initialState = {
   user: null,
-  isGetUserRequest: false,
-  isGetUserLoaded: false,
+  getUserRequest: false,
+  getUserLoaded: false,
   getUserFailedMessage: '',
-  isExitRequest: false,
-  isExitFailed: false,
+  exitRequest: false,
+  exitFailed: '',
 };
 
 const profileReducer = createSlice({
   name: 'profile',
   initialState,
   reducers: {
-    setUser (state, { payload }) {
+    setUser(state, { payload }) {
       state.user = { ...payload };
-      state.isExitFailed = false;
+      state.exitFailed = '';
     },
-    getUserRequest (state) {
-      state.isGetUserRequest = true;
+    getUserRequest(state) {
+      state.getUserRequest = true;
     },
-    getUserSuccess (state, { payload }) {
+    getUserSuccess(state, { payload }) {
       state.user = { ...payload };
-      state.isGetUserRequest = false;
-      state.isGetUserLoaded = true;
+      state.getUserRequest = false;
+      state.getUserLoaded = true;
       state.getUserFailedMessage = '';
     },
-    getUserFailed (state, { payload }) {
-      state.isGetUserRequest = false;
-      state.isGetUserLoaded = true;
+    getUserFailed(state, { payload }) {
+      state.getUserRequest = false;
+      state.getUserLoaded = true;
       state.getUserFailedMessage = payload;
     },
-    exitRequest (state) {
-      state.isExitRequest = true;
+    exitRequest(state) {
+      state.exitRequest = true;
     },
-    exitSuccess (state) {
+    exitSuccess(state) {
       state.user = null;
-      state.isExitRequest = false;
-      state.isExitFailed = true;
+      state.exitRequest = false;
+      state.exitFailed = true;
     },
-    exitFailed (state) {
-      state.isExitRequest = false;
-      state.isExitFailed = true;
+    exitFailed(state, { payload }) {
+      state.exitRequest = false;
+      state.exitFailed = payload;
     },
   },
 });
@@ -58,7 +58,8 @@ export const getUser = () => (dispatch) => {
       } else {
         if (data.message === 'jwt expired') {
           dispatch(refreshToken(getUser));
-        } else dispatch(getUserFailed(data.message));
+        }
+        dispatch(getUserFailed(data.message));
       }
     })
     .catch((e) => {
@@ -72,10 +73,7 @@ export const updateUser = (payload) => (dispatch) => {
     .then((data) => {
       if (data && data.success) {
         dispatch(getUserSuccess(data.user));
-      }
-      if (data.message) {
-        dispatch(getUserFailed(data.message));
-      }
+      } else dispatch(getUserFailed(data.message));
     })
     .catch((e) => {
       dispatch(getUserFailed(e));
@@ -90,12 +88,10 @@ export const exitUser = () => (dispatch) => {
         deleteCookie('accessToken');
         deleteCookie('refreshToken');
         dispatch(exitSuccess());
-      } else {
-        dispatch(exitFailed());
-      }
+      } else dispatch(exitFailed(data.message));
     })
     .catch((e) => {
-      dispatch(exitFailed());
+      dispatch(exitFailed(e));
     });
 };
 

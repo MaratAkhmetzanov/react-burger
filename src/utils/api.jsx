@@ -14,9 +14,7 @@ export const fetchRegister = async (email, password, name) =>
       name,
     }),
   }).then((res) => {
-    if (res.ok) {
-      return res.json();
-    } else Promise.reject(`Ошибка ${res.status}`);
+    return res.json();
   });
 
 export const fetchLogin = async (email, password) =>
@@ -31,9 +29,7 @@ export const fetchLogin = async (email, password) =>
       password,
     }),
   }).then((res) => {
-    if (res.ok) {
-      return res.json();
-    } else Promise.reject(`Ошибка ${res.status}`);
+    return res.json();
   });
 
 export const fetchRefreshToken = async () =>
@@ -61,9 +57,7 @@ export const fetchExit = async () =>
       token: getCookie('refreshToken'),
     }),
   }).then((res) => {
-    if (res.ok) {
-      return res.json();
-    } else Promise.reject(`Ошибка ${res.status}`);
+    return res.json();
   });
 
 export const fetchForgotPassword = async (email) =>
@@ -75,9 +69,7 @@ export const fetchForgotPassword = async (email) =>
     },
     body: JSON.stringify({ email }),
   }).then((res) => {
-    if (res.ok) {
-      return res.json();
-    } else Promise.reject(`Ошибка ${res.status}`);
+    return res.json();
   });
 
 export const fetchResetPassword = async (password, token) =>

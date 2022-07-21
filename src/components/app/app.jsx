@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch, Route, useLocation, useHistory } from 'react-router-dom';
+import { Switch, Route, useLocation, useHistory, Redirect } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from '../../services/store';
 
@@ -48,6 +48,9 @@ const App = () => {
         </Route>
         <Route exact path='/orders'>
           <OrdersPage />
+        </Route>
+        <Route exact path='/order'>
+          <Redirect to='/' />
         </Route>
         <Route exact path='/ingredients/:id'>
           <IngredientPage />

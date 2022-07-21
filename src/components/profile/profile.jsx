@@ -25,7 +25,8 @@ const Profile = () => {
     } else setIsButtonsVisible(false);
   }, [name, userName, email, userEmail, password]);
 
-  const discardUserHandler = () => {
+  const discardUserHandler = (e) => {
+    e.preventDefault();
     setUserName(name);
     setUserEmail(email);
     setPassword('');
@@ -48,63 +49,65 @@ const Profile = () => {
   };
 
   return (
-    <section className={styleProfile.content_section}>
-      <div className={clsx(styleProfile.input, 'mb-6')}>
-        <Input
-          type={'text'}
-          placeholder={'Имя'}
-          onChange={(e) => setUserName(e.target.value)}
-          onFocus={(e) => setInputInFocus('name')}
-          onBlur={(e) => setInputInFocus('')}
-          value={userName}
-          name={'Имя'}
-          error={false}
-          ref={userNameRef}
-          errorText={'Ошибка'}
-          size={'default'}
-          icon={inputInFocus === 'name' ? 'CloseIcon' : 'EditIcon'}
-        />
-      </div>
-      <div className={clsx(styleProfile.input, 'mb-6')}>
-        <Input
-          type={'email'}
-          placeholder={'E-mail'}
-          onChange={(e) => setUserEmail(e.target.value)}
-          onFocus={(e) => setInputInFocus('email')}
-          onBlur={(e) => setInputInFocus('')}
-          value={userEmail}
-          name={'email'}
-          error={false}
-          ref={userEmailRef}
-          errorText={'Ошибка'}
-          size={'default'}
-          icon={inputInFocus === 'email' ? 'CloseIcon' : 'EditIcon'}
-        />
-      </div>
-      <div className={clsx(styleProfile.input)}>
-        <Input
-          type={'password'}
-          placeholder={'Пароль'}
-          onChange={(e) => setPassword(e.target.value)}
-          onFocus={(e) => setInputInFocus('password')}
-          onBlur={(e) => setInputInFocus('')}
-          value={password}
-          name={'password'}
-          error={false}
-          ref={passwordRef}
-          errorText={'Ошибка'}
-          size={'default'}
-          icon={inputInFocus === 'password' ? 'ShowIcon' : 'EditIcon'}
-        />
-      </div>
-      <div className={clsx(styleProfile.buttons, isButtonsVisible ? styleProfile.visible : '', 'mt-6')}>
-        <Button type='secondary' size='medium' onClick={discardUserHandler}>
-          Отмена
-        </Button>
-        <Button type='primary' size='medium' onClick={saveUserHandler}>
-          Сохранить
-        </Button>
-      </div>
+    <section>
+      <form>
+        <div className={clsx(styleProfile.input, 'mb-6')}>
+          <Input
+            type={'text'}
+            placeholder={'Имя'}
+            onChange={(e) => setUserName(e.target.value)}
+            onFocus={(e) => setInputInFocus('name')}
+            onBlur={(e) => setInputInFocus('')}
+            value={userName}
+            name={'Имя'}
+            error={false}
+            ref={userNameRef}
+            errorText={'Ошибка'}
+            size={'default'}
+            icon={inputInFocus === 'name' ? 'CloseIcon' : 'EditIcon'}
+          />
+        </div>
+        <div className={clsx(styleProfile.input, 'mb-6')}>
+          <Input
+            type={'text'}
+            placeholder={'E-mail'}
+            onChange={(e) => setUserEmail(e.target.value)}
+            onFocus={(e) => setInputInFocus('email')}
+            onBlur={(e) => setInputInFocus('')}
+            value={userEmail}
+            name={'email'}
+            error={false}
+            ref={userEmailRef}
+            errorText={'Ошибка'}
+            size={'default'}
+            icon={inputInFocus === 'email' ? 'CloseIcon' : 'EditIcon'}
+          />
+        </div>
+        <div className={clsx(styleProfile.input)}>
+          <Input
+            type={'text'}
+            placeholder={'Пароль'}
+            onChange={(e) => setPassword(e.target.value)}
+            onFocus={(e) => setInputInFocus('password')}
+            onBlur={(e) => setInputInFocus('')}
+            value={password}
+            name={'password'}
+            error={false}
+            ref={passwordRef}
+            errorText={'Ошибка'}
+            size={'default'}
+            icon={inputInFocus === 'password' ? 'CloseIcon' : 'EditIcon'}
+          />
+        </div>
+        <div className={clsx(styleProfile.buttons, isButtonsVisible ? styleProfile.visible : '', 'mt-6')}>
+          <Button type='secondary' size='medium' onClick={discardUserHandler}>
+            Отмена
+          </Button>
+          <Button type='primary' size='medium' onClick={saveUserHandler}>
+            Сохранить
+          </Button>
+        </div>
+      </form>
     </section>
   );
 };

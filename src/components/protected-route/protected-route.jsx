@@ -6,9 +6,9 @@ import { getUser } from '../../services/reducers/profile-reducer';
 import Loader from '../loader/loader';
 
 const ProtectedRoute = ({ children }) => {
-  const { user, isGetUserLoaded } = useSelector((store) => ({
+  const { user, getUserLoaded } = useSelector((store) => ({
     user: store.profile.user,
-    isGetUserLoaded: store.profile.isGetUserLoaded,
+    getUserLoaded: store.profile.getUserLoaded,
   }));
 
   const dispatch = useDispatch();
@@ -18,7 +18,7 @@ const ProtectedRoute = ({ children }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (!isGetUserLoaded) {
+  if (!getUserLoaded) {
     return <Loader />;
   }
 
