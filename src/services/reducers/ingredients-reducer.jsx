@@ -1,63 +1,39 @@
-import {
-  GET_INGREDIENTS_REQUEST,
-  GET_INGREDIENTS_SUCCESS,
-  GET_INGREDIENTS_FAILED,
-  SET_ACTIVE_TAB,
-  ADD_VIEWING_INGREDIENT,
-  DELETE_VIEWING_INGREDIENT
-} from '../actions/ingredients-actions';
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   ingredients: [],
-  ingredientsRequest: false,
-  ingredientsFailed: false,
+  getIngredientsRequest: false,
+  getIngredientsFailed: false,
   activeTab: 'bun',
-  viewingIngredient: {}
 };
 
-export const ingredientsReducer = (state = initialState, action) => {
-  switch (action.type) {
-    case GET_INGREDIENTS_REQUEST: {
-      return {
-        ...state,
-        ingredientsRequest: true
-      };
-    }
-    case GET_INGREDIENTS_SUCCESS: {
-      return {
-        ...state,
-        ingredients: action.ingredients,
-        ingredientsRequest: false,
-        ingredientsFailed: false
-      };
-    }
-    case GET_INGREDIENTS_FAILED: {
-      return {
-        ...state,
-        ingredientsRequest: false,
-        ingredientsFailed: true
-      };
-    }
-    case SET_ACTIVE_TAB: {
-      return {
-        ...state,
-        activeTab: action.tab
-      };
-    }
-    case ADD_VIEWING_INGREDIENT: {
-      return {
-        ...state,
-        viewingIngredient: action.ingredient
-      };
-    }
-    case DELETE_VIEWING_INGREDIENT: {
-      return {
-        ...state,
-        viewingIngredient: {}
-      };
-    }
-    default: {
-      return state;
-    }
-  }
-};
+const ingredientsReducer = createSlice({
+  name: 'order',
+  initialState,
+  reducers: {
+    getIngredientsRequest(state) {
+      state.getIngredientsRequest = true;
+    },
+    getIngredientsSuccess(state, { payload }) {
+      state.ingredients = payload;
+      state.getIngredientsRequest = false;
+      state.getIngredientsFailed = false;
+    },
+    getIngredientsFailed(state, { payload }) {
+      state.getIngredientsRequest = false;
+      state.getIngredientsFailed = payload;
+    },
+    setActiveTab(state, { payload }) {
+      state.activeTab = payload;
+    },
+  },
+});
+
+export const {
+  getIngredientsRequest,
+  getIngredientsSuccess,
+  getIngredientsFailed,
+  setActiveTab,
+} = ingredientsReducer.actions;
+
+export default ingredientsReducer.reducer;

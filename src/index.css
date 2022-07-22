@@ -45,3 +45,11 @@ body {
   margin-top: 4px !important;
   margin-bottom: 4px !important;
 }
+
+.text_type_main-large, .text_type_main-medium, .text_type_main-default{
+  font-family: 'Jet Brains Mono', sans-serif !important;
+}
+
+.text_type_digits-large{
+  font-family: 'Iceland', sans-serif !important;
+}

@@ -10,8 +10,12 @@
   width: 560px;
 }
 
-.checkmark{
+.ingredient_img {
   height: 240px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
 }
 
 .parameters {
@@ -21,4 +25,13 @@
 
 .parameters p {
   min-width: 112px;
+}
+
+.visible{
+  opacity: 1;
+  transition: opacity 1s;
+}
+
+.hidden {
+  opacity: 0;
 }

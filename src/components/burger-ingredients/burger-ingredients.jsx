@@ -3,19 +3,17 @@ import { useSelector, useDispatch } from 'react-redux';
 import clsx from 'clsx';
 import { Scrollbars } from 'react-custom-scrollbars';
 
-import {
-  getIngredients,
-  SET_ACTIVE_TAB,
-} from '../../services/actions/ingredients-actions';
-
 import styleIngredients from './burger-ingredients.module.scss';
 import Tabs from './tabs/tabs';
 import CatalogGroup from './catalog-group/catalog-group';
+import Loader from '../loader/loader';
+import { getIngredients } from '../../services/thunk/ingredients-thunk';
+import { setActiveTab } from '../../services/reducers/ingredients-reducer';
 
 const BurgerIngredients = () => {
-  const { ingredients, ingredientsRequest } = useSelector((store) => ({
+  const { ingredients, getIngredientsRequest } = useSelector((store) => ({
     ingredients: store.ingredients.ingredients,
-    ingredientsRequest: store.ingredients.ingredientsRequest
+    getIngredientsRequest: store.ingredients.getIngredientsRequest,
   }));
 
   const scrollRef = useRef();
@@ -27,14 +25,12 @@ const BurgerIngredients = () => {
 
   useEffect(() => {
     dispatch(getIngredients());
-  }, [dispatch]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  const setActiveTab = useCallback(
+  const setActiveTabHandler = useCallback(
     (tab) => {
-      dispatch({
-        type: SET_ACTIVE_TAB,
-        tab
-      });
+      dispatch(setActiveTab(tab));
     },
     [dispatch]
   );
@@ -46,37 +42,38 @@ const BurgerIngredients = () => {
       const mainOffset = mainTitleRef.current.offsetTop;
 
       top > sauceOffset && top < mainOffset
-        ? setActiveTab('sauce')
+        ? setActiveTabHandler('sauce')
         : top > mainOffset
-          ? setActiveTab('main')
-          : setActiveTab('bun');
+          ? setActiveTabHandler('main')
+          : setActiveTabHandler('bun');
     }
   };
 
   return (
     <section className={styleIngredients.content}>
-      <h1 className={clsx(styleIngredients.title, 'text text_type_main-large mt-10')}>
-        Соберите бургер
-      </h1>
+      <h1 className={clsx(styleIngredients.title, 'text text_type_main-large mt-10')}>Соберите бургер</h1>
       <Tabs />
-      <Scrollbars
-        autoHeight={true}
-        thumbMinSize={120}
-        autoHeightMin={window.innerHeight - 245}
-        renderTrackVertical={() => <div className={styleIngredients.track_vertical} />}
-        renderThumbVertical={() => <div className={styleIngredients.thumb_vertical} />}
-        onScroll={handleScroll}
-        ref={scrollRef}
-      >
-        {ingredientsRequest && <div className={styleIngredients.loading}>Загрузка...</div>}
-        {!ingredientsRequest && (
+      {getIngredientsRequest ? (
+        <div className={styleIngredients.loader}>
+          <Loader />
+        </div>
+      ) : (
+        <Scrollbars
+          autoHeight={true}
+          thumbMinSize={120}
+          autoHeightMin={window.innerHeight - 245}
+          renderTrackVertical={() => <div className={styleIngredients.track_vertical} />}
+          renderThumbVertical={() => <div className={styleIngredients.thumb_vertical} />}
+          onScroll={handleScroll}
+          ref={scrollRef}
+        >
           <>
             <CatalogGroup title='Булки' data={ingredients} type='bun' titleRef={bunTitleRef} />
             <CatalogGroup title='Соусы' data={ingredients} type='sauce' titleRef={sauceTitleRef} />
             <CatalogGroup title='Начинка' data={ingredients} type='main' titleRef={mainTitleRef} />
           </>
-        )}
-      </Scrollbars>
+        </Scrollbars>
+      )}
     </section>
   );
 };

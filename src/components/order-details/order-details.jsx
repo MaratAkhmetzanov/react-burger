@@ -1,34 +1,53 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import clsx from 'clsx';
 
 import styleOrderDetails from './order-details.module.scss';
-import checkmark from '../../images/checkmark.svg';
+import { checkmark } from '../../images/svg.jsx';
+import { Redirect, useHistory } from 'react-router-dom';
+import { getOrder } from '../../services/thunk/order-thunk';
 
 const OrderDetails = () => {
-  const { orderNumber, orderRequest } = useSelector((store) => ({
-    orderNumber: store.order.orderNumber,
-    orderRequest: store.order.orderRequest
-  }));
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+  const { orderNumber, createOrderRequest, userUnauthorized, constructorBun, constructorItems } = useSelector(
+    (store) => ({
+      orderNumber: store.order.orderNumber,
+      createOrderRequest: store.order.createOrderRequest,
+      userUnauthorized: store.profile.userUnauthorized,
+      constructorBun: store.burgerConstructor.constructorBun,
+      constructorItems: store.burgerConstructor.constructorItems,
+    })
+  );
+
+  useEffect(() => {
+    if (constructorBun && !createOrderRequest) {
+      const ingredients = [constructorBun._id, ...constructorItems.map((item) => item._id)];
+      dispatch(getOrder(ingredients));
+    } else {
+      history.replace({ pathname: '/' });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  if (userUnauthorized) {
+    return <Redirect push={false} to={'/login'} />;
+  }
 
   return (
     <div className={styleOrderDetails.order_wrapper}>
-      {orderRequest && (
-        <div className={clsx(styleOrderDetails.loader, 'text text_type_main-medium')}>
-          Формируем заказ…
+      {createOrderRequest && (
+        <div className={styleOrderDetails.loader}>
+          <div className='text text_type_main-medium'>Формируем заказ…</div>
+          <div className='text text_type_main-default text_color_inactive mt-2'>Это займет некоторое время</div>
         </div>
       )}
-      {!orderRequest && (
+      {!createOrderRequest && (
         <>
-          <p className={clsx(styleOrderDetails.order_id, 'text text_type_digits-large mt-20')}>
-            {orderNumber}
-          </p>
-          <p className='text text_type_main-medium mt-8'>идентификатор заказа</p>
-          <img
-            src={checkmark}
-            alt='checkmark'
-            className={clsx(styleOrderDetails.checkmark, 'mt-15')}
-          />
+          <p className={clsx(styleOrderDetails.order_id, 'text text_type_digits-large mt-20')}>{orderNumber}</p>
+          <p className='text text_type_main-medium mt-8 mb-15'>идентификатор заказа</p>
+          {checkmark}
           <p className='text text_type_main-default mt-15'>Ваш заказ начали готовить</p>
           <p className='text text_type_main-default text_color_inactive mt-2 mb-20'>
             Дождитесь готовности на орбитальной станции

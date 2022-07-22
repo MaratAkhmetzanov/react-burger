@@ -1,0 +1,56 @@
+@import '../css/variables.scss';
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.login_form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 480px;
+
+  & h1 {
+    text-align: center;
+  }
+}
+
+.input {
+  width: 100%;
+  & > div > div {
+    width: 480px;
+  }
+}
+
+.login_button {
+  display: flex;
+  justify-content: center;
+}
+
+.bottom_text {
+  text-align: center;
+  & a {
+    text-decoration: none;
+    color: $primary-text;
+    transition: color 0.5s;
+
+    &:hover {
+      color: #fff;
+      transition: color 0.5s;
+    }
+  }
+}
+
+.loading {
+  height: 56px;
+  display: flex;
+  align-items: center;
+}
+
+.error_message {
+  color: #b62910;
+  text-align: center;
+}

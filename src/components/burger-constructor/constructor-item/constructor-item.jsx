@@ -6,18 +6,17 @@ import styleConstructorItem from './constructor-item.module.scss';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 
-import { DELETE_INGREDIENT } from '../../../services/actions/constructor-actions';
 import dataIngredientsType from '../../../utils/types';
+import { deleteIngredient } from '../../../services/reducers/constructor-reducer';
 
 const ConstructorItem = ({ ingredient, index, moveItem }) => {
-  const { position } = ingredient;
-
   const ref = useRef(null);
+
   const [{ handlerId }, drop] = useDrop({
     accept: 'constructorItem',
     collect (monitor) {
       return {
-        handlerId: monitor.getHandlerId()
+        handlerId: monitor.getHandlerId(),
       };
     },
     hover (item, monitor) {
@@ -43,36 +42,30 @@ const ConstructorItem = ({ ingredient, index, moveItem }) => {
       }
       moveItem(dragIndex, hoverIndex);
       item.index = hoverIndex;
-    }
+    },
   });
 
   const [{ isDragging }, drag] = useDrag({
     type: 'constructorItem',
     item: () => {
-      return { position, index };
+      return { index };
     },
     collect: (monitor) => ({
-      isDragging: monitor.isDragging()
-    })
+      isDragging: monitor.isDragging(),
+    }),
   });
 
   drag(drop(ref));
 
-  const deleteIngredient = (position) => {
-    dispatch({
-      type: DELETE_INGREDIENT,
-      position
-    });
+  const deleteIngredientHandler = (position) => {
+    dispatch(deleteIngredient(position));
   };
 
   const dispatch = useDispatch();
 
   return (
     <div
-      className={clsx(
-        styleConstructorItem.drag_element,
-        isDragging ? styleConstructorItem.hide : ''
-      )}
+      className={clsx(styleConstructorItem.drag_element, isDragging ? styleConstructorItem.hide : '')}
       ref={ref}
       data-handler-id={handlerId}
     >
@@ -83,7 +76,7 @@ const ConstructorItem = ({ ingredient, index, moveItem }) => {
         text={ingredient.name}
         price={ingredient.price}
         thumbnail={ingredient.image}
-        handleClose={() => deleteIngredient(ingredient.position)}
+        handleClose={() => deleteIngredientHandler(ingredient.position)}
       />
     </div>
   );
@@ -92,7 +85,7 @@ const ConstructorItem = ({ ingredient, index, moveItem }) => {
 ConstructorItem.propTypes = {
   ingredient: dataIngredientsType.isRequired,
   index: PropTypes.number.isRequired,
-  moveItem: PropTypes.func.isRequired
+  moveItem: PropTypes.func.isRequired,
 };
 
 export default ConstructorItem;

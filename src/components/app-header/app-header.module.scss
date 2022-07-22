@@ -1,4 +1,4 @@
-@import "../../css/variables.scss";
+@import '../../css/variables.scss';
 
 .header {
   background-color: $modal-bg;
@@ -35,10 +35,29 @@
   align-content: center;
 }
 
-.nav_button_active {
-  color: $standart-text;
+.nav_button {
+  text-decoration: none;
+  display: flex;
+  align-content: center;
+  color: $secondary-text;
+  transition: color .5s;
+  & svg{
+    fill: $secondary-text;
+    transition: fill .5s;
+  }
+  &:hover {
+    color: $standart-text;
+    transition: color 0.5s;
+    & svg {
+      fill: $standart-text;
+      transition: fill 0.5s;
+    }
+  }
 }
 
-.nav_button_inactive {
-  color: $secondary-text;
+.active {
+  color: $standart-text;
+  & svg{
+    fill: $standart-text;
+  }
 }
