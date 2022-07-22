@@ -5,7 +5,7 @@ import clsx from 'clsx';
 import styleOrderDetails from './order-details.module.scss';
 import { checkmark } from '../../images/svg.jsx';
 import { Redirect, useHistory } from 'react-router-dom';
-import { getOrder } from '../../services/middleware/order-middleware';
+import { getOrder } from '../../services/thunk/order-thunk';
 
 const OrderDetails = () => {
   const dispatch = useDispatch();

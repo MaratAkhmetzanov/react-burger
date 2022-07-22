@@ -1,11 +1,13 @@
 import { GET_DATA_URL } from './constants';
 import { getCookie } from './cookie';
 
-const fetchResponseCheck = (res) => {
+const fetchResponseCheck = async (res) => {
   if (res.ok) {
     return res.json();
-  } else Promise.reject(`Ошибка ${res.status}`);
-  return res.json();
+  } else {
+    const message = await res.json().then((err) => err.message);
+    return Promise.reject({ status: res.status, message });
+  }
 };
 
 export const fetchRegister = async (email, password, name) =>

@@ -7,7 +7,7 @@ import styleIngredients from './burger-ingredients.module.scss';
 import Tabs from './tabs/tabs';
 import CatalogGroup from './catalog-group/catalog-group';
 import Loader from '../loader/loader';
-import { getIngredients } from '../../services/middleware/ingredients-middleware';
+import { getIngredients } from '../../services/thunk/ingredients-thunk';
 import { setActiveTab } from '../../services/reducers/ingredients-reducer';
 
 const BurgerIngredients = () => {

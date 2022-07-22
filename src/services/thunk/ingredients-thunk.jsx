@@ -11,9 +11,9 @@ export const getIngredients = () => (dispatch) => {
     .then((data) => {
       if (data && data.success) {
         dispatch(getIngredientsSuccess(data.data));
-      } else dispatch(getIngredientsFailed(data.message));
+      } else dispatch(getIngredientsFailed('Ошибка данных'));
     })
-    .catch((e) => {
-      dispatch(getIngredientsFailed(e));
+    .catch((err) => {
+      dispatch(getIngredientsFailed(err.message));
     });
 };

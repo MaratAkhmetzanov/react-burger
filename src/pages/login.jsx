@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import styleAuth from './auth.module.scss';
-import { loginUser } from '../services/middleware/auth-middleware';
+import { loginUser } from '../services/thunk/auth-thunk';
 import { useDispatch } from 'react-redux';
 import { useForm } from '../utils/hooks';
 
@@ -66,7 +66,7 @@ const Login = () => {
           />
         </div>
         <div className={clsx(styleAuth.login_button, 'mb-20')}>
-          <Button type='primary' size='medium' onClick={onFormSubmit}>
+          <Button type='primary' size='medium'>
             {BUTTON_TITLE}
           </Button>
         </div>

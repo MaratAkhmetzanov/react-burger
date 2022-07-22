@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink, useHistory } from 'react-router-dom';
-import { exitUser } from '../../../services/middleware/profile-middleware';
+import { exitUser } from '../../../services/thunk/profile-thunk';
 import styleProfileNav from './profile-nav.module.scss';
 
 const ProfileNav = ({ children, className = '' }) => {

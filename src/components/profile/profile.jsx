@@ -2,7 +2,7 @@ import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-component
 import clsx from 'clsx';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateUser } from '../../services/middleware/profile-middleware';
+import { updateUser } from '../../services/thunk/profile-thunk';
 import { useForm } from '../../utils/hooks';
 import styleProfile from './profile.module.scss';
 
@@ -100,7 +100,7 @@ const Profile = () => {
           <Button type='secondary' size='medium' onClick={discardUserHandler}>
             Отмена
           </Button>
-          <Button type='primary' size='medium' onClick={onFormSubmit}>
+          <Button type='primary' size='medium'>
             Сохранить
           </Button>
         </div>

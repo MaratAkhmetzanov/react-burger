@@ -18,7 +18,7 @@ import {
   resetPasswordFailed,
 } from '../reducers/auth-reducer';
 import { setUser } from '../reducers/profile-reducer';
-import { exitUser } from './profile-middleware';
+import { exitUser } from './profile-thunk';
 
 export const registerUser = (email, password, name) => (dispatch) => {
   dispatch(registerRequest());
@@ -30,11 +30,11 @@ export const registerUser = (email, password, name) => (dispatch) => {
         dispatch(setUser(data.user));
         dispatch(registerSuccess(data.user));
       } else {
-        dispatch(registerFailed(data.message));
+        dispatch(registerFailed('Ошибка данных'));
       }
     })
-    .catch((e) => {
-      dispatch(registerFailed(e));
+    .catch((err) => {
+      dispatch(registerFailed(err.message));
     });
 };
 
@@ -48,11 +48,11 @@ export const loginUser = (email, password) => (dispatch) => {
         dispatch(setUser(data.user));
         dispatch(loginSuccess(data.user));
       } else {
-        dispatch(loginFailed(data.message));
+        dispatch(loginFailed('Ошибка данных'));
       }
     })
-    .catch((e) => {
-      dispatch(loginFailed(e));
+    .catch((err) => {
+      dispatch(loginFailed(err.message));
     });
 };
 
@@ -64,15 +64,13 @@ export const refreshToken = (prevAction) => (dispatch) => {
         saveTokensUtil(data.accessToken, data.refreshToken);
         dispatch(refreshTokenSuccess());
         dispatch(prevAction());
-      } else {
-        if (data.message === 'Token is invalid') {
-          dispatch(exitUser());
-        }
-        dispatch(refreshTokenFailed(data.message));
-      }
+      } else dispatch(refreshTokenFailed('Ошибка данных'));
     })
-    .catch((e) => {
-      dispatch(refreshTokenFailed(e));
+    .catch((err) => {
+      if (err.message === 'Token is invalid') {
+        dispatch(exitUser());
+      }
+      dispatch(refreshTokenFailed(err.message));
     });
 };
 
@@ -85,11 +83,11 @@ export const forgotPassword = (email, history) => (dispatch) => {
         dispatch(forgotPasswordSuccess());
         history.push({ pathname: '/reset-password' });
       } else {
-        dispatch(forgotPasswordFailed(data.message));
+        dispatch(forgotPasswordFailed('Ошибка данных'));
       }
     })
-    .catch((e) => {
-      dispatch(forgotPasswordFailed(e));
+    .catch((err) => {
+      dispatch(forgotPasswordFailed(err.message));
     });
 };
 
@@ -101,10 +99,10 @@ export const resetPassword = (password, token) => (dispatch) => {
       if (data && data.success) {
         dispatch(resetPasswordSuccess());
       } else {
-        dispatch(resetPasswordFailed(data.message));
+        dispatch(resetPasswordFailed('Ошибка данных'));
       }
     })
-    .catch((e) => {
-      dispatch(resetPasswordFailed(e));
+    .catch((err) => {
+      dispatch(resetPasswordFailed(err.message));
     });
 };

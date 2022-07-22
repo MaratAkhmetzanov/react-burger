@@ -8,7 +8,7 @@ import {
   exitSuccess,
   exitFailed,
 } from '../reducers/profile-reducer';
-import { refreshToken } from './auth-middleware';
+import { refreshToken } from './auth-thunk';
 
 export const getUser = () => (dispatch) => {
   dispatch(getUserRequest());
@@ -17,14 +17,14 @@ export const getUser = () => (dispatch) => {
       if (data && data.success) {
         dispatch(getUserSuccess(data.user));
       } else {
-        if (data.message === 'jwt expired') {
-          dispatch(refreshToken(getUser));
-        }
-        dispatch(getUserFailed(data.message));
+        dispatch(getUserFailed('Ошибка данных'));
       }
     })
-    .catch((e) => {
-      dispatch(getUserFailed(e));
+    .catch((err) => {
+      if (err.message === 'jwt expired') {
+        dispatch(refreshToken(getUser));
+      }
+      dispatch(getUserFailed(err.message));
     });
 };
 
@@ -34,10 +34,10 @@ export const updateUser = (payload) => (dispatch) => {
     .then((data) => {
       if (data && data.success) {
         dispatch(getUserSuccess(data.user));
-      } else dispatch(getUserFailed(data.message));
+      } else dispatch(getUserFailed('Ошибка данных'));
     })
-    .catch((e) => {
-      dispatch(getUserFailed(e));
+    .catch((err) => {
+      dispatch(getUserFailed(err.message));
     });
 };
 
@@ -49,9 +49,9 @@ export const exitUser = () => (dispatch) => {
         deleteCookie('accessToken');
         deleteCookie('refreshToken');
         dispatch(exitSuccess());
-      } else dispatch(exitFailed(data.message));
+      } else dispatch(exitFailed('Ошибка данных'));
     })
-    .catch((e) => {
-      dispatch(exitFailed(e));
+    .catch((err) => {
+      dispatch(exitFailed(err.message));
     });
 };

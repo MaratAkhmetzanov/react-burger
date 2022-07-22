@@ -5,7 +5,7 @@ import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-component
 
 import styleAuth from './auth.module.scss';
 import { useDispatch, useSelector } from 'react-redux';
-import { forgotPassword } from '../services/middleware/auth-middleware';
+import { forgotPassword } from '../services/thunk/auth-thunk';
 import { useForm } from '../utils/hooks';
 
 const ForgotPassword = () => {
@@ -63,7 +63,7 @@ const ForgotPassword = () => {
           {changePasswordRequest ? (
             <p className={clsx(styleAuth.loading, 'text text_type_main-default text_color_inactive')}>Загрузка…</p>
           ) : (
-            <Button type='primary' size='medium' onClick={onFormSubmit}>
+            <Button type='primary' size='medium'>
               Восстановить
             </Button>
           )}
