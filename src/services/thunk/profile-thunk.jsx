@@ -16,15 +16,12 @@ export const getUser = () => (dispatch) => {
     .then((data) => {
       if (data && data.success) {
         dispatch(getUserSuccess(data.user));
-      } else {
-        dispatch(getUserFailed('Ошибка данных'));
-      }
+      } else dispatch(getUserFailed('Ошибка данных'));
     })
     .catch((err) => {
       if (err.message === 'jwt expired') {
         dispatch(refreshToken(getUser));
-      }
-      dispatch(getUserFailed(err.message));
+      } else dispatch(getUserFailed(err.message));
     });
 };
 

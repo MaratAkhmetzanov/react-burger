@@ -4,7 +4,7 @@ const initialState = {
   user: null,
   getUserRequest: false,
   getUserLoaded: false,
-  getUserFailedMessage: '',
+  getUserFailed: '',
   exitRequest: false,
   exitFailed: '',
   userUnauthorized: false,
@@ -27,12 +27,12 @@ const profileReducer = createSlice({
       state.userUnauthorized = false;
       state.getUserRequest = false;
       state.getUserLoaded = true;
-      state.getUserFailedMessage = '';
+      state.getUserFailed = '';
     },
     getUserFailed(state, { payload }) {
       state.getUserRequest = false;
       state.getUserLoaded = true;
-      state.getUserFailedMessage = payload;
+      state.getUserFailed = payload;
     },
     exitRequest(state) {
       state.exitRequest = true;

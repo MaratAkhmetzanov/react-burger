@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
   ingredients: [],
   getIngredientsRequest: false,
-  getIngredientsFailed: false,
+  getIngredientsFailed: '',
   activeTab: 'bun',
 };
 
@@ -17,7 +17,7 @@ const ingredientsReducer = createSlice({
     getIngredientsSuccess(state, { payload }) {
       state.ingredients = payload;
       state.getIngredientsRequest = false;
-      state.getIngredientsFailed = false;
+      state.getIngredientsFailed = '';
     },
     getIngredientsFailed(state, { payload }) {
       state.getIngredientsRequest = false;
