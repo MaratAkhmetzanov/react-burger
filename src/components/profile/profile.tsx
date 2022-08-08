@@ -32,12 +32,12 @@ const Profile: FC = (): JSX.Element => {
     } else setIsButtonsVisible(false);
   }, [name, email, values]);
 
-  const discardUserHandler = (e: SyntheticEvent) => {
+  const discardUserHandler = (e: SyntheticEvent): void => {
     e.preventDefault();
     setValues({ name: name, email: email, password: '' });
   };
 
-  const onFormSubmit = (e: FormEvent) => {
+  const onFormSubmit = (e: FormEvent): void => {
     e.preventDefault();
     let payload: TSubmitPayload = {};
     if (values.name !== name) {

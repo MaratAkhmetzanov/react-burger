@@ -62,7 +62,7 @@ const ConstructorItem: FC<TProps> = ({ constructorIngredient, index, moveItemHan
 
   drag(drop(ref));
 
-  const deleteIngredientHandler = (position: string) => {
+  const deleteIngredientHandler = (position: string): void => {
     dispatch(deleteIngredient(position));
   };
 

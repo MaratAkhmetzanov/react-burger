@@ -15,7 +15,7 @@ const Tabs: FC<{ onTabToggleHandler: (tab: string) => void }> = ({
   const dispatch = useDispatch<TODO_ANY>();
 
   const setActiveTabHandler = useCallback(
-    (tab: string) => {
+    (tab: string): void => {
       onTabToggleHandler(tab);
       dispatch(setActiveTab(tab));
     },

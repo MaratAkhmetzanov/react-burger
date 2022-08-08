@@ -34,7 +34,7 @@ const BurgerIngredients: FC = (): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const onTabToggleHandler = (tab: string) => {
+  const onTabToggleHandler = (tab: string): void => {
     if (tab === 'bun' && bunTitleRef.current) {
       bunTitleRef.current.scrollIntoView({ behavior: 'smooth' });
     }
@@ -47,13 +47,13 @@ const BurgerIngredients: FC = (): JSX.Element => {
   };
 
   const setActiveTabHandler = useCallback(
-    (tab: string) => {
+    (tab: string): void => {
       dispatch(setActiveTab(tab));
     },
     [dispatch]
   );
 
-  const handleScroll = () => {
+  const handleScroll = (): void => {
     if (sauceTitleRef && mainTitleRef) {
       const top = scrollRef.current ? scrollRef.current.getScrollTop() + 50 : 0;
       const sauceOffset = sauceTitleRef.current ? sauceTitleRef.current.offsetTop : 1;

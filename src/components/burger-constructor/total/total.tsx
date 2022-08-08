@@ -19,7 +19,7 @@ const Total: FC = (): JSX.Element => {
     constructorItems: store.burgerConstructor.constructorItems,
   }));
 
-  const totalPrice = useMemo(() => {
+  const totalPrice: number = useMemo(() => {
     return (
       (constructorBun ? constructorBun.price * 2 : 0) +
       (constructorItems ? constructorItems.reduce((total, item) => total + item.price, 0) : 0)
@@ -27,9 +27,9 @@ const Total: FC = (): JSX.Element => {
   }, [constructorBun, constructorItems]);
 
   const history = useHistory();
-  const location = useLocation();
+  const location = useLocation<Location>();
 
-  const makeOrder = () => {
+  const makeOrder = (): void => {
     if (constructorBun) {
       history.push({
         pathname: '/order',

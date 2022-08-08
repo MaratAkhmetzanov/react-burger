@@ -22,7 +22,7 @@ const IngredientCard: FC<{ ingredient: TIngredientItem }> = ({ ingredient }) => 
 
   const location = useLocation();
 
-  const counter = useMemo(() => {
+  const counter: number = useMemo(() => {
     if (constructorBun && constructorBun._id === _id) {
       return 2;
     } else if (constructorItems) {

@@ -23,7 +23,7 @@ const Modal: FC<TProps> = ({ closeModal, children }): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleEscPress = (e: KeyboardEvent) => {
+  const handleEscPress = (e: KeyboardEvent): void => {
     if (e.key === 'Escape') {
       closeModal();
     }

@@ -7,16 +7,10 @@ type TProps = {
   children: React.ReactNode;
 };
 
-const ModalOverlay: FC<TProps> = ({ closeModal, children }): JSX.Element => {
-  const handleCloseModal = () => {
-    closeModal();
-  };
-
-  return (
-    <div className={styleModal.overlay} onClick={handleCloseModal}>
-      {children}
-    </div>
-  );
-};
+const ModalOverlay: FC<TProps> = ({ closeModal, children }): JSX.Element => (
+  <div className={styleModal.overlay} onClick={(): void => closeModal()}>
+    {children}
+  </div>
+);
 
 export default ModalOverlay;
