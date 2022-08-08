@@ -18,7 +18,7 @@ const ForgotPassword = (): JSX.Element => {
   const emailRef = useRef<HTMLInputElement>(null);
   const [isEmailEmpty, setIsEmailEmpty] = useState<boolean>(false);
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<TODO_ANY>();
   const history = useHistory();
   const location = useLocation<{ savedEmail: 'string' }>();
 
@@ -35,7 +35,7 @@ const ForgotPassword = (): JSX.Element => {
   const onFormSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (values.email !== '') {
-      //@ts-ignore
+      
       dispatch(forgotPassword(values.email, history));
       history.push({ pathname: '/reset-password', state: { from: location } });
     } else setIsEmailEmpty(true);

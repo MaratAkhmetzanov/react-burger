@@ -8,13 +8,14 @@ import { resetPassword } from '../services/thunk/auth-thunk';
 import { useDispatch } from 'react-redux';
 import { useForm } from '../utils/hooks';
 import { TSButton } from '../utils/utils';
+import { TODO_ANY } from '../utils/types';
 
 const FORM_TITLE = 'Восстановление пароля';
 const BUTTON_TITLE = 'Сохранить';
 
 const PasswordReset = (): JSX.Element => {
   const history = useHistory();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<TODO_ANY>();
   const location = useLocation<{ from: Location }>();
 
   const { values, handleChange } = useForm({ password: '', token: '' });
@@ -30,7 +31,6 @@ const PasswordReset = (): JSX.Element => {
 
   const onFormSubmit = (e: FormEvent) => {
     e.preventDefault();
-    //@ts-ignore
     dispatch(resetPassword(values.password, values.token));
     history.push({ pathname: '/login' });
   };

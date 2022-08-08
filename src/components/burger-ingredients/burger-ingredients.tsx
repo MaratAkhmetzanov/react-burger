@@ -27,10 +27,9 @@ const BurgerIngredients: FC = (): JSX.Element => {
   const sauceTitleRef = useRef<HTMLHeadingElement>(null);
   const mainTitleRef = useRef<HTMLHeadingElement>(null);
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<TODO_ANY>();
 
   useEffect(() => {
-    //@ts-ignore
     dispatch(getIngredients());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

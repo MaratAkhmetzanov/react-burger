@@ -6,7 +6,7 @@ import styleConstructorItem from './constructor-item.module.scss';
 import clsx from 'clsx';
 
 import { deleteIngredient } from '../../../services/reducers/constructor-reducer';
-import { TConstructorItem } from '../../../utils/types';
+import { TConstructorItem, TODO_ANY } from '../../../utils/types';
 
 type TProps = {
   constructorIngredient: TConstructorItem;
@@ -66,7 +66,7 @@ const ConstructorItem: FC<TProps> = ({ constructorIngredient, index, moveItemHan
     dispatch(deleteIngredient(position));
   };
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<TODO_ANY>();
 
   return (
     <div

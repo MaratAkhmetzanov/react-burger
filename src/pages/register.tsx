@@ -8,6 +8,7 @@ import { registerUser } from '../services/thunk/auth-thunk';
 import { useDispatch } from 'react-redux';
 import { useForm } from '../utils/hooks';
 import { TSButton } from '../utils/utils';
+import { TODO_ANY } from '../utils/types';
 
 const Register = (): JSX.Element => {
   const { values, handleChange, setValues } = useForm({ name: '', email: '', password: '' });
@@ -26,11 +27,10 @@ const Register = (): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<TODO_ANY>();
 
   const onFormSubmit = (e: FormEvent) => {
     e.preventDefault();
-    //@ts-ignore
     dispatch(registerUser(values.email, values.password, values.name));
   };
 

@@ -12,7 +12,7 @@ const Tabs: FC<{ onTabToggleHandler: (tab: string) => void }> = ({
 }): JSX.Element => {
   const activeTab = useSelector<TODO_ANY, string>((store) => store.ingredients.activeTab);
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<TODO_ANY>();
 
   const setActiveTabHandler = useCallback(
     (tab: string) => {

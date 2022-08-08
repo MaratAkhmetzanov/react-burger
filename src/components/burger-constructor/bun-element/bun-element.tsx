@@ -17,7 +17,7 @@ const BunElement: FC<TProps> = ({ isTop = true }): JSX.Element => {
     (store) => store.burgerConstructor.constructorBun
   );
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<TODO_ANY>();
 
   const [{ bunDropHover }, bunDropTarget] = useDrop({
     accept: 'bun',

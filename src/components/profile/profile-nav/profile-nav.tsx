@@ -13,7 +13,7 @@ type TProps = {
 
 const ProfileNav: FC<TProps> = ({ children, className = '' }): JSX.Element => {
   const isUserExit = useSelector<TODO_ANY, boolean>((store) => store.profile.isUserExit);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<TODO_ANY>();
   const history = useHistory();
 
   useEffect(() => {
@@ -23,7 +23,6 @@ const ProfileNav: FC<TProps> = ({ children, className = '' }): JSX.Element => {
   }, [isUserExit, history]);
 
   const exitHandler = () => {
-    //@ts-ignore
     dispatch(exitUser());
   };
 

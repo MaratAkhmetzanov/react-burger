@@ -10,7 +10,7 @@ type TProps = {
   path: string;
 };
 
-type TStore = { user: null|TUser; getUserLoaded: boolean };
+type TStore = { user: null | TUser; getUserLoaded: boolean };
 
 const ProtectedRoute: FC<TProps> = ({ children }): JSX.Element => {
   const { user, getUserLoaded } = useSelector<TODO_ANY, TStore>((store) => ({
@@ -18,10 +18,9 @@ const ProtectedRoute: FC<TProps> = ({ children }): JSX.Element => {
     getUserLoaded: store.profile.getUserLoaded,
   }));
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<TODO_ANY>();
 
   useEffect(() => {
-    //@ts-ignore
     dispatch(getUser());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

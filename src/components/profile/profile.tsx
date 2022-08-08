@@ -24,7 +24,7 @@ const Profile: FC = (): JSX.Element => {
   const [isButtonsVisible, setIsButtonsVisible] = useState<boolean>(false);
   const [inputInFocus, setInputInFocus] = useState<string>('');
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<TODO_ANY>();
 
   useEffect(() => {
     if (name !== values.name || email !== values.email || values.password !== '') {
@@ -49,7 +49,6 @@ const Profile: FC = (): JSX.Element => {
     if (values.password !== '') {
       payload.password = values.password;
     }
-    //@ts-ignore
     dispatch(updateUser(payload));
     setValues({ ...values, password: '' });
   };

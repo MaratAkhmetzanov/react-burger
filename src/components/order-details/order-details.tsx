@@ -17,7 +17,7 @@ type TStore = {
 };
 
 const OrderDetails: FC = (): JSX.Element => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<TODO_ANY>();
   const history = useHistory();
 
   const { orderNumber, createOrderRequest, userUnauthorized, constructorBun, constructorItems } =
@@ -32,7 +32,6 @@ const OrderDetails: FC = (): JSX.Element => {
   useEffect(() => {
     if (constructorBun && !createOrderRequest) {
       const ingredients = [constructorBun._id, ...constructorItems.map((item) => item._id)];
-      //@ts-ignore
       dispatch(getOrder(ingredients));
     } else {
       history.replace({ pathname: '/' });

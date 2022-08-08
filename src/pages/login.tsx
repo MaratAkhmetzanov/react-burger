@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux';
 import { useForm } from '../utils/hooks';
 import { TSButton } from '../utils/utils';
 import { Input } from '@ya.praktikum/react-developer-burger-ui-components';
+import { TODO_ANY } from '../utils/types';
 
 const FORM_TITLE = 'Вход';
 const BUTTON_TITLE = 'Войти';
@@ -18,7 +19,7 @@ const Login = (): JSX.Element => {
   const emailRef = useRef<HTMLInputElement>(null);
 
   const location = useLocation<{ savedEmail: 'string' }>();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<TODO_ANY>();
 
   useEffect(() => {
     if (location.state && location.state.savedEmail) {
@@ -32,7 +33,6 @@ const Login = (): JSX.Element => {
 
   const onFormSubmit = (e: FormEvent) => {
     e.preventDefault();
-    //@ts-ignore
     dispatch(loginUser(values.email, values.password));
   };
 

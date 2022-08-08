@@ -18,13 +18,12 @@ const RedirectRoute: FC<TProps> = ({ children }): JSX.Element => {
     getUserLoaded: store.profile.getUserLoaded,
   }));
   
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<TODO_ANY>();
   const location = useLocation<{ from: { pathname: string } }>();
 
   const pathName = location.state && location.state.from ? location.state.from.pathname : '/';
 
   useEffect(() => {
-    //@ts-ignore
     dispatch(getUser());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

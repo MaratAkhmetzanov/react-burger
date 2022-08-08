@@ -1,23 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-type TState = {
-  registerRequest: boolean;
-  registerFailed: string;
-  loginRequest: boolean;
-  loginFailed: string;
-  refreshTokenRequest: boolean;
-  refreshTokenFailed: string;
-  forgotPasswordRequest: boolean;
-  forgotPasswordFailed: string;
-  resetPasswordRequest: boolean;
-  resetPasswordFailed: string;
-};
-
-type TPayload = {
-  payload: string;
-};
-
-const initialState: TState = {
+const initialState = {
   registerRequest: false,
   registerFailed: '',
   loginRequest: false,
@@ -34,58 +17,58 @@ const authReducer = createSlice({
   name: 'authorization',
   initialState,
   reducers: {
-    registerRequest(state: TState): void {
+    registerRequest(state) {
       state.registerRequest = true;
     },
-    registerSuccess(state: TState): void {
+    registerSuccess(state) {
       state.registerRequest = false;
       state.registerFailed = '';
     },
-    registerFailed(state: TState, { payload }: TPayload): void {
+    registerFailed(state, { payload }) {
       state.registerRequest = false;
       state.registerFailed = payload;
     },
-    loginRequest(state: TState): void {
+    loginRequest(state) {
       state.loginRequest = true;
     },
-    loginSuccess(state: TState): void {
+    loginSuccess(state) {
       state.loginRequest = false;
       state.loginFailed = '';
     },
-    loginFailed(state: TState, { payload }: TPayload): void {
+    loginFailed(state, { payload }) {
       state.loginRequest = false;
       state.loginFailed = payload;
     },
-    refreshTokenRequest(state: TState): void {
+    refreshTokenRequest(state) {
       state.refreshTokenRequest = true;
     },
-    refreshTokenSuccess(state: TState): void {
+    refreshTokenSuccess(state) {
       state.refreshTokenRequest = false;
       state.refreshTokenFailed = '';
     },
-    refreshTokenFailed(state: TState, { payload }: TPayload): void {
+    refreshTokenFailed(state, { payload }) {
       state.refreshTokenRequest = false;
       state.refreshTokenFailed = payload;
     },
-    forgotPasswordRequest(state: TState): void {
+    forgotPasswordRequest(state) {
       state.forgotPasswordRequest = true;
     },
-    forgotPasswordSuccess(state: TState): void {
+    forgotPasswordSuccess(state) {
       state.forgotPasswordRequest = false;
       state.forgotPasswordFailed = '';
     },
-    forgotPasswordFailed(state: TState, { payload }: TPayload): void {
+    forgotPasswordFailed(state, { payload }) {
       state.forgotPasswordRequest = false;
       state.forgotPasswordFailed = payload;
     },
-    resetPasswordRequest(state: TState): void {
+    resetPasswordRequest(state) {
       state.resetPasswordRequest = true;
     },
-    resetPasswordSuccess(state: TState): void {
+    resetPasswordSuccess(state) {
       state.resetPasswordRequest = false;
       state.resetPasswordFailed = '';
     },
-    resetPasswordFailed(state: TState, { payload }: TPayload): void {
+    resetPasswordFailed(state, { payload }) {
       state.resetPasswordRequest = false;
       state.resetPasswordFailed = payload;
     },

@@ -17,7 +17,7 @@ const BurgerConstructor: FC = (): JSX.Element => {
     (store) => store.burgerConstructor.constructorItems
   );
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<TODO_ANY>();
 
   const [{ ingredientDropHover }, ingredientDropTarget] = useDrop({
     accept: 'ingredient',

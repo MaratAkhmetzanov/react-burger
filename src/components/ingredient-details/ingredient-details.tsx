@@ -18,11 +18,10 @@ const IngredientDetails: FC = (): JSX.Element => {
   );
   const urlParams = useParams<{ id: string }>();
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<TODO_ANY>();
 
   useEffect(() => {
     if (!ingredients.length) {
-      //@ts-ignore
       dispatch(getIngredients());
     }
     setViewingIngredient(ingredients.find((item) => item._id === urlParams.id));
