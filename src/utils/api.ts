@@ -1,8 +1,7 @@
 import { GET_DATA_URL } from './constants';
 import { getCookie } from './cookie';
-import { TODO_ANY } from './types';
 
-const fetchResponseCheck = async (res: any): Promise<TODO_ANY> => {
+const fetchResponseCheck = async (res: Response): Promise<Response> => {
   if (res.ok) {
     return res.json();
   } else {
@@ -89,7 +88,7 @@ export const fetchGetUser = async () =>
   await fetch(`${GET_DATA_URL}/auth/user`, {
     method: 'GET',
     headers: {
-      authorization: `Basic ${getCookie('accessToken')}`,
+      authorization: `Bearer ${getCookie('accessToken')}`,
     },
   }).then(fetchResponseCheck);
 
@@ -107,7 +106,7 @@ export const fetchUpdateUser = async ({
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      authorization: `Basic ${getCookie('accessToken')}`,
+      authorization: `Bearer ${getCookie('accessToken')}`,
     },
     body: JSON.stringify({
       email,
@@ -122,7 +121,7 @@ export const fetchGetOrder = async (ingredients: Array<string>) =>
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      authorization: `Basic ${getCookie('accessToken')}`,
+      authorization: `Bearer ${getCookie('accessToken')}`,
     },
     body: JSON.stringify({ ingredients }),
   }).then(fetchResponseCheck);
