@@ -8,7 +8,7 @@ const initialState = {
   refreshTokenRequest: false,
   refreshTokenFailed: '',
   forgotPasswordRequest: false,
-  forgotPasswordFailed: false,
+  forgotPasswordFailed: '',
   resetPasswordRequest: false,
   resetPasswordFailed: '',
 };
@@ -17,58 +17,58 @@ const authReducer = createSlice({
   name: 'authorization',
   initialState,
   reducers: {
-    registerRequest (state) {
+    registerRequest(state) {
       state.registerRequest = true;
     },
-    registerSuccess (state, { payload }) {
+    registerSuccess(state) {
       state.registerRequest = false;
       state.registerFailed = '';
     },
-    registerFailed (state, { payload }) {
+    registerFailed(state, { payload }) {
       state.registerRequest = false;
       state.registerFailed = payload;
     },
-    loginRequest (state) {
+    loginRequest(state) {
       state.loginRequest = true;
     },
-    loginSuccess (state) {
+    loginSuccess(state) {
       state.loginRequest = false;
-      state.loginFailed = false;
+      state.loginFailed = '';
     },
-    loginFailed (state, { payload }) {
+    loginFailed(state, { payload }) {
       state.loginRequest = false;
       state.loginFailed = payload;
     },
-    refreshTokenRequest (state) {
+    refreshTokenRequest(state) {
       state.refreshTokenRequest = true;
     },
-    refreshTokenSuccess (state) {
+    refreshTokenSuccess(state) {
       state.refreshTokenRequest = false;
       state.refreshTokenFailed = '';
     },
-    refreshTokenFailed (state, { payload }) {
+    refreshTokenFailed(state, { payload }) {
       state.refreshTokenRequest = false;
       state.refreshTokenFailed = payload;
     },
-    forgotPasswordRequest (state) {
+    forgotPasswordRequest(state) {
       state.forgotPasswordRequest = true;
     },
-    forgotPasswordSuccess (state) {
+    forgotPasswordSuccess(state) {
       state.forgotPasswordRequest = false;
-      state.forgotPasswordFailed = false;
+      state.forgotPasswordFailed = '';
     },
-    forgotPasswordFailed (state, { payload }) {
+    forgotPasswordFailed(state, { payload }) {
       state.forgotPasswordRequest = false;
       state.forgotPasswordFailed = payload;
     },
-    resetPasswordRequest (state) {
+    resetPasswordRequest(state) {
       state.resetPasswordRequest = true;
     },
-    resetPasswordSuccess (state) {
+    resetPasswordSuccess(state) {
       state.resetPasswordRequest = false;
       state.resetPasswordFailed = '';
     },
-    resetPasswordFailed (state, { payload }) {
+    resetPasswordFailed(state, { payload }) {
       state.resetPasswordRequest = false;
       state.resetPasswordFailed = payload;
     },

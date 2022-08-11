@@ -1,4 +1,10 @@
-import { fetchForgotPassword, fetchLogin, fetchRefreshToken, fetchRegister, fetchResetPassword } from '../../utils/api';
+import {
+  fetchForgotPassword,
+  fetchLogin,
+  fetchRefreshToken,
+  fetchRegister,
+  fetchResetPassword,
+} from '../../utils/api';
 import { saveTokensUtil } from '../../utils/utils';
 import {
   registerRequest,
@@ -28,7 +34,7 @@ export const registerUser = (email, password, name) => (dispatch) => {
       if (data && data.success) {
         saveTokensUtil(data.accessToken, data.refreshToken);
         dispatch(setUser(data.user));
-        dispatch(registerSuccess(data.user));
+        dispatch(registerSuccess());
       } else {
         dispatch(registerFailed('Ошибка данных'));
       }
@@ -46,7 +52,7 @@ export const loginUser = (email, password) => (dispatch) => {
       if (data && data.success) {
         saveTokensUtil(data.accessToken, data.refreshToken);
         dispatch(setUser(data.user));
-        dispatch(loginSuccess(data.user));
+        dispatch(loginSuccess());
       } else {
         dispatch(loginFailed('Ошибка данных'));
       }
@@ -76,7 +82,6 @@ export const refreshToken = (prevAction) => (dispatch) => {
 
 export const forgotPassword = (email, history) => (dispatch) => {
   dispatch(forgotPasswordRequest());
-
   fetchForgotPassword(email)
     .then((data) => {
       if (data && data.success) {
