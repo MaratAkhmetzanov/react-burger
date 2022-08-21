@@ -18,6 +18,7 @@ import Modal from '../modal/modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import OrderDetails from '../order-details/order-details';
 import AppWrapper from '../app-wrapper/app-wrapper';
+import FeedPage from '../../pages/feed-page/feed-page';
 
 const App: FC = () => {
   const location = useLocation<{ background: Location }>();
@@ -47,8 +48,8 @@ const App: FC = () => {
           <Route exact path='/'>
             <ConstructorPage />
           </Route>
-          <Route exact path='/orders'>
-            <p className='text text_type_main-medium mt-20'>Смотрите в следующих сериях…</p>
+          <Route exact path='/feed'>
+            <FeedPage />
           </Route>
           <Route exact path='/order'>
             <Redirect to='/' />

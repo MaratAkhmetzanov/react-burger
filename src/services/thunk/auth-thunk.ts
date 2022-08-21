@@ -1,3 +1,4 @@
+import { History } from 'history';
 import {
   fetchForgotPassword,
   fetchLogin,
@@ -5,6 +6,7 @@ import {
   fetchRegister,
   fetchResetPassword,
 } from '../../utils/api';
+import { AppDispatch } from '../../utils/types';
 import { saveTokensUtil } from '../../utils/utils';
 import {
   registerRequest,
@@ -26,25 +28,25 @@ import {
 import { setUser } from '../reducers/profile-reducer';
 import { exitUser } from './profile-thunk';
 
-export const registerUser = (email, password, name) => (dispatch) => {
-  dispatch(registerRequest());
+export const registerUser =
+  (email: string, password: string, name: string) => (dispatch: AppDispatch) => {
+    dispatch(registerRequest());
+    fetchRegister(email, password, name)
+      .then((data) => {
+        if (data && data.success) {
+          saveTokensUtil(data.accessToken, data.refreshToken);
+          dispatch(setUser(data.user));
+          dispatch(registerSuccess());
+        } else {
+          dispatch(registerFailed('Ошибка данных'));
+        }
+      })
+      .catch((err) => {
+        dispatch(registerFailed(err.message));
+      });
+  };
 
-  fetchRegister(email, password, name)
-    .then((data) => {
-      if (data && data.success) {
-        saveTokensUtil(data.accessToken, data.refreshToken);
-        dispatch(setUser(data.user));
-        dispatch(registerSuccess());
-      } else {
-        dispatch(registerFailed('Ошибка данных'));
-      }
-    })
-    .catch((err) => {
-      dispatch(registerFailed(err.message));
-    });
-};
-
-export const loginUser = (email, password) => (dispatch) => {
+export const loginUser = (email: string, password: string) => (dispatch: AppDispatch) => {
   dispatch(loginRequest());
 
   fetchLogin(email, password)
@@ -62,25 +64,26 @@ export const loginUser = (email, password) => (dispatch) => {
     });
 };
 
-export const refreshToken = (prevAction) => (dispatch) => {
-  dispatch(refreshTokenRequest());
-  fetchRefreshToken()
-    .then((data) => {
-      if (data && data.success) {
-        saveTokensUtil(data.accessToken, data.refreshToken);
-        dispatch(refreshTokenSuccess());
-        dispatch(prevAction());
-      } else dispatch(refreshTokenFailed('Ошибка данных'));
-    })
-    .catch((err) => {
-      if (err.message === 'Token is invalid') {
-        dispatch(exitUser());
-      }
-      dispatch(refreshTokenFailed(err.message));
-    });
-};
+export const refreshToken =
+  (prevAction: () => (dispatch: AppDispatch) => void) => (dispatch: AppDispatch) => {
+    dispatch(refreshTokenRequest());
+    fetchRefreshToken()
+      .then((data) => {
+        if (data && data.success) {
+          saveTokensUtil(data.accessToken, data.refreshToken);
+          dispatch(refreshTokenSuccess());
+          dispatch(prevAction());
+        } else dispatch(refreshTokenFailed('Ошибка данных'));
+      })
+      .catch((err) => {
+        if (err.message === 'Token is invalid') {
+          dispatch(exitUser());
+        }
+        dispatch(refreshTokenFailed(err.message));
+      });
+  };
 
-export const forgotPassword = (email, history) => (dispatch) => {
+export const forgotPassword = (email: string, history: History) => (dispatch: AppDispatch) => {
   dispatch(forgotPasswordRequest());
   fetchForgotPassword(email)
     .then((data) => {
@@ -96,7 +99,7 @@ export const forgotPassword = (email, history) => (dispatch) => {
     });
 };
 
-export const resetPassword = (password, token) => (dispatch) => {
+export const resetPassword = (password: string, token: string) => (dispatch: AppDispatch) => {
   dispatch(resetPasswordRequest());
 
   fetchResetPassword(password, token)

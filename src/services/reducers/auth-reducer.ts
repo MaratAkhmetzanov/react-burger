@@ -1,6 +1,19 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const initialState = {
+type TAuthState = {
+  registerRequest: boolean;
+  registerFailed: string;
+  loginRequest: boolean;
+  loginFailed: string;
+  refreshTokenRequest: boolean;
+  refreshTokenFailed: string;
+  forgotPasswordRequest: boolean;
+  forgotPasswordFailed: string;
+  resetPasswordRequest: boolean;
+  resetPasswordFailed: string;
+};
+
+const initialState: TAuthState = {
   registerRequest: false,
   registerFailed: '',
   loginRequest: false,
@@ -24,7 +37,7 @@ const authReducer = createSlice({
       state.registerRequest = false;
       state.registerFailed = '';
     },
-    registerFailed(state, { payload }) {
+    registerFailed(state, { payload }: { payload: string }) {
       state.registerRequest = false;
       state.registerFailed = payload;
     },
@@ -35,7 +48,7 @@ const authReducer = createSlice({
       state.loginRequest = false;
       state.loginFailed = '';
     },
-    loginFailed(state, { payload }) {
+    loginFailed(state, { payload }: { payload: string }) {
       state.loginRequest = false;
       state.loginFailed = payload;
     },
@@ -46,7 +59,7 @@ const authReducer = createSlice({
       state.refreshTokenRequest = false;
       state.refreshTokenFailed = '';
     },
-    refreshTokenFailed(state, { payload }) {
+    refreshTokenFailed(state, { payload }: { payload: string }) {
       state.refreshTokenRequest = false;
       state.refreshTokenFailed = payload;
     },
@@ -57,7 +70,7 @@ const authReducer = createSlice({
       state.forgotPasswordRequest = false;
       state.forgotPasswordFailed = '';
     },
-    forgotPasswordFailed(state, { payload }) {
+    forgotPasswordFailed(state, { payload }: { payload: string }) {
       state.forgotPasswordRequest = false;
       state.forgotPasswordFailed = payload;
     },
@@ -68,7 +81,7 @@ const authReducer = createSlice({
       state.resetPasswordRequest = false;
       state.resetPasswordFailed = '';
     },
-    resetPasswordFailed(state, { payload }) {
+    resetPasswordFailed(state, { payload }: { payload: string }) {
       state.resetPasswordRequest = false;
       state.resetPasswordFailed = payload;
     },

@@ -11,7 +11,7 @@ const AppHeader: FC = (): JSX.Element => {
         <div className={styleAppHeader.header_left}>
           <nav className={styleAppHeader.nav}>
             <NavigationLink label='Конструктор' className='mr-2' route='/' icon='BurgerIcon' />
-            <NavigationLink label='Лента заказов' route='/orders' icon='ListIcon' />
+            <NavigationLink label='Лента заказов' route='/feed' icon='ListIcon' />
           </nav>
         </div>
         <Logo />

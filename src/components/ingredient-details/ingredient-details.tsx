@@ -1,15 +1,14 @@
 import React, { FC, useEffect, useState } from 'react';
-import clsx from 'clsx';
-
-import styleIngredientDetails from './ingredient-details.module.scss';
-import Loader from '../loader/loader';
-import { useDispatch, useSelector } from 'react-redux';
-import { getIngredients } from '../../services/thunk/ingredients-thunk';
 import { useParams } from 'react-router-dom';
-import { TIngredientItem, TODO_ANY } from '../../utils/types';
+import clsx from 'clsx';
+import { getIngredients } from '../../services/thunk/ingredients-thunk';
+import { useDispatch, useSelector } from '../../utils/hooks';
+import { TIngredientItem } from '../../utils/types';
+import Loader from '../loader/loader';
+import styleIngredientDetails from './ingredient-details.module.scss';
 
 const IngredientDetails: FC = (): JSX.Element => {
-  const ingredients = useSelector<TODO_ANY, Array<TIngredientItem> | []>(
+  const ingredients = useSelector(
     (store) => store.ingredients.ingredients
   );
   const [isImageLoaded, setIsImageLoaded] = useState<boolean>(false);
@@ -18,7 +17,7 @@ const IngredientDetails: FC = (): JSX.Element => {
   );
   const urlParams = useParams<{ id: string }>();
 
-  const dispatch = useDispatch<TODO_ANY>();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (!ingredients.length) {

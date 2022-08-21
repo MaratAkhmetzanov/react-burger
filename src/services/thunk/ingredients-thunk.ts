@@ -1,11 +1,12 @@
 import { fetchGetIngredients } from '../../utils/api';
+import { AppDispatch } from '../../utils/types';
 import {
   getIngredientsRequest,
   getIngredientsSuccess,
   getIngredientsFailed,
 } from '../reducers/ingredients-reducer';
 
-export const getIngredients = () => (dispatch) => {
+export const getIngredients = () => (dispatch: AppDispatch) => {
   dispatch(getIngredientsRequest());
   fetchGetIngredients()
     .then((data) => {

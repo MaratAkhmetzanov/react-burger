@@ -1,12 +1,12 @@
 import React, { FC, useRef } from 'react';
-import { useDispatch } from 'react-redux';
 import { useDrop, useDrag, DropTargetMonitor, DragSourceMonitor } from 'react-dnd';
 import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import styleConstructorItem from './constructor-item.module.scss';
 import clsx from 'clsx';
 
 import { deleteIngredient } from '../../../services/reducers/constructor-reducer';
-import { TConstructorItem, TODO_ANY } from '../../../utils/types';
+import { TConstructorItem } from '../../../utils/types';
+import { useDispatch } from '../../../utils/hooks';
 
 type TProps = {
   constructorIngredient: TConstructorItem;
@@ -16,6 +16,7 @@ type TProps = {
 
 const ConstructorItem: FC<TProps> = ({ constructorIngredient, index, moveItemHandler }) => {
   const ref = useRef<HTMLDivElement>(null);
+  const dispatch = useDispatch();
 
   const [{ handlerId }, drop] = useDrop({
     accept: 'constructorItem',
@@ -65,8 +66,6 @@ const ConstructorItem: FC<TProps> = ({ constructorIngredient, index, moveItemHan
   const deleteIngredientHandler = (position: string): void => {
     dispatch(deleteIngredient(position));
   };
-
-  const dispatch = useDispatch<TODO_ANY>();
 
   return (
     <div

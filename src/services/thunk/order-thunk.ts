@@ -1,10 +1,16 @@
 import { fetchGetOrder } from '../../utils/api';
 import { refreshToken } from './auth-thunk';
 import { eraseCunstructor } from '../reducers/constructor-reducer';
-import { createOrderRequest, createOrderSuccess, createOrderFailed, eraseOrder } from '../reducers/order-reducer';
+import {
+  createOrderRequest,
+  createOrderSuccess,
+  createOrderFailed,
+  eraseOrder,
+} from '../reducers/order-reducer';
 import { userUnauthorized } from '../reducers/profile-reducer';
+import { AppDispatch } from '../../utils/types';
 
-export const getOrder = (ingredients) => (dispatch) => {
+export const getOrder = (ingredients: Array<string>) => (dispatch: AppDispatch) => {
   dispatch(createOrderRequest());
   fetchGetOrder(ingredients)
     .then((data) => {

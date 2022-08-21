@@ -1,0 +1,25 @@
+@import '../../css/variables.scss';
+
+.content {
+  width: 600px;
+  margin-right: 40px;
+}
+
+.track_vertical {
+  position: absolute;
+  background-color: $input;
+  width: 8px;
+  top: 0px;
+  right: 0;
+  height: calc(100% - 60px);
+}
+
+.thumb_vertical {
+  width: 100%;
+  position: relative;
+  display: block;
+  cursor: pointer;
+  border-radius: inherit;
+  background-color: $secondary-text;
+  transform: translateY(0px);
+}

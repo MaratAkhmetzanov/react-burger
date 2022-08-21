@@ -1,3 +1,4 @@
+import { store } from './../services/store/index';
 export type TODO_ANY = any;
 
 export type TUser = {
@@ -23,3 +24,6 @@ export type TIngredientItem = {
 export type TConstructorItem = TIngredientItem & {
   position: string;
 };
+
+export type RootState = ReturnType<typeof store.getState>
+export type AppDispatch = typeof store.dispatch;

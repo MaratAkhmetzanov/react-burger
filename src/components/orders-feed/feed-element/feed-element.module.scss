@@ -1,0 +1,40 @@
+@import '../../../css/variables.scss';
+
+.content {
+  align-items: flex-start;
+  background-color: $modal-bg;
+  border-color: $primary-text;
+  border-radius: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-right: 16px;
+  margin-bottom: 16px;
+  padding: 24px;
+}
+
+.top, .bottom {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ingredients {
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+.ingredients_image {
+  margin-right: -24px;
+  width: 64px;
+  height: 64px;
+  & > img {
+    width: 64px;
+    height: 64px;
+    box-sizing: border-box;
+    border-radius: 32px;
+    background-color: $bg;
+    border: 2px solid $primary-text;
+  }
+}

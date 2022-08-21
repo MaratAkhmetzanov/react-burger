@@ -1,27 +1,18 @@
 import React, { FC, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import clsx from 'clsx';
 
 import styleOrderDetails from './order-details.module.scss';
 import { checkmark } from '../../images/svg.jsx';
 import { Redirect, useHistory } from 'react-router-dom';
 import { getOrder } from '../../services/thunk/order-thunk';
-import { TConstructorItem, TODO_ANY } from '../../utils/types';
-
-type TStore = {
-  orderNumber: number;
-  createOrderRequest: boolean;
-  userUnauthorized: boolean;
-  constructorBun: TConstructorItem;
-  constructorItems: Array<TConstructorItem>;
-};
+import { useDispatch, useSelector } from '../../utils/hooks';
 
 const OrderDetails: FC = (): JSX.Element => {
-  const dispatch = useDispatch<TODO_ANY>();
+  const dispatch = useDispatch();
   const history = useHistory();
 
   const { orderNumber, createOrderRequest, userUnauthorized, constructorBun, constructorItems } =
-    useSelector<TODO_ANY, TStore>((store) => ({
+    useSelector((store) => ({
       orderNumber: store.order.orderNumber,
       createOrderRequest: store.order.createOrderRequest,
       userUnauthorized: store.profile.userUnauthorized,
@@ -31,7 +22,10 @@ const OrderDetails: FC = (): JSX.Element => {
 
   useEffect(() => {
     if (constructorBun && !createOrderRequest) {
-      const ingredients = [constructorBun._id, ...constructorItems.map((item) => item._id)];
+      const ingredients: Array<string> = [
+        constructorBun._id,
+        ...constructorItems.map((item) => item._id),
+      ];
       dispatch(getOrder(ingredients));
     } else {
       history.replace({ pathname: '/' });

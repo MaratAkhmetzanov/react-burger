@@ -1,9 +1,8 @@
 import clsx from 'clsx';
-import { FC, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { NavLink, useHistory } from 'react-router-dom';
+import { FC } from 'react';
+import { NavLink } from 'react-router-dom';
 import { exitUser } from '../../../services/thunk/profile-thunk';
-import { TODO_ANY } from '../../../utils/types';
+import { useDispatch } from '../../../utils/hooks';
 import styleProfileNav from './profile-nav.module.scss';
 
 type TProps = {
@@ -12,15 +11,7 @@ type TProps = {
 };
 
 const ProfileNav: FC<TProps> = ({ children, className = '' }): JSX.Element => {
-  const isUserExit = useSelector<TODO_ANY, boolean>((store) => store.profile.isUserExit);
-  const dispatch = useDispatch<TODO_ANY>();
-  const history = useHistory();
-
-  useEffect(() => {
-    if (isUserExit) {
-      history.push({ pathname: '/login' });
-    }
-  }, [isUserExit, history]);
+  const dispatch = useDispatch();
 
   const exitHandler = () => {
     dispatch(exitUser());

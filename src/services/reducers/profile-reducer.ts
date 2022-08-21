@@ -1,6 +1,17 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { TUser } from '../../utils/types';
 
-const initialState = {
+type TProfileState = {
+  user: TUser | null;
+  getUserRequest: boolean;
+  getUserLoaded: boolean;
+  getUserFailed: string;
+  exitRequest: boolean;
+  exitFailed: string;
+  userUnauthorized: boolean;
+};
+
+const initialState: TProfileState = {
   user: null,
   getUserRequest: false,
   getUserLoaded: false,
@@ -14,7 +25,7 @@ const profileReducer = createSlice({
   name: 'profile',
   initialState,
   reducers: {
-    setUser(state, { payload }) {
+    setUser(state, { payload }: { payload: TUser }) {
       state.user = { ...payload };
       state.userUnauthorized = false;
       state.exitFailed = '';
@@ -22,14 +33,14 @@ const profileReducer = createSlice({
     getUserRequest(state) {
       state.getUserRequest = true;
     },
-    getUserSuccess(state, { payload }) {
+    getUserSuccess(state, { payload }: { payload: TUser }) {
       state.user = { ...payload };
       state.userUnauthorized = false;
       state.getUserRequest = false;
       state.getUserLoaded = true;
       state.getUserFailed = '';
     },
-    getUserFailed(state, { payload }) {
+    getUserFailed(state, { payload }: { payload: string }) {
       state.getUserRequest = false;
       state.getUserLoaded = true;
       state.getUserFailed = payload;
@@ -42,7 +53,7 @@ const profileReducer = createSlice({
       state.exitRequest = false;
       state.userUnauthorized = true;
     },
-    exitFailed(state, { payload }) {
+    exitFailed(state, { payload }: { payload: string }) {
       state.exitRequest = false;
       state.exitFailed = payload;
     },

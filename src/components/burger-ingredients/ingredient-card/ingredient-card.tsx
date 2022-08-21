@@ -1,21 +1,16 @@
 import React, { FC, useMemo } from 'react';
-import { useSelector } from 'react-redux';
 import { useDrag } from 'react-dnd';
 import clsx from 'clsx';
 import { CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 
+import { useSelector } from '../../../utils/hooks';
 import styleIngredientCard from './ingredient-card.module.scss';
 import { Link, useLocation } from 'react-router-dom';
-import { TIngredientItem, TODO_ANY } from '../../../utils/types';
-
-type TStore = {
-  constructorBun: TIngredientItem;
-  constructorItems: Array<TIngredientItem>;
-};
+import { TIngredientItem } from '../../../utils/types';
 
 const IngredientCard: FC<{ ingredient: TIngredientItem }> = ({ ingredient }) => {
   const { image, price, name, type, _id } = ingredient;
-  const { constructorBun, constructorItems } = useSelector<TODO_ANY, TStore>((store) => ({
+  const { constructorBun, constructorItems } = useSelector((store) => ({
     constructorBun: store.burgerConstructor.constructorBun,
     constructorItems: store.burgerConstructor.constructorItems,
   }));
