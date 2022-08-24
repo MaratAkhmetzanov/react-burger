@@ -25,5 +25,15 @@ export type TConstructorItem = TIngredientItem & {
   position: string;
 };
 
+export type TOrder = {
+  _id: string;
+  ingredients: Array<string>;
+  status: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+  number: number;
+};
+
 export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch;

@@ -19,6 +19,7 @@ import IngredientDetails from '../ingredient-details/ingredient-details';
 import OrderDetails from '../order-details/order-details';
 import AppWrapper from '../app-wrapper/app-wrapper';
 import FeedPage from '../../pages/feed-page/feed-page';
+import OrderId from '../order-id/order-id';
 
 const App: FC = () => {
   const location = useLocation<{ background: Location }>();
@@ -51,6 +52,9 @@ const App: FC = () => {
           <Route exact path='/feed'>
             <FeedPage />
           </Route>
+          <Route exact path='/feed/:id'>
+            <OrderId />
+          </Route>
           <Route exact path='/order'>
             <Redirect to='/' />
           </Route>
@@ -74,6 +78,11 @@ const App: FC = () => {
           <Route path='/ingredients/:id'>
             <Modal closeModal={handleCloseModal}>
               <IngredientDetails />
+            </Modal>
+          </Route>
+          <Route path='/feed/:id'>
+            <Modal closeModal={handleCloseModal}>
+              <OrderId />
             </Modal>
           </Route>
           <Route path='/order'>
