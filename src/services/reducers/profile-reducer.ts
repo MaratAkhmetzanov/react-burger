@@ -59,7 +59,6 @@ const profileReducer = createSlice({
       state.user = null;
       state.exitRequest = false;
       state.userUnauthorized = true;
-      state.getUserLoaded = false;
     },
     exitFailed(state, { payload }: { payload: string }) {
       state.exitRequest = false;
