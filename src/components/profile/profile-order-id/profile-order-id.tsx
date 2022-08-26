@@ -43,7 +43,6 @@ const ProfileOrderId: FC = (): JSX.Element => {
     }
 
     const order = ordersHistory.find((item) => item.number === parseInt(urlParams.id));
-    console.log(urlParams);
     setViewingOrder(order);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ordersHistory]);

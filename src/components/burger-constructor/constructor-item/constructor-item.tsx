@@ -25,13 +25,12 @@ const ConstructorItem: FC<TProps> = ({ constructorIngredient, index, moveItemHan
         handlerId: monitor.getHandlerId(),
       };
     },
-    hover(ingredient: { index: number }, monitor: DropTargetMonitor) {
+    hover(ingredient: any, monitor: DropTargetMonitor) {
       if (!ref.current) {
         return;
       }
       const dragIndex = ingredient.index;
       const hoverIndex = index;
-      console.log(ingredient);
       if (dragIndex === hoverIndex) {
         return;
       }
