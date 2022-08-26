@@ -29,9 +29,11 @@ const ProfileOrderId: FC = (): JSX.Element => {
     sameElse: 'DD.MM.YYYY, HH:mm',
   };
 
-  useEffect((): (() => void) => {
-    dispatch(wsProfileConnect());
-    return () => dispatch(wsProfileClose());
+  useEffect((): ((() => void) | undefined) => {
+    if (!wsProfileConnected) {
+      dispatch(wsProfileConnect());
+      return () => dispatch(wsProfileClose());
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -39,9 +41,9 @@ const ProfileOrderId: FC = (): JSX.Element => {
     if (!ingredients.length) {
       dispatch(getIngredients());
     }
-    
+
     const order = ordersHistory.find((item) => item.number === parseInt(urlParams.id));
-    console.log(urlParams)
+    console.log(urlParams);
     setViewingOrder(order);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ordersHistory]);

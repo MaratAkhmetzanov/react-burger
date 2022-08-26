@@ -4,21 +4,19 @@ import clsx from 'clsx';
 import { Input } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import styleAuth from './auth.module.scss';
-import { useDispatch, useSelector } from 'react-redux';
 import { forgotPassword } from '../services/thunk/auth-thunk';
-import { useForm } from '../utils/hooks';
-import { TODO_ANY } from '../utils/types';
+import { useDispatch, useForm, useSelector } from '../utils/hooks';
 import { TSButton } from '../utils/utils';
 
 const ForgotPassword = (): JSX.Element => {
-  const changePasswordRequest = useSelector<TODO_ANY>(
-    (store) => store.authorization.changePasswordRequest
+  const forgotPasswordRequest = useSelector(
+    (store) => store.authorization.forgotPasswordRequest
   );
   const { values, handleChange, setValues } = useForm({ email: '' });
   const emailRef = useRef<HTMLInputElement>(null);
   const [isEmailEmpty, setIsEmailEmpty] = useState<boolean>(false);
 
-  const dispatch = useDispatch<TODO_ANY>();
+  const dispatch = useDispatch();
   const history = useHistory();
   const location = useLocation<{ savedEmail: 'string' }>();
 
@@ -67,7 +65,7 @@ const ForgotPassword = (): JSX.Element => {
           />
         </div>
         <div className={clsx(styleAuth.login_button, 'mb-20')}>
-          {changePasswordRequest ? (
+          {forgotPasswordRequest ? (
             <p
               className={clsx(styleAuth.loading, 'text text_type_main-default text_color_inactive')}
             >

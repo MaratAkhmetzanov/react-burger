@@ -30,9 +30,11 @@ const OrderId: FC = (): JSX.Element => {
     sameElse: 'DD.MM.YYYY, HH:mm',
   };
 
-  useEffect((): (() => void) => {
-    dispatch(wsConnect());
-    return () => dispatch(wsClose());
+  useEffect((): (() => void) | undefined => {
+    if (!isLoaded) {
+      dispatch(wsConnect());
+      return () => dispatch(wsClose());
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

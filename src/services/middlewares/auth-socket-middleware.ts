@@ -1,7 +1,12 @@
 import { AnyAction, Middleware, MiddlewareAPI } from 'redux';
 import { getCookie } from '../../utils/cookie';
 import { AppDispatch, RootState } from '../../utils/types';
-import { setProfileOrders, wsProfileConnectSuccess } from '../reducers/profile-reducer';
+import {
+  setProfileOrders,
+  wsProfileClose,
+  wsProfileConnectError,
+  wsProfileConnectSuccess,
+} from '../reducers/profile-reducer';
 
 export const authSocketMiddleware = (wsUrl: string): Middleware => {
   return ((store: MiddlewareAPI<AppDispatch, RootState>) => {
@@ -17,6 +22,7 @@ export const authSocketMiddleware = (wsUrl: string): Middleware => {
 
       if (socket) {
         if (type === 'profile/wsProfileClose') {
+          socket.close();
         }
 
         socket.onopen = (event) => {
@@ -24,6 +30,7 @@ export const authSocketMiddleware = (wsUrl: string): Middleware => {
         };
 
         socket.onerror = (event) => {
+          dispatch(wsProfileConnectError());
         };
 
         socket.onmessage = (event: MessageEvent) => {
@@ -32,6 +39,7 @@ export const authSocketMiddleware = (wsUrl: string): Middleware => {
         };
 
         socket.onclose = (event) => {
+          dispatch(wsProfileClose());
         };
       }
       next(action);

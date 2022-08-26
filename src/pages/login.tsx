@@ -4,11 +4,9 @@ import clsx from 'clsx';
 
 import styleAuth from './auth.module.scss';
 import { loginUser } from '../services/thunk/auth-thunk';
-import { useDispatch } from 'react-redux';
-import { useForm } from '../utils/hooks';
+import { useDispatch, useForm } from '../utils/hooks';
 import { TSButton } from '../utils/utils';
 import { Input } from '@ya.praktikum/react-developer-burger-ui-components';
-import { TODO_ANY } from '../utils/types';
 
 const FORM_TITLE = 'Вход';
 const BUTTON_TITLE = 'Войти';
@@ -19,7 +17,7 @@ const Login = (): JSX.Element => {
   const emailRef = useRef<HTMLInputElement>(null);
 
   const location = useLocation<{ savedEmail: 'string' }>();
-  const dispatch = useDispatch<TODO_ANY>();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (location.state && location.state.savedEmail) {
