@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { TOrder, TUser } from '../../utils/types';
+import { TOrder, TSocketMessage, TUser } from '../../utils/types';
 
 type TProfileState = {
   user: TUser | null;
@@ -85,7 +85,7 @@ const profileReducer = createSlice({
       state.wsProfileConnecting = false;
       state.wsProfileConnected = false;
     },
-    setProfileOrders(state, { payload }: { payload: any }) {
+    setProfileOrders(state, { payload }: { payload: TSocketMessage }) {
       state.ordersHistory = [...payload.orders].reverse();
       state.wsProfileConnected = true;
     },  

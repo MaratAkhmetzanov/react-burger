@@ -35,5 +35,12 @@ export type TOrder = {
   number: number;
 };
 
-export type RootState = ReturnType<typeof store.getState>
+export type TSocketMessage = {
+  orders: Array<TOrder>;
+  success: boolean;
+  total: number;
+  totalToday: number;
+};
+
+export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

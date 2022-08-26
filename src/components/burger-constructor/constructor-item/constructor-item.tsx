@@ -25,20 +25,20 @@ const ConstructorItem: FC<TProps> = ({ constructorIngredient, index, moveItemHan
         handlerId: monitor.getHandlerId(),
       };
     },
-    hover(ingredient: any, monitor: any) {
+    hover(ingredient: { index: number }, monitor: DropTargetMonitor) {
       if (!ref.current) {
         return;
       }
       const dragIndex = ingredient.index;
       const hoverIndex = index;
-
+      console.log(ingredient);
       if (dragIndex === hoverIndex) {
         return;
       }
       const hoverBoundingRect = ref.current?.getBoundingClientRect();
       const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
       const clientOffset = monitor.getClientOffset();
-      const hoverClientY = clientOffset.y - hoverBoundingRect.top;
+      const hoverClientY = clientOffset!.y - hoverBoundingRect.top;
 
       if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
         return;

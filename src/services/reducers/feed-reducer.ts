@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { TOrder } from '../../utils/types';
+import { TOrder, TSocketMessage } from '../../utils/types';
 
 type TFeedState = {
   isConnecting: boolean;
@@ -41,7 +41,7 @@ const feedReducer = createSlice({
       state.isConnecting = false;
       state.isConnected = false;
     },
-    setOrdersHistory(state, { payload }: { payload: any }) {
+    setOrdersHistory(state, { payload }: { payload: TSocketMessage }) {
       state.ordersHistory = [...payload.orders];
       state.total = payload.total;
       state.totalToday = payload.totalToday;
