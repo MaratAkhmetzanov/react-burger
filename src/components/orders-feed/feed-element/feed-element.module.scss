@@ -1,10 +1,5 @@
 @import '../../../css/variables.scss';
 
-.router_link {
-  text-decoration: none;
-  color: #fff;
-}
-
 .content {
   align-items: flex-start;
   background-color: $modal-bg;
@@ -14,7 +9,6 @@
   border: 2px solid transparent;
   display: flex;
   flex-direction: column;
-  gap: 24px;
   margin-right: 16px;
   margin-bottom: 16px;
   padding: 24px;

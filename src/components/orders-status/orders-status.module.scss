@@ -1,6 +1,6 @@
 @import '../../css/variables.scss';
 
-.content{
+.content {
   width: 580px;
   position: relative;
 }
@@ -9,7 +9,6 @@
   display: flex;
   column-gap: 36px;
   & ul {
-    width: 272px;
     margin: 0;
     padding: 0;
   }
@@ -17,6 +16,12 @@
     color: $standart-2-text;
     list-style: none;
   }
+}
+
+.status_list {
+  width: 272px;
+  display: flex;
+  column-gap: 48px;
 }
 
 .count {

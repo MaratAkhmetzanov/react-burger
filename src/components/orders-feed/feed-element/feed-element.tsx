@@ -5,21 +5,19 @@ import styles from './feed-element.module.scss';
 import Moment from 'react-moment';
 import { TIngredientItem } from '../../../utils/types';
 import clsx from 'clsx';
-import { Link, useLocation } from 'react-router-dom';
 
 const FeedElement: FC<{
   composition: Array<TIngredientItem | undefined>;
   date: string;
   name: string;
   number: number;
-}> = ({ composition, date, name, number }): JSX.Element => {
+  status?: string;
+}> = ({ composition, date, name, number, status = '' }): JSX.Element => {
   const calendarStrings = {
     lastDay: '[Вчера,] HH:mm',
     sameDay: '[Сегодня,] HH:mm',
     sameElse: 'DD.MM.YYYY, HH:mm',
   };
-
-  const location = useLocation();
 
   const burgerComposition = [...composition]
     .slice(0, 6)
@@ -44,32 +42,33 @@ const FeedElement: FC<{
     .reverse();
 
   return (
-    <Link
-      to={{
-        pathname: `/feed/${number}`,
-        state: { background: location },
-      }}
-      className={styles.router_link}
-    >
-      <div className={styles.content}>
-        <div className={styles.top}>
-          <p className='text text_type_digits-default'>{`#${number}`}</p>
-          <p className='text text_type_main-default text_color_inactive'>
-            <Moment calendar={calendarStrings} date={date} />
-          </p>
-        </div>
-        <p className='text text_type_main-medium'>{name}</p>
-        <div className={styles.bottom}>
-          <div className={styles.ingredients}>{burgerComposition}</div>
-          <div className={styles.price}>
-            <span className='text text_type_digits-default'>
-              {composition.reduce((total: number, item) => total + (item ? item.price : 0), 0)}
-            </span>
-            <CurrencyIcon type='primary' />
-          </div>
+    <div className={styles.content}>
+      <div className={styles.top}>
+        <p className='text text_type_digits-default'>{`#${number}`}</p>
+        <p className='text text_type_main-default text_color_inactive'>
+          <Moment calendar={calendarStrings} date={date} />
+        </p>
+      </div>
+      <p className='text text_type_main-medium mt-6'>{name}</p>
+      {status !== '' && (
+        <p className='text text_type_main-default mt-2'>
+          {status === 'done' ? 'Выполнен' : status === 'pending' ? 'Готовится' : 'Создан'}
+        </p>
+      )}
+      <div className={clsx(styles.bottom, 'mt-6')}>
+        <div className={styles.ingredients}>{burgerComposition}</div>
+        <div className={styles.price}>
+          <span className='text text_type_digits-default'>
+            {composition.reduce(
+              (total: number, item) =>
+                item ? total + (item.type === 'bun' ? item.price * 2 : item.price) : 0,
+              0
+            )}
+          </span>
+          <CurrencyIcon type='primary' />
         </div>
       </div>
-    </Link>
+    </div>
   );
 };
 

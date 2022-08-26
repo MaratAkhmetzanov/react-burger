@@ -59,7 +59,7 @@ const Profile: FC = (): JSX.Element => {
   };
 
   return (
-    <section>
+    <section className={styleProfile.wrapper}>
       <form onSubmit={onFormSubmit}>
         <div className={clsx(styleProfile.input, 'mb-6')}>
           <Input

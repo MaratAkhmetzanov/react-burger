@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { TUser } from '../../utils/types';
+import { TOrder, TUser } from '../../utils/types';
 
 type TProfileState = {
   user: TUser | null;
@@ -9,6 +9,9 @@ type TProfileState = {
   exitRequest: boolean;
   exitFailed: string;
   userUnauthorized: boolean;
+  wsProfileConnecting: boolean;
+  wsProfileConnected: boolean;
+  ordersHistory: Array<TOrder>;
 };
 
 const initialState: TProfileState = {
@@ -19,6 +22,9 @@ const initialState: TProfileState = {
   exitRequest: false,
   exitFailed: '',
   userUnauthorized: false,
+  wsProfileConnecting: false,
+  wsProfileConnected: false,
+  ordersHistory: [],
 };
 
 const profileReducer = createSlice({
@@ -47,11 +53,13 @@ const profileReducer = createSlice({
     },
     exitRequest(state) {
       state.exitRequest = true;
+      state.getUserLoaded = true;
     },
     exitSuccess(state) {
       state.user = null;
       state.exitRequest = false;
       state.userUnauthorized = true;
+      state.getUserLoaded = false;
     },
     exitFailed(state, { payload }: { payload: string }) {
       state.exitRequest = false;
@@ -60,6 +68,28 @@ const profileReducer = createSlice({
     userUnauthorized(state) {
       state.userUnauthorized = true;
     },
+    wsProfileConnect(state) {
+      state.wsProfileConnecting = true;
+    },
+    wsProfileClose(state) {
+      state.wsProfileConnected = false;
+    },
+    wsProfileConnectSuccess(state) {
+      state.wsProfileConnecting = false;
+      state.wsProfileConnected = true;
+    },
+    wsProfileConnectClosed(state) {
+      state.wsProfileConnecting = false;
+      state.wsProfileConnected = false;
+    },
+    wsProfileConnectError(state) {
+      state.wsProfileConnecting = false;
+      state.wsProfileConnected = false;
+    },
+    setProfileOrders(state, { payload }: { payload: any }) {
+      state.ordersHistory = [...payload.orders].reverse();
+      state.wsProfileConnected = true;
+    },  
   },
 });
 
@@ -72,6 +102,12 @@ export const {
   exitSuccess,
   exitFailed,
   userUnauthorized,
+  wsProfileConnect,
+  wsProfileClose,
+  wsProfileConnectSuccess,
+  wsProfileConnectClosed,
+  wsProfileConnectError,
+  setProfileOrders,
 } = profileReducer.actions;
 
 export default profileReducer.reducer;

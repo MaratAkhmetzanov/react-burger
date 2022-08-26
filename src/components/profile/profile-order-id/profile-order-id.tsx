@@ -2,22 +2,21 @@ import React, { FC, useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { useParams } from 'react-router-dom';
 import clsx from 'clsx';
-import { getIngredients } from '../../services/thunk/ingredients-thunk';
-import { useDispatch, useSelector } from '../../utils/hooks';
-import { TOrder } from '../../utils/types';
-import Loader from '../loader/loader';
-import styles from './order-id.module.scss';
-import { wsClose, wsConnect } from '../../services/reducers/feed-reducer';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import Scrollbars from 'react-custom-scrollbars';
 import Moment from 'react-moment';
+import styles from './profile-order-id.module.scss';
+import Loader from '../../loader/loader';
+import { useDispatch, useSelector } from '../../../utils/hooks';
+import { TOrder } from '../../../utils/types';
+import { wsProfileClose, wsProfileConnect } from '../../../services/reducers/profile-reducer';
+import { getIngredients } from '../../../services/thunk/ingredients-thunk';
 
-const OrderId: FC = (): JSX.Element => {
-  const { ingredients, isLoaded, ordersHistory } = useSelector((store) => ({
+const ProfileOrderId: FC = (): JSX.Element => {
+  const { ingredients, wsProfileConnected, ordersHistory } = useSelector((store) => ({
     ingredients: store.ingredients.ingredients,
-    getIngredientsRequest: store.ingredients.getIngredientsRequest,
-    ordersHistory: store.feed.ordersHistory,
-    isLoaded: store.feed.isLoaded,
+    ordersHistory: store.profile.ordersHistory,
+    wsProfileConnected: store.profile.wsProfileConnected,
   }));
   const [viewingOrder, setViewingOrder] = useState<TOrder | undefined>(undefined);
   const urlParams = useParams<{ id: string }>();
@@ -31,8 +30,8 @@ const OrderId: FC = (): JSX.Element => {
   };
 
   useEffect((): (() => void) => {
-    dispatch(wsConnect());
-    return () => dispatch(wsClose());
+    dispatch(wsProfileConnect());
+    return () => dispatch(wsProfileClose());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -40,8 +39,9 @@ const OrderId: FC = (): JSX.Element => {
     if (!ingredients.length) {
       dispatch(getIngredients());
     }
-
+    
     const order = ordersHistory.find((item) => item.number === parseInt(urlParams.id));
+    console.log(urlParams)
     setViewingOrder(order);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ordersHistory]);
@@ -56,7 +56,7 @@ const OrderId: FC = (): JSX.Element => {
         }, 0)
       : 0;
 
-  if (!isLoaded) {
+  if (!wsProfileConnected) {
     return <Loader />;
   }
 
@@ -115,4 +115,4 @@ const OrderId: FC = (): JSX.Element => {
   );
 };
 
-export default OrderId;
+export default ProfileOrderId;

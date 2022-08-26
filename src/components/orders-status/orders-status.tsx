@@ -26,27 +26,57 @@ const OrdersStatus: FC = (): JSX.Element => {
             <div className={styles.orders_status}>
               <div>
                 <p className='text text_type_main-medium mb-6'>Готовы:</p>
-                <ul>
-                  {ordersHistory
-                    .slice(0, 5)
-                    .map(
-                      (element) =>
-                        element.status === 'done' && (
-                          <li className='text text_type_digits-default mb-2'>{element.number}</li>
-                        )
-                    )}
-                </ul>
+                <div className={styles.status_list}>
+                  <ul>
+                    {ordersHistory
+                      .filter((element) => element.status === 'done')
+                      .slice(0, 10)
+                      .map((element) => (
+                        <li key={element.number} className='text text_type_digits-default mb-2'>
+                          {element.number}
+                        </li>
+                      ))}
+                  </ul>
+                  {ordersHistory.length > 10 && (
+                    <ul>
+                      {ordersHistory
+                        .filter((element) => element.status === 'done')
+                        .slice(11, 21)
+                        .map((element) => (
+                          <li key={element.number} className='text text_type_digits-default mb-2'>
+                            {element.number}
+                          </li>
+                        ))}
+                    </ul>
+                  )}
+                </div>
               </div>
               <div>
                 <p className='text text_type_main-medium mb-6'>В работе:</p>
-                <ul>
-                  {ordersHistory.map(
-                    (element) =>
-                      element.status !== 'done' && (
-                        <li className='text text_type_digits-default mb-2'>{element.number}</li>
-                      )
+                <div className={styles.status_list}>
+                  <ul>
+                    {ordersHistory
+                      .filter((element) => element.status === 'pending')
+                      .slice(0, 10)
+                      .map((element) => (
+                        <li key={element.number} className='text text_type_digits-default mb-2'>
+                          {element.number}
+                        </li>
+                      ))}
+                  </ul>
+                  {ordersHistory.length > 10 && (
+                    <ul>
+                      {ordersHistory
+                        .filter((element) => element.status === 'pending')
+                        .slice(11, 21)
+                        .map((element) => (
+                          <li key={element.number} className='text text_type_digits-default mb-2'>
+                            {element.number}
+                          </li>
+                        ))}
+                    </ul>
                   )}
-                </ul>
+                </div>
               </div>
             </div>
             <div className={styles.orders_total}>

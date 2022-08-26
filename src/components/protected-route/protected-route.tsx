@@ -7,9 +7,10 @@ import { useDispatch, useSelector } from '../../utils/hooks';
 type TProps = {
   children: React.ReactNode;
   path: string;
+  exact?: boolean;
 };
 
-const ProtectedRoute: FC<TProps> = ({ children }): JSX.Element => {
+const ProtectedRoute: FC<TProps> = ({ exact = false, children, ...rest }): JSX.Element => {
   const { user, getUserLoaded } = useSelector((store) => ({
     user: store.profile.user,
     getUserLoaded: store.profile.getUserLoaded,
@@ -29,6 +30,7 @@ const ProtectedRoute: FC<TProps> = ({ children }): JSX.Element => {
   return (
     <Route
       exact
+      {...rest}
       render={({ location }) =>
         user ? (
           children

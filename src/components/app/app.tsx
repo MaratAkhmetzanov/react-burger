@@ -20,6 +20,7 @@ import OrderDetails from '../order-details/order-details';
 import AppWrapper from '../app-wrapper/app-wrapper';
 import FeedPage from '../../pages/feed-page/feed-page';
 import OrderId from '../order-id/order-id';
+import ProfileOrderId from '../profile/profile-order-id/profile-order-id';
 
 const App: FC = () => {
   const location = useLocation<{ background: Location }>();
@@ -61,13 +62,15 @@ const App: FC = () => {
           <Route exact path='/ingredients/:id'>
             <IngredientDetails />
           </Route>
-          <ProtectedRoute path='/profile'>
+          <ProtectedRoute exact path='/profile'>
             <ProfilePage />
           </ProtectedRoute>
-          <ProtectedRoute path='/profile/orders'>
+          <ProtectedRoute exact path='/profile/orders'>
             <ProfileOrdersPage />
           </ProtectedRoute>
-          <ProtectedRoute path='/profile/orders/:id'>ingredient</ProtectedRoute>
+          <ProtectedRoute exact path='/profile/orders/:id'>
+            <ProfileOrderId />
+          </ProtectedRoute>
           <Route>
             <NotFound404 />
           </Route>
@@ -83,6 +86,11 @@ const App: FC = () => {
           <Route path='/feed/:id'>
             <Modal closeModal={handleCloseModal}>
               <OrderId />
+            </Modal>
+          </Route>
+          <Route path='/profile/orders/:id'>
+            <Modal closeModal={handleCloseModal}>
+              <ProfileOrderId />
             </Modal>
           </Route>
           <Route path='/order'>
