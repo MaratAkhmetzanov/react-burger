@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TOrder, TSocketMessage } from '../../utils/types';
 
 type TFeedState = {
@@ -23,7 +23,7 @@ const feedReducer = createSlice({
   name: 'feed',
   initialState,
   reducers: {
-    wsConnect(state, { payload }: { payload: string }) {
+    wsConnect(state, { payload }: PayloadAction<string>) {
       state.isConnecting = true;
     },
     wsClose(state) {
@@ -44,7 +44,7 @@ const feedReducer = createSlice({
       state.isConnected = false;
       state.ordersHistory = [];
     },
-    setOrdersHistory(state, { payload }: { payload: TSocketMessage }) {
+    setOrdersHistory(state, { payload }: PayloadAction<TSocketMessage>) {
       state.ordersHistory = [...payload.orders];
       state.total = payload.total;
       state.totalToday = payload.totalToday;
@@ -61,5 +61,23 @@ export const {
   wsConnectError,
   setOrdersHistory,
 } = feedReducer.actions;
+
+export const wsActions = {
+  wsConnect,
+  wsClose,
+  wsConnectSuccess,
+  wsConnectClosed,
+  wsConnectError,
+  setOrdersHistory,
+};
+
+export type TWsActions = {
+  wsConnect: typeof wsConnect,
+  wsClose: typeof wsClose,
+  wsConnectSuccess: typeof wsConnectSuccess,
+  wsConnectClosed: typeof wsConnectClosed,
+  wsConnectError: typeof wsConnectError,
+  setOrdersHistory: typeof setOrdersHistory,
+};
 
 export default feedReducer.reducer;

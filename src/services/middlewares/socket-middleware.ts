@@ -1,21 +1,22 @@
-import { AnyAction, Middleware, MiddlewareAPI } from 'redux';
+import { Middleware, MiddlewareAPI } from 'redux';
 import { AppDispatch, RootState } from '../../utils/types';
 import {
   setOrdersHistory,
+  TWsActions,
   wsConnectClosed,
   wsConnectError,
   wsConnectSuccess,
 } from '../reducers/feed-reducer';
 
-export const socketMiddleware = (): Middleware => {
+export const socketMiddleware = (wsActions: TWsActions): Middleware => {
   return ((store: MiddlewareAPI<AppDispatch, RootState>) => {
     let socket: WebSocket | null = null;
 
-    return (next: AppDispatch) => (action: AnyAction) => {
+    return (next: AppDispatch) => (action) => {
       const { dispatch } = store;
       const { type, payload } = action;
 
-      if (type === 'feed/wsConnect' && !socket) {
+      if (type === 'feed/wsConnect') {
         socket = new WebSocket(payload);
       }
 

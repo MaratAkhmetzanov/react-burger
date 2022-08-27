@@ -1,3 +1,4 @@
+import { wsActions } from './../reducers/feed-reducer';
 import { configureStore } from '@reduxjs/toolkit';
 import { rootReducer } from '../reducers';
 import { socketMiddleware } from '../middlewares/socket-middleware';
@@ -7,6 +8,6 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,
-    }).concat([socketMiddleware()]),
+    }).concat([socketMiddleware(wsActions)]),
   devTools: process.env.NODE_ENV !== 'production',
 });
