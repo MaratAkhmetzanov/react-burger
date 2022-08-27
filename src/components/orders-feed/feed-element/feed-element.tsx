@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from 'uuid';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { FC } from 'react';
 import styles from './feed-element.module.scss';
@@ -24,13 +23,13 @@ const FeedElement: FC<{
     .map((element, index) => {
       if (index < 5) {
         return (
-          <div key={uuidv4()} className={clsx(styles.ingredients_image)}>
+          <div key={index} className={clsx(styles.ingredients_image)}>
             <img src={element?.image_mobile} alt='ingredient' />
           </div>
         );
       } else {
         return (
-          <div key={uuidv4()} className={styles.ingredients_image}>
+          <div key={index} className={styles.ingredients_image}>
             <img className={styles.transparent} src={element?.image_mobile} alt='ingredient' />
             <span className={clsx(styles.leftCount, 'text text_type_main-default')}>{`+${
               composition.length - 5

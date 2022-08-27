@@ -7,16 +7,16 @@ import {
   wsConnectSuccess,
 } from '../reducers/feed-reducer';
 
-export const socketMiddleware = (wsUrl: string): Middleware => {
+export const socketMiddleware = (): Middleware => {
   return ((store: MiddlewareAPI<AppDispatch, RootState>) => {
     let socket: WebSocket | null = null;
 
     return (next: AppDispatch) => (action: AnyAction) => {
       const { dispatch } = store;
-      const { type } = action;
+      const { type, payload } = action;
 
-      if (type === 'feed/wsConnect') {
-        socket = new WebSocket(wsUrl);
+      if (type === 'feed/wsConnect' && !socket) {
+        socket = new WebSocket(payload);
       }
 
       if (socket) {
@@ -30,6 +30,7 @@ export const socketMiddleware = (wsUrl: string): Middleware => {
 
         socket.onerror = (event) => {
           dispatch(wsConnectError());
+          socket = null;
         };
 
         socket.onmessage = (event: MessageEvent) => {
@@ -39,6 +40,7 @@ export const socketMiddleware = (wsUrl: string): Middleware => {
 
         socket.onclose = (event) => {
           dispatch(wsConnectClosed());
+          socket = null;
         };
       }
       next(action);

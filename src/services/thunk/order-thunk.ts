@@ -8,30 +8,32 @@ import {
   eraseOrder,
 } from '../reducers/order-reducer';
 import { userUnauthorized } from '../reducers/profile-reducer';
-import { AppDispatch } from '../../utils/types';
+import { AppThunk } from '../../utils/types';
 
-export const getOrder = (ingredients: Array<string>) => (dispatch: AppDispatch) => {
-  dispatch(createOrderRequest());
-  fetchGetOrder(ingredients)
-    .then((data) => {
-      if (data && data.success) {
-        dispatch(
-          createOrderSuccess({
-            name: data.name,
-            orderNumber: data.order.number,
-          })
-        );
-        dispatch(eraseCunstructor());
-      } else {
-        dispatch(createOrderFailed('Ошибка данных'));
-      }
-    })
-    .catch((err) => {
-      if (err.message === 'jwt expired') {
-        dispatch(refreshToken(() => getOrder(ingredients)));
-      } else if (err.message === 'jwt malformed') {
-        dispatch(userUnauthorized());
-      } else dispatch(eraseOrder());
-      dispatch(createOrderFailed(err.message));
-    });
-};
+export const getOrder =
+  (ingredients: Array<string>): AppThunk =>
+  (dispatch) => {
+    dispatch(createOrderRequest());
+    fetchGetOrder(ingredients)
+      .then((data) => {
+        if (data && data.success) {
+          dispatch(
+            createOrderSuccess({
+              name: data.name,
+              orderNumber: data.order.number,
+            })
+          );
+          dispatch(eraseCunstructor());
+        } else {
+          dispatch(createOrderFailed('Ошибка данных'));
+        }
+      })
+      .catch((err) => {
+        if (err.message === 'jwt expired') {
+          dispatch(refreshToken(() => getOrder(ingredients)));
+        } else if (err.message === 'jwt malformed') {
+          dispatch(userUnauthorized());
+        } else dispatch(eraseOrder());
+        dispatch(createOrderFailed(err.message));
+      });
+  };

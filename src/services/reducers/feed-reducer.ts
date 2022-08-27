@@ -23,7 +23,7 @@ const feedReducer = createSlice({
   name: 'feed',
   initialState,
   reducers: {
-    wsConnect(state) {
+    wsConnect(state, { payload }: { payload: string }) {
       state.isConnecting = true;
     },
     wsClose(state) {
@@ -35,11 +35,14 @@ const feedReducer = createSlice({
     },
     wsConnectClosed(state) {
       state.isConnecting = false;
+      state.isLoaded = false;
       state.isConnected = false;
+      state.ordersHistory = [];
     },
     wsConnectError(state) {
       state.isConnecting = false;
       state.isConnected = false;
+      state.ordersHistory = [];
     },
     setOrdersHistory(state, { payload }: { payload: TSocketMessage }) {
       state.ordersHistory = [...payload.orders];
@@ -50,7 +53,13 @@ const feedReducer = createSlice({
   },
 });
 
-export const { wsConnect, wsClose, wsConnectSuccess, wsConnectClosed, wsConnectError, setOrdersHistory } =
-  feedReducer.actions;
+export const {
+  wsConnect,
+  wsClose,
+  wsConnectSuccess,
+  wsConnectClosed,
+  wsConnectError,
+  setOrdersHistory,
+} = feedReducer.actions;
 
 export default feedReducer.reducer;

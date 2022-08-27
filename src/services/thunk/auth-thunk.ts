@@ -6,7 +6,7 @@ import {
   fetchRegister,
   fetchResetPassword,
 } from '../../utils/api';
-import { AppDispatch } from '../../utils/types';
+import { AppThunk } from '../../utils/types';
 import { saveTokensUtil } from '../../utils/utils';
 import {
   registerRequest,
@@ -29,7 +29,8 @@ import { setUser } from '../reducers/profile-reducer';
 import { exitUser } from './profile-thunk';
 
 export const registerUser =
-  (email: string, password: string, name: string) => (dispatch: AppDispatch) => {
+  (email: string, password: string, name: string): AppThunk =>
+  (dispatch) => {
     dispatch(registerRequest());
     fetchRegister(email, password, name)
       .then((data) => {
@@ -46,26 +47,29 @@ export const registerUser =
       });
   };
 
-export const loginUser = (email: string, password: string) => (dispatch: AppDispatch) => {
-  dispatch(loginRequest());
+export const loginUser =
+  (email: string, password: string): AppThunk =>
+  (dispatch) => {
+    dispatch(loginRequest());
 
-  fetchLogin(email, password)
-    .then((data) => {
-      if (data && data.success) {
-        saveTokensUtil(data.accessToken, data.refreshToken);
-        dispatch(setUser(data.user));
-        dispatch(loginSuccess());
-      } else {
-        dispatch(loginFailed('Ошибка данных'));
-      }
-    })
-    .catch((err) => {
-      dispatch(loginFailed(err.message));
-    });
-};
+    fetchLogin(email, password)
+      .then((data) => {
+        if (data && data.success) {
+          saveTokensUtil(data.accessToken, data.refreshToken);
+          dispatch(setUser(data.user));
+          dispatch(loginSuccess());
+        } else {
+          dispatch(loginFailed('Ошибка данных'));
+        }
+      })
+      .catch((err) => {
+        dispatch(loginFailed(err.message));
+      });
+  };
 
 export const refreshToken =
-  (prevAction: () => (dispatch: AppDispatch) => void) => (dispatch: AppDispatch) => {
+  (prevAction: () => AppThunk): AppThunk =>
+  (dispatch) => {
     dispatch(refreshTokenRequest());
     fetchRefreshToken()
       .then((data) => {
@@ -83,34 +87,38 @@ export const refreshToken =
       });
   };
 
-export const forgotPassword = (email: string, history: History) => (dispatch: AppDispatch) => {
-  dispatch(forgotPasswordRequest());
-  fetchForgotPassword(email)
-    .then((data) => {
-      if (data && data.success) {
-        dispatch(forgotPasswordSuccess());
-        history.push({ pathname: '/reset-password' });
-      } else {
-        dispatch(forgotPasswordFailed('Ошибка данных'));
-      }
-    })
-    .catch((err) => {
-      dispatch(forgotPasswordFailed(err.message));
-    });
-};
+export const forgotPassword =
+  (email: string, history: History): AppThunk =>
+  (dispatch) => {
+    dispatch(forgotPasswordRequest());
+    fetchForgotPassword(email)
+      .then((data) => {
+        if (data && data.success) {
+          dispatch(forgotPasswordSuccess());
+          history.push({ pathname: '/reset-password' });
+        } else {
+          dispatch(forgotPasswordFailed('Ошибка данных'));
+        }
+      })
+      .catch((err) => {
+        dispatch(forgotPasswordFailed(err.message));
+      });
+  };
 
-export const resetPassword = (password: string, token: string) => (dispatch: AppDispatch) => {
-  dispatch(resetPasswordRequest());
+export const resetPassword =
+  (password: string, token: string): AppThunk =>
+  (dispatch) => {
+    dispatch(resetPasswordRequest());
 
-  fetchResetPassword(password, token)
-    .then((data) => {
-      if (data && data.success) {
-        dispatch(resetPasswordSuccess());
-      } else {
-        dispatch(resetPasswordFailed('Ошибка данных'));
-      }
-    })
-    .catch((err) => {
-      dispatch(resetPasswordFailed(err.message));
-    });
-};
+    fetchResetPassword(password, token)
+      .then((data) => {
+        if (data && data.success) {
+          dispatch(resetPasswordSuccess());
+        } else {
+          dispatch(resetPasswordFailed('Ошибка данных'));
+        }
+      })
+      .catch((err) => {
+        dispatch(resetPasswordFailed(err.message));
+      });
+  };

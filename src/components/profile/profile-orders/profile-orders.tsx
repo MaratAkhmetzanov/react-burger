@@ -5,16 +5,18 @@ import FeedElement from '../../orders-feed/feed-element/feed-element';
 import { useDispatch, useSelector } from '../../../utils/hooks';
 import styles from './profile-orders.module.scss';
 import { getIngredients } from '../../../services/thunk/ingredients-thunk';
-import { wsProfileClose, wsProfileConnect } from '../../../services/reducers/profile-reducer';
 import { Link, useLocation } from 'react-router-dom';
+import { AUTH_WS_URL } from '../../../utils/constants';
+import { wsClose, wsConnect } from '../../../services/reducers/feed-reducer';
+import { getCookie } from '../../../utils/cookie';
 
 const ProfileOrders: FC = (): JSX.Element => {
-  const { getIngredientsRequest, ingredients, wsProfileConnected, ordersHistory } = useSelector(
+  const { getIngredientsRequest, ingredients, isLoaded, ordersHistory } = useSelector(
     (store) => ({
       ingredients: store.ingredients.ingredients,
       getIngredientsRequest: store.ingredients.getIngredientsRequest,
-      ordersHistory: store.profile.ordersHistory,
-      wsProfileConnected: store.profile.wsProfileConnected,
+      ordersHistory: store.feed.ordersHistory,
+      isLoaded: store.feed.isLoaded,
     })
   );
 
@@ -22,8 +24,8 @@ const ProfileOrders: FC = (): JSX.Element => {
   const location = useLocation();
 
   useEffect((): (() => void) => {
-    dispatch(wsProfileConnect());
-    return () => dispatch(wsProfileClose());
+    dispatch(wsConnect(`${AUTH_WS_URL}?token=${getCookie('accessToken')}`));
+    return () => dispatch(wsClose());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -41,8 +43,8 @@ const ProfileOrders: FC = (): JSX.Element => {
         renderTrackVertical={() => <div className={styles.track_vertical} />}
         renderThumbVertical={() => <div className={styles.thumb_vertical} />}
       >
-        {wsProfileConnected && !getIngredientsRequest ? (
-          ordersHistory.map((order) => (
+        {isLoaded && !getIngredientsRequest ? (
+          [...ordersHistory].reverse().map((order) => (
             <Link
               key={order._id}
               to={{

@@ -1,6 +1,6 @@
 import { fetchExit, fetchGetUser, fetchUpdateUser } from '../../utils/api';
 import { deleteCookie } from '../../utils/cookie';
-import { AppDispatch } from '../../utils/types';
+import { AppThunk } from '../../utils/types';
 import {
   getUserRequest,
   getUserSuccess,
@@ -11,7 +11,7 @@ import {
 } from '../reducers/profile-reducer';
 import { refreshToken } from './auth-thunk';
 
-export const getUser = () => (dispatch: AppDispatch) => {
+export const getUser = ():AppThunk => (dispatch) => {
   dispatch(getUserRequest());
   fetchGetUser()
     .then((data) => {
@@ -27,7 +27,7 @@ export const getUser = () => (dispatch: AppDispatch) => {
 };
 
 export const updateUser =
-  (payload: { name?: string; email?: string; password?: string }) => (dispatch: AppDispatch) => {
+  (payload: { name?: string; email?: string; password?: string }):AppThunk => (dispatch) => {
     dispatch(getUserRequest());
     fetchUpdateUser(payload)
       .then((data) => {
@@ -40,7 +40,7 @@ export const updateUser =
       });
   };
 
-export const exitUser = () => (dispatch: AppDispatch) => {
+export const exitUser = ():AppThunk => (dispatch) => {
   dispatch(exitRequest());
   fetchExit()
     .then((data) => {

@@ -1,18 +1,18 @@
 import React, { FC, useEffect, useState } from 'react';
-import { v4 as uuidv4 } from 'uuid';
 import { useParams } from 'react-router-dom';
 import clsx from 'clsx';
 import { getIngredients } from '../../services/thunk/ingredients-thunk';
 import { useDispatch, useSelector } from '../../utils/hooks';
-import { TOrder } from '../../utils/types';
+import { TIngredientItem, TOrder } from '../../utils/types';
 import Loader from '../loader/loader';
 import styles from './order-id.module.scss';
 import { wsClose, wsConnect } from '../../services/reducers/feed-reducer';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import Scrollbars from 'react-custom-scrollbars';
 import Moment from 'react-moment';
+import { WS_URL } from '../../utils/constants';
 
-const OrderId: FC = (): JSX.Element => {
+const OrderId: FC<{ popup?: boolean }> = ({ popup = false }): JSX.Element => {
   const { ingredients, isLoaded, ordersHistory } = useSelector((store) => ({
     ingredients: store.ingredients.ingredients,
     getIngredientsRequest: store.ingredients.getIngredientsRequest,
@@ -31,8 +31,8 @@ const OrderId: FC = (): JSX.Element => {
   };
 
   useEffect((): (() => void) | undefined => {
-    if (!isLoaded) {
-      dispatch(wsConnect());
+    dispatch(wsConnect(WS_URL));
+    if (!popup) {
       return () => dispatch(wsClose());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -51,7 +51,9 @@ const OrderId: FC = (): JSX.Element => {
   const getTotal = (): number =>
     viewingOrder
       ? viewingOrder.ingredients.reduce((total: number, item) => {
-          const ingredient = ingredients.find((ingredient) => ingredient._id === item);
+          const ingredient: TIngredientItem | undefined = ingredients.find(
+            (ingredient) => ingredient._id === item
+          );
           if (ingredient) {
             return total + (ingredient.type === 'bun' ? ingredient.price * 2 : ingredient.price);
           } else return 0;
@@ -81,10 +83,10 @@ const OrderId: FC = (): JSX.Element => {
             renderThumbVertical={() => <div className={styles.thumb_vertical} />}
           >
             <div className={styles.ingredients_wrp}>
-              {viewingOrder.ingredients.map((element) => {
+              {viewingOrder.ingredients.map((element, index) => {
                 const ingredient = ingredients.find((ingredient) => ingredient._id === element);
                 return (
-                  <div className={styles.ingredient_row} key={uuidv4()}>
+                  <div className={styles.ingredient_row} key={index}>
                     <div className={clsx(styles.ingredients_image)}>
                       <img src={ingredient?.image_mobile} alt='ingredient' />
                     </div>
