@@ -20,6 +20,7 @@ import OrderDetails from '../order-details/order-details';
 import AppWrapper from '../app-wrapper/app-wrapper';
 import FeedPage from '../../pages/feed-page/feed-page';
 import OrderId from '../order-id/order-id';
+import ProfileOrderId from '../profile/profile-order-id/profile-order-id';
 
 const App: FC = () => {
   const location = useLocation<{ background: Location }>();
@@ -68,7 +69,7 @@ const App: FC = () => {
             <ProfileOrdersPage />
           </ProtectedRoute>
           <ProtectedRoute exact path='/profile/orders/:id'>
-            <OrderId />
+            <ProfileOrderId />
           </ProtectedRoute>
           <Route>
             <NotFound404 />
@@ -89,7 +90,7 @@ const App: FC = () => {
           </Route>
           <Route path='/profile/orders/:id'>
             <Modal closeModal={handleCloseModal}>
-              <OrderId popup />
+              <ProfileOrderId popup />
             </Modal>
           </Route>
           <Route path='/order'>

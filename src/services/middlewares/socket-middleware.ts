@@ -1,11 +1,7 @@
 import { Middleware, MiddlewareAPI } from 'redux';
 import { AppDispatch, RootState } from '../../utils/types';
 import {
-  setOrdersHistory,
   TWsActions,
-  wsConnectClosed,
-  wsConnectError,
-  wsConnectSuccess,
 } from '../reducers/feed-reducer';
 
 export const socketMiddleware = (wsActions: TWsActions): Middleware => {
@@ -16,31 +12,31 @@ export const socketMiddleware = (wsActions: TWsActions): Middleware => {
       const { dispatch } = store;
       const { type, payload } = action;
 
-      if (type === 'feed/wsConnect') {
+      if (type === wsActions.wsConnect.type) {
         socket = new WebSocket(payload);
       }
 
       if (socket) {
-        if (type === 'feed/wsClose') {
-          socket.close();
+        if (type === wsActions.wsClose.type) {
+          socket.close(1000);
         }
 
         socket.onopen = (event) => {
-          dispatch(wsConnectSuccess());
+          dispatch(wsActions.wsConnectSuccess());
         };
 
         socket.onerror = (event) => {
-          dispatch(wsConnectError());
+          dispatch(wsActions.wsConnectError());
           socket = null;
         };
 
         socket.onmessage = (event: MessageEvent) => {
           const data = JSON.parse(event.data);
-          dispatch(setOrdersHistory(data));
+          dispatch(wsActions.setOrdersHistory(data));
         };
 
         socket.onclose = (event) => {
-          dispatch(wsConnectClosed());
+          dispatch(wsActions.wsConnectClosed());
           socket = null;
         };
       }

@@ -1,18 +1,19 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import clsx from 'clsx';
-import { getIngredients } from '../../services/thunk/ingredients-thunk';
-import { useDispatch, useSelector } from '../../utils/hooks';
-import { TIngredientItem, TOrder } from '../../utils/types';
-import Loader from '../loader/loader';
-import styles from './order-id.module.scss';
-import { wsClose, wsConnect } from '../../services/reducers/feed-reducer';
+import styles from './profile-order-id.module.scss';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import Scrollbars from 'react-custom-scrollbars';
 import Moment from 'react-moment';
-import { WS_URL } from '../../utils/constants';
+import { useDispatch, useSelector } from '../../../utils/hooks';
+import { TIngredientItem, TOrder } from '../../../utils/types';
+import { AUTH_WS_URL } from '../../../utils/constants';
+import { wsClose, wsConnect } from '../../../services/reducers/feed-reducer';
+import { getIngredients } from '../../../services/thunk/ingredients-thunk';
+import Loader from '../../loader/loader';
+import { getCookie } from '../../../utils/cookie';
 
-const OrderId: FC<{ popup?: boolean }> = ({ popup = false }): JSX.Element => {
+const ProfileOrderId: FC<{ popup?: boolean }> = ({ popup = false }): JSX.Element => {
   const { ingredients, isLoaded, ordersHistory } = useSelector((store) => ({
     ingredients: store.ingredients.ingredients,
     getIngredientsRequest: store.ingredients.getIngredientsRequest,
@@ -32,7 +33,7 @@ const OrderId: FC<{ popup?: boolean }> = ({ popup = false }): JSX.Element => {
 
   useEffect((): (() => void) | undefined => {
     if (!popup) {
-      dispatch(wsConnect(WS_URL));
+      dispatch(wsConnect(`${AUTH_WS_URL}?token=${getCookie('accessToken')}`));
       return () => dispatch(wsClose());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -119,4 +120,4 @@ const OrderId: FC<{ popup?: boolean }> = ({ popup = false }): JSX.Element => {
   );
 };
 
-export default OrderId;
+export default ProfileOrderId;

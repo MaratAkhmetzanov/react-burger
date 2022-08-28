@@ -27,7 +27,10 @@ const feedReducer = createSlice({
       state.isConnecting = true;
     },
     wsClose(state) {
+      state.isConnecting = false;
+      state.isLoaded = false;
       state.isConnected = false;
+      state.ordersHistory = []; 
     },
     wsConnectSuccess(state) {
       state.isConnecting = false;
@@ -49,6 +52,7 @@ const feedReducer = createSlice({
       state.total = payload.total;
       state.totalToday = payload.totalToday;
       state.isLoaded = true;
+      state.isConnected = true;
     },
   },
 });
