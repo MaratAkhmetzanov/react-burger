@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import { Logo } from '@ya.praktikum/react-developer-burger-ui-components';
 import NavigationLink from './navigation-link';
 import styleAppHeader from './app-header.module.scss';
+import { Link } from 'react-router-dom';
 
 const AppHeader: FC = (): JSX.Element => {
   return (
@@ -11,10 +12,12 @@ const AppHeader: FC = (): JSX.Element => {
         <div className={styleAppHeader.header_left}>
           <nav className={styleAppHeader.nav}>
             <NavigationLink label='Конструктор' className='mr-2' route='/' icon='BurgerIcon' />
-            <NavigationLink label='Лента заказов' route='/orders' icon='ListIcon' />
+            <NavigationLink label='Лента заказов' route='/feed' icon='ListIcon' />
           </nav>
         </div>
-        <Logo />
+        <Link to='/'>
+          <Logo />
+        </Link>
         <div className={styleAppHeader.header_right}>
           <NavigationLink
             label='Личный кабинет'

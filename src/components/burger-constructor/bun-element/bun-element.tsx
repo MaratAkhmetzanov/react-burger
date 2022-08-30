@@ -1,30 +1,30 @@
 import React, { FC } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { DropTargetMonitor, useDrop } from 'react-dnd';
 import { ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components';
 import styleBunElement from './bun-element.module.scss';
 import clsx from 'clsx';
 
 import { addIngredient } from '../../../services/reducers/constructor-reducer';
-import { TConstructorItem, TODO_ANY } from '../../../utils/types';
+import { TIngredientItem } from '../../../utils/types';
+import { useDispatch, useSelector } from '../../../utils/hooks';
 
 type TProps = {
   isTop?: boolean;
 };
 
 const BunElement: FC<TProps> = ({ isTop = true }): JSX.Element => {
-  const constructorBun = useSelector<TODO_ANY, TConstructorItem>(
+  const constructorBun = useSelector(
     (store) => store.burgerConstructor.constructorBun
   );
 
-  const dispatch = useDispatch<TODO_ANY>();
+  const dispatch = useDispatch();
 
   const [{ bunDropHover }, bunDropTarget] = useDrop({
     accept: 'bun',
     collect: (monitor: DropTargetMonitor) => ({
       bunDropHover: monitor.isOver(),
     }),
-    drop(ingredient) {
+    drop(ingredient: TIngredientItem) {
       dispatch(addIngredient(ingredient));
     },
   });

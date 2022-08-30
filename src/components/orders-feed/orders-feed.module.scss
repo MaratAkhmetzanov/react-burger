@@ -1,9 +1,8 @@
-@import '../../../css/variables.scss';
+@import '../../css/variables.scss';
 
-.wrapper {
-  width: 872px;
-  display: flex;
-  justify-content: center;
+.content {
+  width: 600px;
+  margin-right: 40px;
 }
 
 .router_link {

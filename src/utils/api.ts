@@ -1,11 +1,13 @@
 import { GET_DATA_URL } from './constants';
 import { getCookie } from './cookie';
 
-const fetchResponseCheck = async (res: Response): Promise<Response> => {
+const fetchResponseCheck = async (res: Response) => {
   if (res.ok) {
     return res.json();
   } else {
-    const message = await res.json().then((err: any) => err.message);
+    const message = await res
+      .json()
+      .then((err: { [key in string]: string | boolean }) => err.message);
     return Promise.reject({ status: res.status, message });
   }
 };
@@ -97,9 +99,9 @@ export const fetchUpdateUser = async ({
   password,
   name,
 }: {
-  email: string;
-  password: string;
-  name: string;
+  name?: string;
+  email?: string;
+  password?: string;
 }) =>
   await fetch(`${GET_DATA_URL}/auth/user`, {
     method: 'PATCH',

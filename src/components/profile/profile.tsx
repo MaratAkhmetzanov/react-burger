@@ -1,10 +1,8 @@
 import { Input } from '@ya.praktikum/react-developer-burger-ui-components';
 import clsx from 'clsx';
 import { FC, FormEvent, SyntheticEvent, useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { updateUser } from '../../services/thunk/profile-thunk';
-import { useForm } from '../../utils/hooks';
-import { TODO_ANY, TUser } from '../../utils/types';
+import { useDispatch, useForm, useSelector } from '../../utils/hooks';
 import { TSButton } from '../../utils/utils';
 import styleProfile from './profile.module.scss';
 
@@ -15,8 +13,15 @@ type TSubmitPayload = {
 };
 
 const Profile: FC = (): JSX.Element => {
-  const { name, email } = useSelector<TODO_ANY, TUser>((store) => store.profile.user);
-  const { values, handleChange, setValues } = useForm({ name: name, email: email, password: '' });
+  const { name, email } = useSelector((store) => ({
+    name: store.profile.user?.name,
+    email: store.profile.user?.email,
+  }));
+  const { values, handleChange, setValues } = useForm({
+    name: name ? name : '',
+    email: email ? email : '',
+    password: '',
+  });
   const nameRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
@@ -24,7 +29,7 @@ const Profile: FC = (): JSX.Element => {
   const [isButtonsVisible, setIsButtonsVisible] = useState<boolean>(false);
   const [inputInFocus, setInputInFocus] = useState<string>('');
 
-  const dispatch = useDispatch<TODO_ANY>();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (name !== values.name || email !== values.email || values.password !== '') {
@@ -34,7 +39,7 @@ const Profile: FC = (): JSX.Element => {
 
   const discardUserHandler = (e: SyntheticEvent): void => {
     e.preventDefault();
-    setValues({ name: name, email: email, password: '' });
+    setValues({ name: name ? name : '', email: email ? email : '', password: '' });
   };
 
   const onFormSubmit = (e: FormEvent): void => {
@@ -54,7 +59,7 @@ const Profile: FC = (): JSX.Element => {
   };
 
   return (
-    <section>
+    <section className={styleProfile.wrapper}>
       <form onSubmit={onFormSubmit}>
         <div className={clsx(styleProfile.input, 'mb-6')}>
           <Input

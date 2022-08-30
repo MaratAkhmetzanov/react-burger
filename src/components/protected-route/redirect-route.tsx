@@ -1,8 +1,7 @@
 import React, { FC, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { Redirect, Route, useLocation } from 'react-router-dom';
 import { getUser } from '../../services/thunk/profile-thunk';
-import { TODO_ANY, TUser } from '../../utils/types';
+import { useDispatch, useSelector } from '../../utils/hooks';
 import Loader from '../loader/loader';
 
 type TProps = {
@@ -10,15 +9,13 @@ type TProps = {
   path: string;
 };
 
-type TStore = { user: null|TUser; getUserLoaded: boolean };
-
 const RedirectRoute: FC<TProps> = ({ children }): JSX.Element => {
-  const { user, getUserLoaded } = useSelector<TODO_ANY, TStore>((store) => ({
+  const { user, getUserLoaded } = useSelector((store) => ({
     user: store.profile.user,
     getUserLoaded: store.profile.getUserLoaded,
   }));
   
-  const dispatch = useDispatch<TODO_ANY>();
+  const dispatch = useDispatch();
   const location = useLocation<{ from: { pathname: string } }>();
 
   const pathName = location.state && location.state.from ? location.state.from.pathname : '/';

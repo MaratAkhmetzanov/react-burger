@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useCallback, FC } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import clsx from 'clsx';
 import { Scrollbars } from 'react-custom-scrollbars';
 
@@ -9,25 +8,20 @@ import CatalogGroup from './catalog-group/catalog-group';
 import Loader from '../loader/loader';
 import { getIngredients } from '../../services/thunk/ingredients-thunk';
 import { setActiveTab } from '../../services/reducers/ingredients-reducer';
-import { TIngredientItem, TODO_ANY } from '../../utils/types';
-
-type TStore = {
-  ingredients: Array<TIngredientItem>;
-  getIngredientsRequest: boolean;
-};
+import { useDispatch, useSelector } from '../../utils/hooks';
 
 const BurgerIngredients: FC = (): JSX.Element => {
-  const { ingredients, getIngredientsRequest } = useSelector<TODO_ANY, TStore>((store) => ({
+  const { ingredients, getIngredientsRequest } = useSelector((store) => ({
     ingredients: store.ingredients.ingredients,
     getIngredientsRequest: store.ingredients.getIngredientsRequest,
   }));
 
-  const scrollRef = useRef<TODO_ANY>(null);
+  const scrollRef = useRef<Scrollbars>(null);
   const bunTitleRef = useRef<HTMLHeadingElement>(null);
   const sauceTitleRef = useRef<HTMLHeadingElement>(null);
   const mainTitleRef = useRef<HTMLHeadingElement>(null);
 
-  const dispatch = useDispatch<TODO_ANY>();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getIngredients());

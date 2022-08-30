@@ -1,5 +1,4 @@
 import React, { FC, useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { DropTargetMonitor, useDrop } from 'react-dnd';
 import styleConstructor from './burger-constructor.module.scss';
 import { Scrollbars } from 'react-custom-scrollbars';
@@ -10,21 +9,22 @@ import { addIngredient, moveIngredient } from '../../services/reducers/construct
 import Total from './total/total';
 import ConstructorItem from './constructor-item/constructor-item';
 import BunElement from './bun-element/bun-element';
-import { TConstructorItem, TODO_ANY } from '../../utils/types';
+import { TIngredientItem } from '../../utils/types';
+import { useDispatch, useSelector } from '../../utils/hooks';
 
 const BurgerConstructor: FC = (): JSX.Element => {
-  const constructorItems = useSelector<TODO_ANY, Array<TConstructorItem>>(
+  const constructorItems = useSelector(
     (store) => store.burgerConstructor.constructorItems
   );
 
-  const dispatch = useDispatch<TODO_ANY>();
+  const dispatch = useDispatch();
 
   const [{ ingredientDropHover }, ingredientDropTarget] = useDrop({
     accept: 'ingredient',
     collect: (monitor: DropTargetMonitor) => ({
       ingredientDropHover: monitor.isOver(),
     }),
-    drop(ingredient) {
+    drop(ingredient: TIngredientItem) {
       dispatch(addIngredient(ingredient));
     },
   });

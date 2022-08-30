@@ -5,17 +5,15 @@ import { Input } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import styleAuth from './auth.module.scss';
 import { resetPassword } from '../services/thunk/auth-thunk';
-import { useDispatch } from 'react-redux';
-import { useForm } from '../utils/hooks';
+import { useDispatch, useForm } from '../utils/hooks';
 import { TSButton } from '../utils/utils';
-import { TODO_ANY } from '../utils/types';
 
 const FORM_TITLE = 'Восстановление пароля';
 const BUTTON_TITLE = 'Сохранить';
 
 const PasswordReset = (): JSX.Element => {
   const history = useHistory();
-  const dispatch = useDispatch<TODO_ANY>();
+  const dispatch = useDispatch();
   const location = useLocation<{ from: Location }>();
 
   const { values, handleChange } = useForm({ password: '', token: '' });

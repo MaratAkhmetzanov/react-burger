@@ -1,3 +1,6 @@
+import { AnyAction } from 'redux';
+import { ThunkAction } from 'redux-thunk';
+import { store } from './../services/store/index';
 export type TODO_ANY = any;
 
 export type TUser = {
@@ -23,3 +26,24 @@ export type TIngredientItem = {
 export type TConstructorItem = TIngredientItem & {
   position: string;
 };
+
+export type TOrder = {
+  _id: string;
+  ingredients: Array<string>;
+  status: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+  number: number;
+};
+
+export type TSocketMessage = {
+  orders: Array<TOrder>;
+  success: boolean;
+  total: number;
+  totalToday: number;
+};
+
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
+export type AppThunk<ReturnType = void> = ThunkAction<ReturnType, RootState, unknown, AnyAction>;

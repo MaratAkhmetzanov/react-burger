@@ -18,6 +18,9 @@ import Modal from '../modal/modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import OrderDetails from '../order-details/order-details';
 import AppWrapper from '../app-wrapper/app-wrapper';
+import FeedPage from '../../pages/feed-page/feed-page';
+import OrderId from '../order-id/order-id';
+import ProfileOrderId from '../profile/profile-order-id/profile-order-id';
 
 const App: FC = () => {
   const location = useLocation<{ background: Location }>();
@@ -47,8 +50,11 @@ const App: FC = () => {
           <Route exact path='/'>
             <ConstructorPage />
           </Route>
-          <Route exact path='/orders'>
-            <p className='text text_type_main-medium mt-20'>Смотрите в следующих сериях…</p>
+          <Route exact path='/feed'>
+            <FeedPage />
+          </Route>
+          <Route exact path='/feed/:id'>
+            <OrderId />
           </Route>
           <Route exact path='/order'>
             <Redirect to='/' />
@@ -56,13 +62,15 @@ const App: FC = () => {
           <Route exact path='/ingredients/:id'>
             <IngredientDetails />
           </Route>
-          <ProtectedRoute path='/profile'>
+          <ProtectedRoute exact path='/profile'>
             <ProfilePage />
           </ProtectedRoute>
-          <ProtectedRoute path='/profile/orders'>
+          <ProtectedRoute exact path='/profile/orders'>
             <ProfileOrdersPage />
           </ProtectedRoute>
-          <ProtectedRoute path='/profile/orders/:id'>ingredient</ProtectedRoute>
+          <ProtectedRoute exact path='/profile/orders/:id'>
+            <ProfileOrderId />
+          </ProtectedRoute>
           <Route>
             <NotFound404 />
           </Route>
@@ -73,6 +81,16 @@ const App: FC = () => {
           <Route path='/ingredients/:id'>
             <Modal closeModal={handleCloseModal}>
               <IngredientDetails />
+            </Modal>
+          </Route>
+          <Route path='/feed/:id'>
+            <Modal closeModal={handleCloseModal}>
+              <OrderId popup />
+            </Modal>
+          </Route>
+          <Route path='/profile/orders/:id'>
+            <Modal closeModal={handleCloseModal}>
+              <ProfileOrderId popup />
             </Modal>
           </Route>
           <Route path='/order'>

@@ -5,10 +5,8 @@ import { Input } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import styleAuth from './auth.module.scss';
 import { registerUser } from '../services/thunk/auth-thunk';
-import { useDispatch } from 'react-redux';
-import { useForm } from '../utils/hooks';
+import { useDispatch, useForm } from '../utils/hooks';
 import { TSButton } from '../utils/utils';
-import { TODO_ANY } from '../utils/types';
 
 const Register = (): JSX.Element => {
   const { values, handleChange, setValues } = useForm({ name: '', email: '', password: '' });
@@ -27,7 +25,7 @@ const Register = (): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const dispatch = useDispatch<TODO_ANY>();
+  const dispatch = useDispatch();
 
   const onFormSubmit = (e: FormEvent) => {
     e.preventDefault();

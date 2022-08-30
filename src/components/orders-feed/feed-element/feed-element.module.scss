@@ -1,0 +1,70 @@
+@import '../../../css/variables.scss';
+
+.content {
+  align-items: flex-start;
+  background-color: $modal-bg;
+  border-color: $primary-text;
+  border-radius: 40px;
+  box-sizing: border-box;
+  border: 2px solid transparent;
+  display: flex;
+  flex-direction: column;
+  margin-right: 16px;
+  margin-bottom: 16px;
+  padding: 24px;
+
+  &:hover {
+    border-color: $input;
+  }
+}
+
+.top,
+.bottom {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ingredients {
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+.ingredients_image {
+  display: flex;
+  border-radius: 32px;
+  background-color: $bg;
+  border: 2px solid $primary-text;
+  height: 64px;
+  justify-content: center;
+  margin-right: -24px;
+  overflow: hidden;
+  position: relative;
+  width: 64px;
+  & > img {
+    box-sizing: border-box;
+    height: 64px;
+  }
+}
+
+.transparent {
+  opacity: 0.6;
+}
+
+.leftCount {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  height: 64px;
+  left: 0;
+  position: absolute;
+  right: 0;
+  width: 64px;
+}
+
+.price {
+  align-items: center;
+  display: flex;
+  column-gap: 8px;
+}

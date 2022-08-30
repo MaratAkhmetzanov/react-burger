@@ -1,20 +1,15 @@
 import React, { FC, useMemo } from 'react';
-import { useSelector } from 'react-redux';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import styleTotal from './total.module.scss';
 import clsx from 'clsx';
 
 import { useHistory, useLocation } from 'react-router-dom';
-import { TConstructorItem, TODO_ANY } from '../../../utils/types';
+import { TConstructorItem } from '../../../utils/types';
 import { TSButton } from '../../../utils/utils';
-
-type TStore = {
-  constructorBun: TConstructorItem;
-  constructorItems: Array<TConstructorItem>;
-};
+import { useSelector } from '../../../utils/hooks';
 
 const Total: FC = (): JSX.Element => {
-  const { constructorBun, constructorItems } = useSelector<TODO_ANY, TStore>((store) => ({
+  const { constructorBun, constructorItems } = useSelector((store) => ({
     constructorBun: store.burgerConstructor.constructorBun,
     constructorItems: store.burgerConstructor.constructorItems,
   }));
@@ -22,7 +17,9 @@ const Total: FC = (): JSX.Element => {
   const totalPrice: number = useMemo(() => {
     return (
       (constructorBun ? constructorBun.price * 2 : 0) +
-      (constructorItems ? constructorItems.reduce((total, item) => total + item.price, 0) : 0)
+      (constructorItems
+        ? constructorItems.reduce((total: number, item: TConstructorItem) => total + item.price, 0)
+        : 0)
     );
   }, [constructorBun, constructorItems]);
 

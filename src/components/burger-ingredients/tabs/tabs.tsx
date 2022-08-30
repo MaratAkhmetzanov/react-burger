@@ -1,18 +1,17 @@
 import React, { FC, useCallback } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import clsx from 'clsx';
 
 import styleTabs from './tabs.module.scss';
 import { setActiveTab } from '../../../services/reducers/ingredients-reducer';
-import { TODO_ANY } from '../../../utils/types';
 import { TSTab } from '../../../utils/utils';
+import { useDispatch, useSelector } from '../../../utils/hooks';
 
 const Tabs: FC<{ onTabToggleHandler: (tab: string) => void }> = ({
   onTabToggleHandler,
 }): JSX.Element => {
-  const activeTab = useSelector<TODO_ANY, string>((store) => store.ingredients.activeTab);
+  const activeTab = useSelector((store) => store.ingredients.activeTab);
 
-  const dispatch = useDispatch<TODO_ANY>();
+  const dispatch = useDispatch();
 
   const setActiveTabHandler = useCallback(
     (tab: string): void => {
