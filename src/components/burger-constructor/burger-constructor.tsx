@@ -35,7 +35,7 @@ const BurgerConstructor: FC = (): JSX.Element => {
       ingredients.splice(hoverIndex, 0, ingredients.splice(dragIndex, 1)[0]);
       dispatch(moveIngredient(ingredients));
     },
-    [dispatch, constructorItems]
+    [dispatch, constructorItems],
   );
 
   return (
@@ -45,8 +45,10 @@ const BurgerConstructor: FC = (): JSX.Element => {
         {!constructorItems.length && (
           <div
             className={clsx(
+              ingredientDropHover
+                ? styleConstructor.ingredients_dropzone_hover
+                : styleConstructor.ingredients_dropzone,
               'ml-8 mr-4',
-              ingredientDropHover ? styleConstructor.ingredients_dropzone_hover : ''
             )}
             ref={ingredientDropTarget}
           >

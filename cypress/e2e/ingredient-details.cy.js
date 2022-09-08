@@ -10,6 +10,9 @@ describe('Ingredients catalog', function() {
   it('First card click → open ingredient details', function() {
     cy.get('[class^=ingredient-card_router_link__]').first().click();
     cy.contains('Детали ингредиента');
+    cy.get('[class^=ingredient-card_router_link__]').first().find('[class^=ingredient-card_card_name__]').then(($element) => {
+      cy.get('[class^=ingredient-details_details_wrapper__]').contains($element.text());
+    })
   });
   
   it('Close btn click → close ingredient details', function() {
