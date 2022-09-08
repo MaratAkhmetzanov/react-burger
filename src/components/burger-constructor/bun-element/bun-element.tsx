@@ -32,9 +32,9 @@ const BunElement: FC<TProps> = ({ isTop = true }): JSX.Element => {
   return (
     <div
       className={clsx(
-        'ml-8 mr-4',
         bunDropHover ? styleBunElement.bun_dropzone_hover : styleBunElement.bun_dropzone,
-        isTop ? styleBunElement.top : styleBunElement.bottom
+        isTop ? styleBunElement.top : styleBunElement.bottom,
+        'ml-8 mr-4',
       )}
       ref={bunDropTarget}
     >
