@@ -3,6 +3,7 @@ import { DropTargetMonitor, useDrop } from 'react-dnd';
 import styleConstructor from './burger-constructor.module.scss';
 import { Scrollbars } from 'react-custom-scrollbars';
 import clsx from 'clsx';
+import { v4 as uuidv4 } from 'uuid';
 
 import { addIngredient, moveIngredient } from '../../services/reducers/constructor-reducer';
 
@@ -13,9 +14,7 @@ import { TIngredientItem } from '../../utils/types';
 import { useDispatch, useSelector } from '../../utils/hooks';
 
 const BurgerConstructor: FC = (): JSX.Element => {
-  const constructorItems = useSelector(
-    (store) => store.burgerConstructor.constructorItems
-  );
+  const constructorItems = useSelector((store) => store.burgerConstructor.constructorItems);
 
   const dispatch = useDispatch();
 
@@ -25,7 +24,8 @@ const BurgerConstructor: FC = (): JSX.Element => {
       ingredientDropHover: monitor.isOver(),
     }),
     drop(ingredient: TIngredientItem) {
-      dispatch(addIngredient(ingredient));
+      const position = uuidv4();
+      dispatch(addIngredient({ ...ingredient, position }));
     },
   });
 
@@ -35,7 +35,7 @@ const BurgerConstructor: FC = (): JSX.Element => {
       ingredients.splice(hoverIndex, 0, ingredients.splice(dragIndex, 1)[0]);
       dispatch(moveIngredient(ingredients));
     },
-    [dispatch, constructorItems]
+    [dispatch, constructorItems],
   );
 
   return (
@@ -45,8 +45,10 @@ const BurgerConstructor: FC = (): JSX.Element => {
         {!constructorItems.length && (
           <div
             className={clsx(
+              ingredientDropHover
+                ? styleConstructor.ingredients_dropzone_hover
+                : styleConstructor.ingredients_dropzone,
               'ml-8 mr-4',
-              ingredientDropHover ? styleConstructor.ingredients_dropzone_hover : ''
             )}
             ref={ingredientDropTarget}
           >

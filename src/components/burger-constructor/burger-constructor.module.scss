@@ -33,10 +33,13 @@
   cursor: default;
 }
 
-.ingredients_dropzone_hover {
-  outline: 2px dashed #fff;
-  border-radius: 40px;
-  transition: outline-color 0.5s;
+.ingredients_dropzone {
+  outline: 2px dashed transparent;
+  &_hover {
+    outline: 2px dashed #fff;
+    border-radius: 40px;
+    transition: outline-color 0.5s;
+  }
 }
 
 .track_vertical {

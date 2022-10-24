@@ -1,4 +1,4 @@
-@import "../../css/variables.scss";
+@import '../../css/variables.scss';
 
 .wrapper {
   height: 100%;
@@ -8,7 +8,7 @@
   display: flex;
   width: 1240px;
   margin: 0 auto;
-  height: calc(100% - 88px);
+  height: calc(100vh - 88px);
 }
 
 .loading {

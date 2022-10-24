@@ -24,8 +24,8 @@
 - Личный профиль
 - История заказов
 
-### Страница проекта
-[https://maratakhmetzanov.github.io/react-burger/](https://maratakhmetzanov.github.io/react-burger/)
+### Адрес проекта
+Проект размещен на а GitHub Pages по ссылке [https://maratakhmetzanov.github.io/react-burger/](https://maratakhmetzanov.github.io/react-burger/)
 
 ## Цель проекта
 Применить на практике знания полученные во время обучения.

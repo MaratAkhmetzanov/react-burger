@@ -4,7 +4,7 @@ import { ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-comp
 import styleBunElement from './bun-element.module.scss';
 import clsx from 'clsx';
 
-import { addIngredient } from '../../../services/reducers/constructor-reducer';
+import { addBun } from '../../../services/reducers/constructor-reducer';
 import { TIngredientItem } from '../../../utils/types';
 import { useDispatch, useSelector } from '../../../utils/hooks';
 
@@ -25,16 +25,16 @@ const BunElement: FC<TProps> = ({ isTop = true }): JSX.Element => {
       bunDropHover: monitor.isOver(),
     }),
     drop(ingredient: TIngredientItem) {
-      dispatch(addIngredient(ingredient));
+      dispatch(addBun(ingredient));
     },
   });
 
   return (
     <div
       className={clsx(
-        'ml-8 mr-4',
         bunDropHover ? styleBunElement.bun_dropzone_hover : styleBunElement.bun_dropzone,
-        isTop ? styleBunElement.top : styleBunElement.bottom
+        isTop ? styleBunElement.top : styleBunElement.bottom,
+        'ml-8 mr-4',
       )}
       ref={bunDropTarget}
     >
